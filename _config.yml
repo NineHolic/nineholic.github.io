@@ -2,20 +2,20 @@
 #   Main Configs   #
 # ---------------- #
 baseurl:
-url: https://mazhuang.org
+url: https://nineholic.github.io
 date_format: "ordinal"
-title: 码志
-subtitle: "公众号：闷骚的程序员"
-description: "马壮的个人博客，公众号：闷骚的程序员"
-keywords: 码志, Zhuang Ma, mzlogin, mazhuang, 闷骚的程序员
+title: Nine
+subtitle: 
+description: 
+keywords: 
 timezone: Asia/Shanghai
 encoding: "utf-8"
 side_bar_repo_limit: 5
-repository: mzlogin/mzlogin.github.io
+repository: NineHolic/nineholic.github.io
 # 对 css 和 js 资源的 cdn 加速配置
 cdn:
     jsdelivr:
-        enabled: true
+        enabled: false
 # 可选组件配置
 components:
     # 分享
@@ -26,7 +26,7 @@ components:
     # 不蒜子访问统计
     busuanzi:
         enabled: true
-        start_date: 2020-05-03
+        start_date: 2021-05-01
     # My Popular Repositories
     side_bar_repo:
         enabled: true
@@ -37,24 +37,25 @@ components:
     # 页面右上角，以及「关于」页面的二维码
     # 修改图片请替换 assets/images/qrcode.jpg
     qrcode:
-        enabled: true
-        image_alt: 闷骚的程序员
+        enabled: false
+        image_alt:
 # 压缩页面内容
 compress_html:
   clippings: all
   comments: ["<!--", "-->"]
 # 代码高亮风格，支持的 theme 列表见 https://github.com/mzlogin/rouge-themes
-highlight_theme: github
+highlight_theme: base16.solarized.dark
+# highlight_theme: base16.dark
 
 # ---------------- #
 #      Author      #
 # ---------------- #
-author: Zhuang Ma
+author: Nine
 organization: 
 organization_url: 
-github_username: mzlogin
-location: Wuhan, China
-email: chumpma@gmail.com
+github_username: NineHolic
+location: Nanchang, China
+email: nineholic@qq.com
 
 # ---------------- #
 #    Navigation    #
@@ -68,9 +69,9 @@ navs:
     href: /categories/
     label: 分类
 
-#   -
-#     href: /archives/
-#     label: 归档
+  -
+     href: /archives/
+     label: 归档
 
 #   -
 #     href: /open-source/
@@ -131,17 +132,17 @@ disqus:
     username: 
 # https://imsun.net/posts/gitment-introduction/
 gitment:
-    owner: mzlogin
+    owner: nineholic
     repo: blog-comments
     oauth:
-        client_id: d2e1cbbd298958076462
-        client_secret: b42a4178e5fd4a7cf63189ef4b1453b05c375709
+        client_id: f78c6d97082d9e075113
+        client_secret: b7ac22c3b5a365ef167381f88f9b5d2cedaa7203 
 # https://github.com/gitalk/gitalk#install
 gitalk:
-    owner: mzlogin
+    owner: nineholic
     repo: blog-comments
-    clientID: d2e1cbbd298958076462
-    clientSecret: b42a4178e5fd4a7cf63189ef4b1453b05c375709
+    clientID: f78c6d97082d9e075113
+    clientSecret: b7ac22c3b5a365ef167381f88f9b5d2cedaa7203 
 # 在使用其它评论组件时可点击显示 Disqus
 lazy_load_disqus : false
 
@@ -158,9 +159,11 @@ simple_jekyll_search:
 #      Google      #
 # ---------------- #
 google:
-    analytics_id: UA-80669434-1
-    adsense:
-        footer: true
-        sidebar: true 
-        content_header: true
-        content_footer: false
+  analytics_id: G-1NYMW33JE2
+  adsense:
+    footer: true
+    sidebar: true
+    content_header: true
+    content_footer: false
+baidu:
+  analytics_id: b453bacb03211c5dc30b712308eec1bc
