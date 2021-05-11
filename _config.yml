@@ -6,7 +6,7 @@ url: https://nineholic.github.io
 date_format: "ordinal"
 title: Nine
 subtitle: Blog
-description: 
+description:
 keywords: 九, Nine, NineHolic
 timezone: Asia/Shanghai
 encoding: "utf-8"
@@ -34,10 +34,9 @@ components:
     # 文章字数统计
     word_count:
         enabled: true
-    # 页面右上角，以及「关于」页面的二维码
-    # 修改图片请替换 assets/images/qrcode.jpg
-    qrcode:
-        enabled: false
+    # 页面右上角，天气插件
+    weather:
+        enabled: true
         image_alt:
 # 压缩页面内容
 compress_html:
