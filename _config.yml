@@ -5,9 +5,9 @@ baseurl:
 url: https://nineholic.github.io
 date_format: "ordinal"
 title: Nine
-subtitle: 
+subtitle: Blog
 description: 
-keywords: 
+keywords: 九, Nine, NineHolic
 timezone: Asia/Shanghai
 encoding: "utf-8"
 side_bar_repo_limit: 5
