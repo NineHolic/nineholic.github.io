@@ -2,7 +2,7 @@
 
         <div class="site-footer" role="contentinfo">
             <div class="copyright left mobile-block">
-                    © 2021
+                Copyright © <script>document.write(new Date().getFullYear())</script>
                     <span title="{{ site.author}}">{{ site.author }}</span>
                     <a href="javascript:window.scrollTo(0,0)" class="right mobile-visible">TOP</a>
             </div>
@@ -24,6 +24,7 @@
                 <li><a href="{{ site.url }}{{ site.subscribe_rss }}"><span class="octicon octicon-rss" style="color:orange;"></span></a></li>
             </ul>
             <div class="mobile-hidden" style="margin-top:8px">
+                {% if site.components.busuanzi.enabled %}
                 <span id="busuanzi_container_site_pv">
                     本站访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次
                 </span>
@@ -33,6 +34,27 @@
                 {% if site.components.busuanzi.start_date %}
                 /&nbsp;统计始于&nbsp;{{ site.components.busuanzi.start_date }}
                 {% endif %}
+                {% endif %}
+                <span id="runtime_span"></span>
+                <script type="text/javascript">
+                    function show_runtime() {
+                        window.setTimeout("show_runtime()", 1000);
+                        X = new
+                        Date("05/10/2021 16:20:00");
+                        Y = new Date();
+                        T = (Y.getTime() - X.getTime());
+                        M = 24 * 60 * 60 * 1000;
+                        a = T / M;
+                        A = Math.floor(a);
+                        b = (a - A) * 24;
+                        B = Math.floor(b);
+                        c = (b - B) * 60;
+                        C = Math.floor((b - B) * 60);
+                        D = Math.floor((c - C) * 60);
+                        runtime_span.innerHTML = "本站已运行 " + A + " 天 " + B + " 小时 " + C + " 分 " + D + " 秒"
+                    }
+                    show_runtime();
+                </script>
             </div>
         </div>
     </footer>
