@@ -143,6 +143,8 @@ $(document).ready(function(){
 });
     </script>
     {% endif %}
-
-</body>
+    {% if site.components.firework.enabled %}
+    <script src="{{ assets_base_url }}/assets/js/mouse-click.js"></script>
+    {% endif %}
+    </body>
 </html>

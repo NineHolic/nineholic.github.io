@@ -34,6 +34,9 @@ components:
     # 文章字数统计
     word_count:
         enabled: true
+    # 鼠标点击烟火效果
+    firework:
+      enabled: true
     # 禁用网页 F12 调试
     html_debug:
       enabled: false
