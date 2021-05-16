@@ -95,9 +95,9 @@
 }
 
 .site-header h1 .avatar {
-    margin-top: -2px;
+    margin-top: -7px;
     margin-right: 9px;
-    margin-bottom: -2px
+    margin-bottom: -16px
 }
 
 .site-header-actions>li {
@@ -586,6 +586,17 @@
     /* border-radius: 3px; */
     -webkit-box-shadow: inset 0 -1px 0 #bbb;
     box-shadow: inset 0 -1px 0 #bbb
+}
+
+.title-info {
+    display: flex;
+    flex-direction: row;
+}
+
+.avatar-top {
+    border-radius: 50%!important;
+    height: 45px;
+    width: 45px;
 }
 
 .weather-info {
