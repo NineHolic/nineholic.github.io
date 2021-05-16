@@ -8,7 +8,10 @@ menu: 链接
 permalink: /links/
 ---
 
-> God made relatives. Thank God we can choose our friends.
+<blockquote>
+    <a id="hitokoto">每日一言</a>
+</blockquote>
+<script src="https://v1.hitokoto.cn/?encode=js&select=%23hitokoto&c=k" defer></script>
 
 <ul>
 {% for link in site.data.links %}
