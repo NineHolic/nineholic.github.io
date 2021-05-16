@@ -8,7 +8,19 @@ menu: 维基
 permalink: /wiki/
 ---
 
-> 记多少命令和快捷键会让脑袋爆炸呢？
+<blockquote>
+    <a id="poem">今日诗词</a>
+    <a id="author"></a>
+</blockquote>
+<script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+<script type="text/javascript">
+    jinrishici.load(function(result) {
+      var poem =  result.data.content;
+      var author = "——" + result.data.origin.author +"《" + result.data.origin.title + "》";
+      document.getElementById("poem").innerHTML = poem;
+      document.getElementById("author").innerHTML = author;
+    })
+</script>
 
 <ul class="listing">
 {% for wiki in site.wiki %}
