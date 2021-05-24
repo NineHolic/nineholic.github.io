@@ -1,4 +1,10 @@
-### linux 安装 java
+---
+layout: post
+title: Linux 下安装 java
+categories: [java, linux]
+description: linux 下 java 的手动安装及脚本安装
+keywords: java linux
+---
 
 linux 下安装配置 jdk 1.8、jdk 11
 
@@ -41,7 +47,7 @@ export PATH=$PATH:$JAVA_HOME/bin
 source /etc/profile
 ```
 
-> 其中 JAVA_HOME，JRE_HOME 根据自己的实际安装路径及 JDK 版本配
+> 其中 JAVA_HOME，JRE_HOME 根据自己的实际安装路径及 JDK 版本配置
 
 ##### 3、验证是否安装成功
 
