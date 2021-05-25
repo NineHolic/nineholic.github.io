@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Centos7 下静默安装 Oracle 11g
-categories: [oracle， linux， centos]
+categories: [oracle, linux, centos]
 description: 初次在 linux 上安装 Oracle 11g，记录安装过程和之后补充的一些知识
 keywords: oracle linux centos
 ---
