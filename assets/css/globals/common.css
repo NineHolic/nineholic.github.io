@@ -131,7 +131,7 @@
 
 .site-header-nav-item {
     display: inline-block;
-    padding: 6px 10px 15px;
+    padding: 6px 12px 15px;
     margin-left: 1.25rem;
     font-size: 1rem;
     color: #777
@@ -600,11 +600,8 @@
 }
 
 .weather-info {
-    line-height: normal
-}
-
-.page-title {
-    width: 54.3%
+    float: right;
+    line-height: normal;
 }
 
 .pl-c {
