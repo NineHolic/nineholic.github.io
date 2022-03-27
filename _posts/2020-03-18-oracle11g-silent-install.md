@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Centos7 下静默安装 Oracle 11g
-categories: [oracle, linux, centos]
+categories: [Oracle, Linux, Centos]
 description: 初次在 linux 上安装 Oracle 11g，记录安装过程和之后补充的一些知识
-keywords: oracle linux centos
+keywords: Oracle Linux Centos
 ---
 
 Centos 7 下静默安装 Oracle 11g，安装环境：Centos 7.8、JDK 1.8、Oracle 11.2.0.1
@@ -12,16 +12,20 @@ Centos 7 下静默安装 Oracle 11g，安装环境：Centos 7.8、JDK 1.8、Orac
 
 Oracle 11.2.0.1 官网下载地址：
 
-http://download.oracle.com/otn/linux/oracle11g/R2/linux.x64_11gR2_database_1of2.zip
-http://download.oracle.com/otn/linux/oracle11g/R2/linux.x64_11gR2_database_2of2.zip
+[http://download.oracle.com/otn/linux/oracle11g/R2/linux.x64_11gR2_database_1of2.zip](http://download.oracle.com/otn/linux/oracle11g/R2/linux.x64_11gR2_database_1of2.zip)
+[http://download.oracle.com/otn/linux/oracle11g/R2/linux.x64_11gR2_database_2of2.zip](http://download.oracle.com/otn/linux/oracle11g/R2/linux.x64_11gR2_database_2of2.zip)
 
 ##### 1、安装依赖
 
-使⽤ root ⽤户执⾏，直接安装以下依赖包：
+使⽤ root ⽤户执⾏，直接安装以下依赖包
+
+- The following or later version of packages for Oracle Linux 7, and Red Hat Enterprise Linux 7 must be installed:
 
 ```shell
-yum -y install make gcc binutils gcc-c++ compat-libstdc++-33 elfutils-libelf-devel elfutils-libelf-devel-static ksh libaio libaio-devel numactl-devel sysstat unixODBC unixODBC-devel pcre-devel glibc.i686 unzip vim
+yum -y install binutils compat-libcap1 compat-libstdc++-33 compat-libstdc++-33*i686 compat-libstdc++-33*.devel compat-libstdc++-33 compat-libstdc++-33*.devel gcc gcc-c++ glibc glibc*.i686 glibc-devel glibc-devel*.i686 ksh libaio libaio*.i686 libaio-devel libaio-devel*.devel libgcc libgcc*.i686 libstdc++ libstdc++*.i686 libstdc++-devel libstdc++-devel*.devel libXi libXi*.i686 libXtst libXtst*.i686 make sysstat unixODBC unixODBC*.i686 unixODBC-devel unixODBC-devel*.i686 unzip vim
 ```
+
+> 参考官方：http://docs.oracle.com/cd/E11882_01/install.112/e24326/toc.htm#BHCCADGD
 
 ##### 2、⽤户和组准备
 
@@ -41,7 +45,7 @@ useradd -g oinstall -G dba -d /home/oracle oracle
 passwd oracle
 ```
 
-![image-20200318232522415](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200325223330655.png)
+![image-20200325223330655](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200318232522415.png)
 
 ##### 3、⽬录准备及权限调整
 
@@ -69,11 +73,9 @@ chmod -R 775 /home/oracle/app/oracle/data
 
 ##### 4、内核参数调整
 
-使⽤ root ⽤户执⾏：
+使⽤ root ⽤户执⾏：`vim /etc/sysctl.conf`
 
 ```shell
-vim /etc/sysctl.conf
-
 # 在⽂件最后新增: 
 fs.aio-max-nr = 1048576 
 fs.file-max = 6815744 
@@ -86,20 +88,17 @@ net.core.rmem_default = 262144
 net.core.rmem_max = 4194304 
 net.core.wmem_default = 262144 
 net.core.wmem_max = 1048586
-
-# 使之⽣效
-/sbin/sysctl -p
 ```
+
+使之⽣效：`/sbin/sysctl -p`
 
 ##### 5、⽤户的限制⽂件修改
 
-要改善 Linux 系统上的软件性能，必须对 Oracle 软件所有者用户（grid、oracle）增加以下资源限制：
+要改善 Linux 系统上的软件性能，必须对 Oracle 软件所有者用户（grid、oracle）增加以下资源限制
 
-使⽤ root ⽤户执⾏：
+使⽤ root ⽤户执⾏：`vim /etc/security/limits.conf`
 
 ```shell
-vim /etc/security/limits.conf
-
 # 在最后新增: 
 oracle           soft    nproc           2047 
 oracle           hard    nproc           16384 
@@ -115,19 +114,19 @@ Shell 限制    limits.conf 中的条目      硬限制
 进程堆栈段的最大大小        stack  10240
 ```
 
-```shell
-vim /etc/pam.d/login
+修改文件：`vim /etc/pam.d/login`
 
+```shell
 # 在最后新增: 
 session  required   /lib64/security/pam_limits.so 
 session  required   pam_limits.so
 ```
 
-对默认的 shell 启动文件进行以下更改，以便更改所有 Oracle 安装所有者的 ulimit 设置
+对默认的 shell 启动文件进行以下更改，以便更改所有 Oracle 安装所有者的 ulimit 设置：
+
+`vim /etc/profile`
 
 ```shell
-vim /etc/profile
-
 # 在最后新增: 
 if [ $USER = "oracle" ]; then 
  if [ $SHELL = "/bin/ksh" ]; then   
@@ -137,73 +136,66 @@ if [ $USER = "oracle" ]; then
    ulimit -u 16384 -n 65536 
  fi 
 fi
-
-# 使之⽣效
-source /etc/profile
 ```
+
+使之⽣效：`source /etc/profile`
 
 ##### 6、环境配置
 
 使用 root 用户执行
 
-```shell
-# 修改主机名，本机改为 DB
-vim /etc/hostname
+修改主机名，本机改为 DB：`vim /etc/hostname`
 
-# 添加主机名与 IP 对应记录
-vim /etc/hosts
+添加主机名与 IP 对应记录：`vim /etc/hosts`
 
+```ini
 192.168.33.131	DB
+```
 
-# 禁用 selinux，将 SELINUX=enforcing 为 SELINUX=disabled 后重启系统
-vim /etc/selinux/config
+禁用 selinux，将 SELINUX=enforcing 改为 SELINUX=disabled 后重启服务器：`vim /etc/selinux/config`
 
-# 重启后查看SELinux状态（enabled即为开启状态）
+![image-20200318232522415](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200325223330655.png)
+
+```shell
+# 重启后查看 SELinux 状态（enabled 即为开启状态）
 /usr/sbin/sestatus -v
 
-# 开放1521端口
+# 开放 1521 端口
 firewall-cmd  --zone=public --add-port=1521/tcp --permanent
 
 # 重启防火墙
 firewall-cmd --reload
 ```
 
-![image-20200325223330655](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200318232522415.png)
-
 ![image-20200325223422821](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200325223422821.png)
 
-使⽤ oracle ⽤户执⾏：
+使⽤ oracle ⽤户执⾏：`su - oracle`
+
+`vim ~/.bash_profile`
 
 ```shell
-su - oracle
-vim ~/.bash_profile
-
-# 在最后新增如下， 注意其中的 ORACLE_BASE 和 ORACLE_HOME 也在应答⽂件中有设置， 要保持⼀致 
-export LANG=en_US.UTF-8 
-export ORACLE_BASE=/home/oracle/app/oracle 
-export ORACLE_HOME=$ORACLE_BASE/product/11gr2/dbhome_1 
+# 在最后新增如下，注意其中的 ORACLE_BASE 和 ORACLE_HOME 也在应答⽂件中有设置，要保持⼀致 
+export LANG=en_US.UTF-8
+export ORACLE_BASE=/home/oracle/app/oracle
+export ORACLE_HOME=$ORACLE_BASE/product/11gr2/dbhome_1
 export ORACLE_SID=orcl
 PATH=/usr/sbin:$PATH:$ORACLE_HOME/bin
-
-# 使之⽣效
-source ~/.bash_profile
+export PAT
 ```
+
+使之⽣效：`source ~/.bash_profile``
 
 ##### 7、使用应答⽂件静默安装 oracle
 
-使⽤ oracle ⽤户下执⾏
+使⽤ oracle ⽤户下执⾏：`su - oracle`
 
 ```shell
-su - oracle
 # 解压安装包后得到⼀个 database 的⽂件夹 
 unzip linux.x64_11gR2_database_1of2.zip 
 unzip linux.x64_11gR2_database_2of2.zip
 
 # 在复制的 demo 应答⽂件基础上修改 
 cp /home/oracle/response/db_install.rsp /home/oracle/database/response/my_db_install.rsp
-
-# 注意其中的 ORACLE_HOSTNAME、ORACLE_BASE、ORACLE_HOME 需要根据实际情况修改 
-vim /home/oracle/response/my_db_install.rsp
 ```
 
 | 文件             | 作用                                                         |
@@ -213,7 +205,7 @@ vim /home/oracle/response/my_db_install.rsp
 | dbca.rsp         | 静默安装 Database Configuration Assistant，创建数据库应答    |
 | netca.rsp        | 静默安装 Oracle Net Configuration Assistant，建立监听、本地服务名等网络设置的应答 |
 
-部分参数说明，按需修改：
+部分参数说明，按需修改：`vim /home/oracle/response/my_db_install.rsp`
 
 ```ini
 # 安装类型：INSTALL_DB_SWONLY（只装数据库软件）、INSTALL_DB_AND_CONFIG（安装并配置数据库）、UPGRADE_DB（更新数据库）
@@ -315,15 +307,14 @@ rm -rf /home/oracle/inventory/*
 
 ##### 8、使用数据库应答文件创建数据库
 
-使⽤ oracle ⽤户执⾏：
+使⽤ oracle ⽤户执⾏：`su - oracle`
 
 ```shell
-su - oracle
 # 在 demo 应答⽂件基础上修改 
 cp /home/oracle/database/response/dbca.rsp /home/oracle/database/response/my_dbca.rsp
 ```
 
-修改应答⽂件中的内容：
+修改应答⽂件中的内容：`vim /home/oracle/database/response/my_dbca.rsp`
 
 ```ini
 # 创建数据库
@@ -391,22 +382,18 @@ dbca -silent -responseFile /home/oracle/database/response/my_dbca.rsp
 
 ##### 9、配置监听
 
-使⽤ oracle ⽤户执⾏
+使⽤ oracle ⽤户执⾏：`su - oracle`
 
 ```shell
-su - oracle
-# 执行前需开放 1521 端口，执⾏完成后，会在 $ORACLE_HOME/network/admin ⽬录下⽣成 sqlnet.ora 和 listener.ora 两个⽂件
+# 执⾏完成后，会在 $ORACLE_HOME/network/admin ⽬录下⽣成 sqlnet.ora 和 listener.ora 两个⽂件
 cd /home/oracle/database/response
 netca /silent /responsefile /home/oracle/database/response/netca.rsp
 ```
 
-```shell
-# 注册 sid 
-vim $ORACLE_HOME/network/admin/listener.ora
-```
+注册 sid：`vim $ORACLE_HOME/network/admin/listener.ora`
 
 ```shell
-# 1、修改 LISTENER 中 HOST 为主机名
+# 1、将 LISTENER 中 HOST 修改为主机名
 # 2、添加以下内容，(PROGRAM = extproc) 需要注释掉，否则后⾯会导致客户端⽆法连接，连接时报错：ORA-12514，sid_name 与应答文件中一致
 SID_LIST_LISTENER = 
  (SID_LIST =    
@@ -416,17 +403,13 @@ SID_LIST_LISTENER =
 	 #(PROGRAM = extproc)    
 	 ) 
  )
- 
-# 修改后重启监听
-lsnrctl reload
 ```
 
 ![image-20200709161036238](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200709161036238.png)
 
-```shell
-# 查看监听状态
-lsnrctl status
-```
+修改后重启监听：`lsnrctl reload`
+
+查看监听状态：`lsnrctl status`
 
 ![image-20200709162005159](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200709162005159.png)
 
@@ -437,7 +420,7 @@ lsnrctl status
 SQL> select status from v$instance;
 ```
 
-![image-20200709162818045](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200709163238460.png)
+![image-20200709163238460](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200709162818045.png)
 
 ##### 10、配置数据库
 
@@ -454,7 +437,10 @@ SQL> show parameter instance_name;
 -- 当前的数据库连接数 
 SQL> select count(*) from v$process;
 
--- 修改连接数
+-- 查询最大连接数，默认为 150
+SQL> show parameter processes;
+
+-- 修改最大连接数
 SQL> alter system set processes = 2000 scope = spfile; 
 
 -- 关闭数据库实例
@@ -463,36 +449,39 @@ SQL> shutdown immediate;
 -- 启动数据库实例
 SQL> startup;
 
--- 密码有效期默认是180天
+-- 查询密码有效期，默认为 180 天
 SQL> SELECT * FROM dba_profiles s WHERE s.profile='DEFAULT' AND resource_name='PASSWORD_LIFE_TIME';
 
--- 修改为无限期，无需重启数据库
+-- 密码有效期修改为无限期，无需重启数据库
 SQL> ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED;
 ```
 
-![image-20200709163238460](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200709162818045.png)
+![image-20200709162818045](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200709163238460.png)
 
 ##### 11、设置开机自启
 
-```shell
-# 进入 oracle 用户下，修改自启动脚本
-su - oracle
-vim $ORACLE_HOME/bin/dbstart
-
-# 修改 oratab 选线，将 N 改成 Y
-vim /etc/oratab
-
-# 进入 root 用户，将 oracle 自带的 dbstart 启动脚本加入到 /etc/rc.d/rc.local
-vim /etc/rc.d/rc.local
-
-su - oracle -lc "/home/oracle/app/oracle/product/11gr2/dbhome_1/bin/dbstart"
-```
-
-![image-20200708185408774](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200708185531372.png)
+进入 oracle 用户下，修改启动脚本如下：`vim $ORACLE_HOME/bin/dbstart`
 
 ![image-20200708185531372](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200708185408774.png)
 
+修改关闭脚本如下：`vim $ORACLE_HOME/bin/dbshut`
+
+![image-20210825162141723](media/image-20210825162141723.png)
+
+修改 oratab 选线，将 N 改成 Y：`vim /etc/oratab`
+
+![image-20200708185408774](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200708185531372.png)
+
+进入 root 用户，修改配置：`vim /etc/rc.d/rc.local`
+
+```shell
+# 在末尾加上 oracle 自带的 dbstart 启动脚本
+su - oracle -lc "/home/oracle/app/oracle/product/11gr2/dbhome_1/bin/dbstart"
+```
+
 ![image-20200708185901783](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200708185901783.png)
+
+添加执行权限：`chmod +x /etc/rc.d/rc.local`
 
 #### 二、可能遇到的问题
 
@@ -504,16 +493,13 @@ su - oracle -lc "/home/oracle/app/oracle/product/11gr2/dbhome_1/bin/dbstart"
 
  解决⽅法:
 
-```shell
-vi /home/oracle/inventory/ContentsXML/inventory.xml
-# 删除<HOME_LIST>下的所有内容，然后再试
-```
+删除<HOME_LIST>下的所有内容，然后再试：`vi /home/oracle/inventory/ContentsXML/inventory.xml` 
 
 ##### 2、plsql 连接报错
 
 > ORA-12514: TNS:listener does not currently know of service requested in connect descriptor
 
-- 检查 $ORACLE_HOME/network/admin/listener.ora， 是否按照上⾯
+- 检查 $ORACLE_HOME/network/admin/listener.ora 配置
 - 配置监听配置了 SID_LIST_LISTENER 
 - 其中的 sid 有没有写错
 
@@ -555,9 +541,9 @@ vi /home/oracle/inventory/ContentsXML/inventory.xml
 swapon -s
 ```
 
-如果返回的信息概要是空的，则表示 Swap 文件不存在，如何有：
+如果返回的信息概要是空的，则表示 Swap 文件不存在
 
-需要先关闭 swap 分区：`swapoff -a`，修改完成后再开启 swap 分区：`swapon -a`
+如果有则需要先关闭 swap 分区：`swapoff -a`，修改完成后再开启 swap 分区：`swapon -a`
 
 ```shell
 swapoff -a
@@ -579,11 +565,11 @@ dd if=/dev/zero of=/swapfile bs=1024 count=3072k
 
 >  参数说明：
 >
-> if = 文件名：输入文件名，缺省为标准输入。即指定源文件。
+> if=filename：输入文件名，缺省为标准输入。即指定源文件。
 >
-> < if=input file > of=文件名：输出文件名，缺省为标准输出。即指定目的文件。
+> < if=input file > of=filename：输出文件名，缺省为标准输出。即指定目的文件。
 >
-> < of=output file > bs=bytes：同时设置读入/输出的块大小为bytes个字节count=blocks：仅拷贝blocks个块，块大小等于bs指定的字节数
+> < of=output file > bs=bytes：同时设置读入/输出的块大小为 bytes 个字节 count=blocks：仅拷贝 blocks 个块，块大小等于 bs 指定的字节数
 
 ④ 格式化并激活 Swap 文件上面已经创建好 Swap 文件，还需要格式化后才能使用。运行命令：
 
@@ -591,13 +577,13 @@ dd if=/dev/zero of=/swapfile bs=1024 count=3072k
 mkswap /swapfile
 ```
 
-激活 Swap ，运行命令：
+激活 Swap ，运行命令开启 swap 分区：
 
 ```shell
 swapon /swapfile
 ```
 
-![image-20200319005119708](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200319005042871.png)
+![image-20200319005042871](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200319005119708.png)
 
 以上步骤做完，再次运行命令：
 
@@ -607,7 +593,7 @@ swapon -s
 
   你会发现返回的信息概要：
 
-![image-20200319005042871](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200319005119708.png)
+![image-20200319005119708](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200319005042871.png)
 
  如果要机器重启的时候自动挂载 Swap ，那么还需要修改 fstab 配置，在其最后添加如下一行：`vi /etc/fstab`
 
@@ -643,11 +629,9 @@ AMERICAN_AMERICA.AL32UTF8
 
 导入 dmp 文件时需要 oracle server 端、client 端和 dmp 文件的字符集都一致才能正确导入
 
-ZHS16GBK 修改字符集为 AL32UTF8
+ZHS16GBK 修改字符集为 AL32UTF8：`sqlplus / as sysdba`
 
 ```sql
-sqlplus / as sysdba
-
 SQL> shutdown immediate;
 SQL> STARTUP MOUNT;
 SQL> ALTER SESSION SET SQL_TRACE=TRUE;
