@@ -3,7 +3,7 @@ layout: post
 title: Linux 下安装 Java
 categories: [Java, Linux]
 description: Linux 下 Java 的手动安装及脚本安装方式
-keywords: Java Linux
+keywords: Java, Linux
 ---
 
 Linux 下安装配置 jdk 1.8、jdk 11

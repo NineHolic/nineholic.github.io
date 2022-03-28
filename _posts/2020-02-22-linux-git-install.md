@@ -3,7 +3,7 @@ layout: post
 title: Linux 下安装 Git 
 categories: [git, linux]
 description: linux 下 git 的安装，使用脚本进行安装
-keywords: git linux
+keywords: git, linux
 ---
 
 linux 下编译安装 git 以及使用脚本安装
