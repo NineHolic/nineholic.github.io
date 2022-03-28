@@ -1,9 +1,9 @@
 ---
 layout: wiki
 title: Jenkins
-categories: jenkins
-description: 记录学习 jenkins 中一些方便使用的技巧
-keywords: jenkins, pipeline, linux
+categories: Jenkins
+description: 记录学习 Jenkins 中一些方便使用的技巧
+keywords: Jenkins, Linux, Skill
 ---
 
 学习和使用 jenkins 过程中遇到的问题和解决办法

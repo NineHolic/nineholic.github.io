@@ -1,14 +1,74 @@
 ---
 layout: post
 title: Linux
-categories: linux
-description: 记录学习 linux 中一些方便使用的技巧
-keywords: centos ubuntu linux
+categories: Linux
+description: 记录学习 Linux 中一些方便使用的技巧
+keywords: Centos Ubuntu Linux Skill
 ---
 
-学习和使用 linux 过程中遇到的问题和解决办法
+学习和使用 Linux 过程中遇到的问题和解决办法
 
-##### 更换yum源
+##### 用户名所在行高亮显示
+
+![image-20200307235437332](https://gitee.com/NineHolic/cloudimage/raw/master/linux/image-20200307235437332.png)
+
+执行下面的脚本后重新登录即可
+
+```shell
+wget https://cdn.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/_posts/files/shell/setcolor.sh && /bin/bash setcolor.sh
+```
+
+或者把以下内容添加对应用户到 .bashrc 中：
+
+```shell
+force_color_prompt=yes
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	# We have color support; assume it's compliant with Ecma-48
+	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+	# a case would tend to support setf rather than setaf.)
+	color_prompt=yes
+    else
+	color_prompt=
+    fi
+fi
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+```
+
+Ubuntu 下可直接修改对应用户目录下的 .bashrc 文件，把`# force_color_prompt=yes`注释去掉后重新登录
+
+（如果使用其他用户登录，其下的 .bashrc 也要修改，与终端软件无关）
+
+![image-20200307235430234](https://gitee.com/NineHolic/cloudimage/raw/master/linux/image-20200307235430234.png)
+
+##### 更换 yum 源
 
 将本地 CentOS 的 yum 安装源更换为阿里源
 
@@ -26,11 +86,11 @@ yum clean all
 # 生成新的缓存
 yum makecache
 
-# 测试yum
+# 测试 yum
 yum search openssh
 ```
 
-##### 更换apt源
+##### 更换 apt 源
 
 清华开源镜像站：https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu，选择ubuntu版本
 
@@ -79,7 +139,7 @@ cat /etc/redhat-release
 ##### 域名无法ping通
 
 ```shell
-# 修改 reolv.conf，配置 dns，添加两行
+# 修改 /etc/reolv.conf，配置 dns，添加两行
 nameserver 114.114.114.114
 nameserver 223.5.5.5
 ```
@@ -98,69 +158,20 @@ nameserver 223.5.5.5
 # 将默认的 22 端口改为 22333 端口
 vim /etc/ssh/sshd_config
 
-# 重启ssh，此时另起连接窗口使用 22333 端口测试连接，防止修改失败连不上
+# 重启 ssh 服务
 systemctl restart sshd
 ```
 
-##### 用户名所在行高亮显示
+##### 禁止 root 登录
 
-修改登录用户目录下的 .bashrc 文件，把46行的`# force_color_prompt=yes`注释去掉保存后重新登录，
-
-（如果使用其他用户登录，其下的 .bashrc 也要修改，和终端软件无关）
-
-![image-20200307235430234](https://gitee.com/NineHolic/cloudimage/raw/master/linux/image-20200307235430234.png)
-
-重新登录后
-
-![image-20200307235437332](https://gitee.com/NineHolic/cloudimage/raw/master/linux/image-20200307235437332.png)
-
-如果没有找到`# force_color_prompt=yes`这一行，把以下内容添加到 .bashrc 中：
+此项修改需已有其它账号，否则会无法登录
 
 ```shell
-force_color_prompt=yes
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
-    fi
-fi
+# 将 PermitRootLogin 所在行注释去掉，yes 改为 no
+vim /etc/ssh/sshd_config
 
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
-
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-```
-
-```shell
-# 执行后重新登录即可
-wget https://cdn.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/_posts/files/shell/setcolor.sh && /bin/bash setcolor.sh
+# 重启 ssh，此时使用 root 账号连接会提示 ssh 服务器拒绝了密码，说明配置成功
+systemctl restart sshd
 ```
 
 ##### 删除自带的 openjdk
@@ -182,60 +193,99 @@ alternatives --remove java /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.232.b09-0.el7_7
 rm -rf java-1.8.0-openjdk-1.8.0.232.b09-0.el7_7.aarch64
 ```
 
-##### vi/vim 临时/永久显示行号
+##### 磁盘空间已满，但实际占用却很小
 
-- 临时显示，`vi`命令执行后输入：`：set nu`
+如下图情况，使用`du -sh`查看占用大小
 
+![image-20211124112755375](media/image-20211124112755375.png)
 
-- 永久显示：`vi /etc/vim/vimrc`，在最后一行加上`set nu`，保存后再次使用`vi`时就会显示行号了
+使用`lsof | grep deleted`查看，没有`lsof`命令则使用`yum`安装：`yum -y install lsof`
 
+可以看到java进程占用了大约49G空间，使用`kill -9 35467`杀掉进程释放空间
 
-![image-20200308000935928](https://gitee.com/NineHolic/cloudimage/raw/master/linux/image-20200308000935928.png)
+![image-20211124143501925](media/image-20211124143501925.png)
+
+![image-20211124145007856](media/image-20211124145007856.png)
 
 ##### 防火墙操作 firewall
 
 ```shell
+# 开机启用/禁用
+systemctl enable firewalld
+systemctl disable firewalld
+
 # 查看 firewall 服务状态
 systemctl status firewalld
 
 # 查看 firewall 的状态
 firewall-cmd --state
 
-# 开启服务
+# 服务命令
 service firewalld start
-
-# 重启服务
+service firewalld stop
 service firewalld restart
 
-# 关闭服务
-service firewalld stop
-```
-
-****
-
-![image-20200517215608126](https://gitee.com/NineHolic/cloudimage/raw/master/linux/image-20200517215608126.png)
-
-```shell
 # 查看防火墙规则
 firewall-cmd --list-all 
 
-# 查询端口是否开放
-firewall-cmd --zone=public --query-port=80/tcp
-
-# 开放 80 端口
-firewall-cmd --zone=public --add-port=80/tcp --permanent
+# 开放端口
+firewall-cmd --permanent --zone=public --add-port=8080/tcp
+firewall-cmd --permanent --zone=public --add-port=8080-9090/tcp
 
 # 移除端口
-firewall-cmd --zone=public --remove-port=80/tcp --permanent
+firewall-cmd --permanent --zone=public --remove-port=80/tcp
 
-#重启防火墙(修改配置后要重启防火墙)
+# 对指定 ip 开放端口
+firewall-cmd --permanent --add-rich-rule="rule family="ipv4" source address="192.168.0.105" port protocol="tcp" port="8859" accept"
+
+# 删除某个IP
+firewall-cmd --permanent --remove-rich-rule="rule family="ipv4" source address="192.168.1.51" accept"
+
+# 针对一个ip段访问
+firewall-cmd --permanent --add-rich-rule="rule family="ipv4" source address="192.168.1.0/24" port protocol="tcp" port="8859" accept"
+firewall-cmd --permanent --add-rich-rule="rule family="ipv4" source address="192.168.0.0/16" accept"
+
+# 端口转发
+firewall-cmd --permanent --zone=public --add-forward-port=port=3336:proto=tcp:toport=3306:toaddr=192.168.0.105
+
+# 查看转发的端口
+firewall-cmd --list-forward-ports
+
+# 更新防火墙规则(修改配置后需执行)
 firewall-cmd --reload
 
 # 参数解释
 1、firwall-cmd：是 Linux 提供的操作 firewall 的一个工具；
-2、--zone=public：作用域
-3、--add-port：标识添加的端口；
-4、--permanent：设置永久；
+2、--permanent：设置永久；
+3、--zone=public：作用域
+4、--add-port：标识添加的端口；
+```
+
+##### iptables 相关命令失效
+
+原因是 Centos 7 开始默认使用 firewalle 管理防火墙
+
+![image-20210818101632941](media/image-20210818101632941.png)
+
+```shell
+# 停止 firewalld 服务、禁止firewall开机启动
+systemctl stop firewalld
+systemctl disable firewalld.service
+ 
+# 安装 iptables-services
+yum -y install iptables-services
+ 
+# 设置防火墙开机启动
+systemctl enable iptables.service
+
+# 服务命令
+systemctl stop iptables
+systemctl start iptables
+systemctl restart iptables
+systemctl reload iptables
+ 
+# 查看 iptables 现有规则
+iptables -L -n
 ```
 
 ##### 替换为 unix 格式换行（将 \r 替换成空）
