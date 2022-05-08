@@ -45,7 +45,7 @@ useradd -g oinstall -G dba -d /home/oracle oracle
 passwd oracle
 ```
 
-![image-20200325223330655](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200318232522415.png)
+![image-20200325223330655](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200318232522415.png)
 
 ##### 3、⽬录准备及权限调整
 
@@ -100,10 +100,10 @@ net.core.wmem_max = 1048586
 
 ```shell
 # 在最后新增: 
-oracle           soft    nproc           2047 
-oracle           hard    nproc           16384 
-oracle           soft    nofile          1024 
-oracle           hard    nofile          65536 
+oracle           soft    nproc           2047
+oracle           hard    nproc           16384
+oracle           soft    nofile          1024
+oracle           hard    nofile          65536
 oracle           soft    stack           10240
 ```
 
@@ -118,7 +118,7 @@ Shell 限制    limits.conf 中的条目      硬限制
 
 ```shell
 # 在最后新增: 
-session  required   /lib64/security/pam_limits.so 
+session  required   /lib64/security/pam_limits.so
 session  required   pam_limits.so
 ```
 
@@ -148,13 +148,13 @@ fi
 
 添加主机名与 IP 对应记录：`vim /etc/hosts`
 
-```ini
+```
 192.168.33.131	DB
 ```
 
 禁用 selinux，将 SELINUX=enforcing 改为 SELINUX=disabled 后重启服务器：`vim /etc/selinux/config`
 
-![image-20200318232522415](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200325223330655.png)
+![image-20200318232522415](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200325223330655.png)
 
 ```shell
 # 重启后查看 SELinux 状态（enabled 即为开启状态）
@@ -167,7 +167,7 @@ firewall-cmd  --zone=public --add-port=1521/tcp --permanent
 firewall-cmd --reload
 ```
 
-![image-20200325223422821](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200325223422821.png)
+![image-20200325223422821](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200325223422821.png)
 
 使⽤ oracle ⽤户执⾏：`su - oracle`
 
@@ -180,10 +180,10 @@ export ORACLE_BASE=/home/oracle/app/oracle
 export ORACLE_HOME=$ORACLE_BASE/product/11gr2/dbhome_1
 export ORACLE_SID=orcl
 PATH=/usr/sbin:$PATH:$ORACLE_HOME/bin
-export PAT
+export PATH
 ```
 
-使之⽣效：`source ~/.bash_profile``
+使之⽣效：`source ~/.bash_profile`
 
 ##### 7、使用应答⽂件静默安装 oracle
 
@@ -282,7 +282,7 @@ DECLINE_SECURITY_UPDATES=true
 
 开始安装前先检查 swap 内存大小和磁盘大小是否够用，不够的话需要增加 swap 大小和磁盘，详见文章底部
 
-![image-20200510211959538](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200510211959538.png)
+![image-20200510211959538](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200510211959538.png)
 
 ```shell
 # 注意：重装 Oracle 时执⾏前 /home/oracle/inventory 下不能有内容， 否则会报错 [INS-32035]， 重装的时候要清空此⽬录
@@ -294,7 +294,7 @@ rm -rf /home/oracle/inventory/*
 
 执⾏一段时间后提示需要 root ⽤户执⾏两个脚本时，即为安装成功：
 
-![image-20200325223920792](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200325223920792.png)
+![image-20200325223920792](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200325223920792.png)
 
 使⽤ root ⽤户执⾏两个脚本
 
@@ -303,7 +303,7 @@ rm -rf /home/oracle/inventory/*
 /home/oracle/app/oracle/product/11gr2/dbhome_1/root.sh
 ```
 
-![image-20200325222300814](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200325222300814.png)
+![image-20200325222300814](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200325222300814.png)
 
 ##### 8、使用数据库应答文件创建数据库
 
@@ -378,7 +378,7 @@ cd /home/oracle/database/response
 dbca -silent -responseFile /home/oracle/database/response/my_dbca.rsp
 ```
 
-![image-20200325230157838](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200325230157838.png)
+![image-20200325230157838](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200325230157838.png)
 
 ##### 9、配置监听
 
@@ -405,13 +405,13 @@ SID_LIST_LISTENER =
  )
 ```
 
-![image-20200709161036238](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200709161036238.png)
+![image-20200709161036238](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200709161036238.png)
 
 修改后重启监听：`lsnrctl reload`
 
 查看监听状态：`lsnrctl status`
 
-![image-20200709162005159](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200709162005159.png)
+![image-20200709162005159](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200709162005159.png)
 
 使⽤ sqlplus 本机测试：`sqlplus / as sysdba`
 
@@ -420,7 +420,7 @@ SID_LIST_LISTENER =
 SQL> select status from v$instance;
 ```
 
-![image-20200709163238460](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200709162818045.png)
+![image-20200709163238460](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200709162818045.png)
 
 ##### 10、配置数据库
 
@@ -429,7 +429,7 @@ SQL> select status from v$instance;
 SQL> show parameter instance_name;
 ```
 
-![image-20200325233251985](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200325233251985.png)
+![image-20200325233251985](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200325233251985.png)
 
 修改数据库最⼤连接数和密码有效期
 
@@ -456,13 +456,13 @@ SQL> SELECT * FROM dba_profiles s WHERE s.profile='DEFAULT' AND resource_name='P
 SQL> ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED;
 ```
 
-![image-20200709162818045](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200709163238460.png)
+![image-20200709162818045](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200709163238460.png)
 
 ##### 11、设置开机自启
 
 进入 oracle 用户下，修改启动脚本如下：`vim $ORACLE_HOME/bin/dbstart`
 
-![image-20200708185531372](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200708185408774.png)
+![image-20200708185531372](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200708185408774.png)
 
 修改关闭脚本如下：`vim $ORACLE_HOME/bin/dbshut`
 
@@ -470,7 +470,7 @@ SQL> ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED;
 
 修改 oratab 选线，将 N 改成 Y：`vim /etc/oratab`
 
-![image-20200708185408774](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200708185531372.png)
+![image-20200708185408774](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200708185531372.png)
 
 进入 root 用户，修改配置：`vim /etc/rc.d/rc.local`
 
@@ -479,7 +479,7 @@ SQL> ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED;
 su - oracle -lc "/home/oracle/app/oracle/product/11gr2/dbhome_1/bin/dbstart"
 ```
 
-![image-20200708185901783](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200708185901783.png)
+![image-20200708185901783](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200708185901783.png)
 
 添加执行权限：`chmod +x /etc/rc.d/rc.local`
 
@@ -519,7 +519,7 @@ su - oracle -lc "/home/oracle/app/oracle/product/11gr2/dbhome_1/bin/dbstart"
 .runInstaller -silent -ignorePrereq -debug -force -responseFile /home/oracle/database/response/my_db_install.rsp
 ```
 
-![image-20200319003641004](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200319003641004.png)
+![image-20200319003641004](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200319003641004.png)
 
 ##### 5、swap 报错
 
@@ -549,7 +549,7 @@ swapon -s
 swapoff -a
 ```
 
-![image-20200319004638911](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200319004638911.png)
+![image-20200319004638911](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200319004638911.png)
 
 ② 检查文件系统在设置 Swap 文件之前，同样有必要检查一下文件系统，看看是否有足够的硬盘空间来设置 Swap 。运行以下命令：
 
@@ -583,7 +583,7 @@ mkswap /swapfile
 swapon /swapfile
 ```
 
-![image-20200319005042871](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200319005119708.png)
+![image-20200319005042871](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200319005119708.png)
 
 以上步骤做完，再次运行命令：
 
@@ -593,7 +593,7 @@ swapon -s
 
   你会发现返回的信息概要：
 
-![image-20200319005119708](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20200319005042871.png)
+![image-20200319005119708](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200319005042871.png)
 
  如果要机器重启的时候自动挂载 Swap ，那么还需要修改 fstab 配置，在其最后添加如下一行：`vi /etc/fstab`
 
@@ -610,7 +610,7 @@ chmod 0600 /swapfile
 
 ##### 6、plsql 查询数据乱码
 
-![image-20210203161342912](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20210203161342912.png)
+![image-20210203161342912](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20210203161342912.png)
 
 ```sql
 -- 查询 oracle server 端的字符集
@@ -623,7 +623,7 @@ AMERICAN_AMERICA.AL32UTF8
 
 添加 NLS_LANG 为系统环境变量，与查询结果保持一致，重启plsql
 
-![image-20210203161649530](https://gitee.com/NineHolic/cloudimage/raw/master/oracle/image-20210203161649530.png)
+![image-20210203161649530](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20210203161649530.png)
 
 ##### 7、修改字符集
 

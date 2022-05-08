@@ -25,7 +25,7 @@ node -v
 npm -v
 ```
 
-![image-20210519230930635](https://gitee.com/NineHolic/cloudimage/raw/master/win/image-20210519230930635.png)
+![image-20210519230930635](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210519230930635.png)
 
 ##### 2、环境配置
 
@@ -46,4 +46,4 @@ npm config list
 npm install -g vue
 ```
 
-![image-20210520001758139](https://gitee.com/NineHolic/cloudimage/raw/master/win/image-20210520001758139.png)
+![image-20210520001758139](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210520001758139.png)

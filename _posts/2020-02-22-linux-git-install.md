@@ -56,9 +56,9 @@ source /etc/profile
 git --version
 ```
 
-![image-20200613192918431](https://gitee.com/NineHolic/cloudimage/raw/master/git/image-20200613192918431.png)
+![image-20200613192918431](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200613192918431.png)
 
-![image-20200613193019509](https://gitee.com/NineHolic/cloudimage/raw/master/git/image-20200613193019509.png)
+![image-20200613193019509](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200613193019509.png)
 
 #### 二、脚本安装
 

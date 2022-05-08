@@ -25,7 +25,7 @@ mkdir /usr/local/java
 tar -zxvf jdk-8u241-linux-x64.tar.gz -C /usr/local/java
 ```
 
-![image-20200510203033047](https://gitee.com/NineHolic/cloudimage/raw/master/linux/image-20200510203033047.png)
+![image-20200510203033047](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200510203033047.png)
 
 ##### 2、配置环境变量
 
@@ -52,7 +52,7 @@ export PATH=$PATH:$JAVA_HOME/bin
 
 输入`java -version`，显示 java 版本信息，则说明 JDK 安装成功
 
-![image-20200510203046295](https://gitee.com/NineHolic/cloudimage/raw/master/linux/image-20200308231107030.png)
+![image-20200510203046295](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200308231107030.png)
 
 #### 二、脚本安装
 
