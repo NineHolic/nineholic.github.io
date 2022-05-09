@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Centos7 升级 OpenSSH
-categories: [Linux, Centos]
-description: Centos7 下的 Openssl、Openssh 升级
-keywords: Linux, Centos, Openssh
+categories: OpenSSH
+description: Centos7 下的 openssl、openssh 升级
+keywords: Linux, Centos, OpenSSH
 ---
 
 Centos7.6 升级后测试 ssh 登录及重启后 ssh 登录均无问题，升级无需卸载原先的 openssl 和 openssh

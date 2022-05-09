@@ -3,7 +3,7 @@ layout: post
 title: Linux
 categories: Linux
 description: 记录学习 Linux 中一些方便使用的技巧
-keywords: Centos Ubuntu Linux Skill
+keywords: Centos, Ubuntu, Linux, Skill
 ---
 
 学习和使用 Linux 过程中遇到的问题和解决办法

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Windows 下安装配置 Node.js
-categories: [Windows, Node.js]
+categories: Node.js
 description: Node.js 环境配置
 keywords: Windows, Node.js
 ---

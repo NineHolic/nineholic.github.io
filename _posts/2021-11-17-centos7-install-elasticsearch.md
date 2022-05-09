@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Centos7 安装 Elasticsearch
-categories: [Elasticsearch, Linux, Centos]
-description: Elasticsearch 安装配置
-keywords: Elasticsearch Linux Centos
+categories: Elasticsearch
+description: Elasticsearch 的简单配置和使用
+keywords: Elasticsearch, Linux, Centos
 ---
 
 Elasticsearch 是一个高度可伸缩的开源全文搜索和分析引擎。它可以快速和接近实时地存储、搜索和分析大量数据

@@ -1,12 +1,12 @@
 ---
 layout: post
 title: PicGo 结合 Gitee 搭建图床
-categories: [图床, Gitee]
+categories: GitHup
 description: 使用 Gitee 作为图床存储博客图片
-keywords: Picgo, Gitee, 图床
+keywords: Picgo, GitHup, 图床
 ---
 
-PicGo 结合 Gitee 搭建图床，用于存储博客图片
+PicGo 结合 GitHup 搭建图床，用于存储博客图片
 
 ##### 1、安装 PicGo 
 

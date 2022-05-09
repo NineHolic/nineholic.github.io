@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Centos7 下安装配置 Gitlab
-categories: [Linux, Centos, Gitlab]
+categories: Gitlab
 description: Gitlab 的安装与简单配置
 keywords: Linux, Centos, Gitlab
 ---

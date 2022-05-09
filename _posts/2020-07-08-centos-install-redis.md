@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Linux 下安装 Redis
-categories: [Linux, Redis]
+categories: Redis
 description: Linux 下 Redis 的安装以及配置开机自启
 keywords: Linux, Redis
 ---

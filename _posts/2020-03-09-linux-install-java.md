@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Linux 下安装 Java
-categories: [Java, Linux]
+categories: Java
 description: Linux 下 Java 的手动安装及脚本安装方式
 keywords: Java, Linux
 ---
