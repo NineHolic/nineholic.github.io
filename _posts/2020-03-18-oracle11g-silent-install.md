@@ -466,7 +466,7 @@ SQL> ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED;
 
 修改关闭脚本如下：`vim $ORACLE_HOME/bin/dbshut`
 
-![image-20210825162141723](media/image-20210825162141723.png)
+![image-20210825162141723](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20210825162141723.png)
 
 修改 oratab 选线，将 N 改成 Y：`vim /etc/oratab`
 
