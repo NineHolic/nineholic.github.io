@@ -10,12 +10,11 @@ description:
 keywords: 九, Nine, NineHolic
 timezone: Asia/Shanghai
 encoding: "utf-8"
-side_bar_repo_limit: 5
 repository: NineHolic/nineholic.github.io
 # 对 css 和 js 资源的 cdn 加速配置
 cdn:
     jsdelivr:
-        enabled: false
+        enabled: true
 # 可选组件配置
 components:
     # 分享
@@ -30,7 +29,7 @@ components:
     # My Popular Repositories
     side_bar_repo:
         enabled: true
-        limit: 5
+        limit: 1
     # 文章字数统计
     word_count:
         enabled: true
@@ -128,7 +127,7 @@ collections:
 # ---------------- #
 #      Comments    #
 # ---------------- #
-# support provider: disqus, gitment, gitalk
+# support provider: disqus, gitment, gitalk, utterances
 comments_provider: gitalk
 # !!!重要!!! 请修改下面这些信息为你自己申请的
 # !!!Important!!! Please modify infos below to yours
@@ -141,13 +140,16 @@ gitment:
     repo: blog-comments
     oauth:
         client_id: f78c6d97082d9e075113
-        client_secret: b7ac22c3b5a365ef167381f88f9b5d2cedaa7203 
+        client_secret: b7ac22c3b5a365ef167381f88f9b5d2cedaa7203
 # https://github.com/gitalk/gitalk#install
 gitalk:
     owner: nineholic
     repo: blog-comments
     clientID: f78c6d97082d9e075113
-    clientSecret: b7ac22c3b5a365ef167381f88f9b5d2cedaa7203 
+    clientSecret: b7ac22c3b5a365ef167381f88f9b5d2cedaa7203
+# https://utteranc.es/
+utterances:
+  repo: NineHolic/blog-comments
 # 在使用其它评论组件时可点击显示 Disqus
 lazy_load_disqus : false
 
@@ -168,7 +170,8 @@ google:
   adsense:
     footer: true
     sidebar: true
-    content_header: true
+    sidebar-detail: false
+    content_header: false
     content_footer: false
 baidu:
   analytics_id: 127d2465f8c408bcd24bd9f36aca125d
