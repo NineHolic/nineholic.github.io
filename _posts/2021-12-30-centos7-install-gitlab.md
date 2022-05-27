@@ -143,11 +143,9 @@ firewall-cmd --reload
 gitlab-ctl status
 ```
 
-![image-20220404235024738](media/image-20220404235024738.png)
+![image-20220404235024738](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20220404235024738.png)
 
 安装完成后建议关闭注册功能
-
-![image-20220404235852224](media/image-20220404235852224.png)
 
 ##### 4、Gitlab 备份
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Windows 上安装使用 OpenSSH 服务
+title: Windows 上使用 OpenSSH 服务
 categories: OpenSSH
 description: OpenSSH 在 Windows 上的使用
 keywords: Windows, OpenSSH
