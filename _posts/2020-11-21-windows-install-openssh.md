@@ -27,7 +27,7 @@ OpenSSH 是安全 Shell (SSH) 工具的开放源代码版本，Linux 及其他�
 
 本机为 windows 2016，根据不同的系统下载不同的压缩包，如果是 64 位系统，选择 32 位也可以：[https://github.com/PowerShell/Win32-OpenSSH/releases](https://github.com/PowerShell/Win32-OpenSSH/releases)，解压到 C:\Program Files 目录下，重命名为 OpenSSH，将 OpenSSH 目录加入 PATH 系统环境变量中：
 
-![image-20201112161638698](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201112161638698.png)
+![image-20201112161638698](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201112161638698.png)
 
 ##### 3、安装 OpenSSH
 
@@ -49,17 +49,17 @@ net start sshd
 sc config sshd start= auto
 ```
 
-![image-20201112174718680](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201112175015594.png)
+![image-20201112174718680](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201112175015594.png)
 
-![image-20201116152208341](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201112174718680.png)
+![image-20201116152208341](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201112174718680.png)
 
-![image-20201112174851796](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116152208341.png)
+![image-20201112174851796](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116152208341.png)
 
 ##### 4、测试连接
 
 ssh 连接成功，默认会进入 windows 的命令行下（cmd）
 
-![image-20201112175015594](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116153601121.png)
+![image-20201112175015594](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116153601121.png)
 
 可以把默认的 shell 设置为 PowerShell，以管理员运行 PowerShell 执行：
 
@@ -67,11 +67,11 @@ ssh 连接成功，默认会进入 windows 的命令行下（cmd）
 New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -PropertyType String -Force
 ```
 
-![image-20201116153601121](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116154738862.png)
+![image-20201116153601121](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116154738862.png)
 
 执行后会在注册表`HKEY_LOCAL_MACHINE\SOFTWARE\OpenSSH`下添加一条 DefaultShell 字符串值，删除后恢复为原来默认 shell，下次登陆时会进入 PowerShell 下
 
-![image-20201116155055181](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116155055181.png)
+![image-20201116155055181](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116155055181.png)
 
 也可使用 Xshell、FlashFXP 等工具进行连接，传输文件时比远程桌面直接复制更方便
 
@@ -81,13 +81,13 @@ New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Wi
 
 默认加密方式为dsa，使用参数 -t 指定 rsa 加密方式先在本地生成秘钥
 
-![image-20201113154858419](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201113154858419.png)
+![image-20201113154858419](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201113154858419.png)
 
 2)、将公钥上传到服务器.ssh目录下
 
 PowerShell 中没有 ssh-copy-id 命令，手动将本地的 .ssh 目录上传到 windows 服务器用户目录下（避免文件权限问题），删除id_rsa 和 known_hosts 并将 id_rsa.pub 重命名为 authorized_keys
 
-![image-20201116155609812](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116155609812.png)
+![image-20201116155609812](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116155609812.png)
 
 3)、修改 ssh 服务的配置文件
 
@@ -102,8 +102,8 @@ PowerShell 中没有 ssh-copy-id 命令，手动将本地的 .ssh 目录上传�
 
 重启 sshd、sshd-agent 服务，并将启动类型改为自动
 
-![image-20201116161117405](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116161117405.png)
+![image-20201116161117405](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116161117405.png)
 
 使用 Xshell 测试
 
-![image-20201116161237093](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116161237093.png)
+![image-20201116161237093](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116161237093.png)

@@ -34,7 +34,7 @@ cd src
 make -j2 install PREFIX=/usr/local/redis
 ```
 
-![image-20200708175841687](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200708174648619.png)
+![image-20200708175841687](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200708174648619.png)
 
 ##### 2、配置 redis
 
@@ -53,7 +53,7 @@ mv ../redis.conf /usr/local/redis/etc
 # 将 requirepass foobared 改为 requirepass 1234，1234 为 redis 密码
 ```
 
-![image-20200708174648619](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200708175841687.png)![image-20200708175529165](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200708182146625.png)![image-20200708182146625](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200708175529165.png)
+![image-20200708174648619](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200708175841687.png)![image-20200708175529165](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200708182146625.png)![image-20200708182146625](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200708175529165.png)
 
 ```shell
 # 创建软连接，让 redis-server、redis-cli 可以在任意目录下直接使用
@@ -116,5 +116,5 @@ systemctl status redis
 
 make 时，发生以下错误，使用`make MALLOC=libc`执行
 
-![image-20201123153608469](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20201123153608469.png)
+![image-20201123153608469](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20201123153608469.png)
 

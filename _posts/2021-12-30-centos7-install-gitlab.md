@@ -143,7 +143,7 @@ firewall-cmd --reload
 gitlab-ctl status
 ```
 
-![image-20220404235024738](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20220404235024738.png)
+![image-20220404235024738](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20220404235024738.png)
 
 安装完成后建议关闭注册功能
 
@@ -202,7 +202,7 @@ chmod 777 1618907900_2021_04_20_13.10.3-ee_gitlab_backup.tar
 gitlab-rake gitlab:backup:restore BACKUP=1618907900_2021_04_20_13.10.3-ee
 ```
 
-![image-20220317225958638](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20220317225958638.png)
+![image-20220317225958638](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20220317225958638.png)
 
 ```shell
 # 重启 gitlab
@@ -259,7 +259,7 @@ exit
 gitlab-rake gitlab:doctor:secrets
 ```
 
-![image-20211230095708439](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20211230095708439.png)
+![image-20211230095708439](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20211230095708439.png)
 
 ```shell
 gitlab-rails dbconsole

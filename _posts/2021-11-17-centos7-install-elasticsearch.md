@@ -43,7 +43,7 @@ firewall-cmd --reload
 
 浏览器打开：http://192.168.0.250:9200，出现以下信息表示启动成功
 
-![image-20220316170035522](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316170035522.png)
+![image-20220316170035522](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316170035522.png)
 
 ##### 2、安装ik分词器
 
@@ -73,7 +73,7 @@ curl -H 'Content-Type: application/json' -XGET '192.168.0.250:9200/_analyze?pret
 curl -H 'Content-Type: application/json' -XGET '192.168.0.250:9200/_analyze?pretty' -d '{"analyzer":"ik_max_word","text":"飞流直下三千尺"}'
 ```
 
-![image-20220316163049837](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316163049837.png)
+![image-20220316163049837](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316163049837.png)
 
 ```shell
 # 配置自定义词库
@@ -86,11 +86,11 @@ echo '三千尺' > /usr/share/elasticsearch/plugins/ik/config/my.dic
 systemctl restart elasticsearch
 ```
 
-![image-20220316163012921](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316163012921.png)
+![image-20220316163012921](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316163012921.png)
 
 使用自定义词库后的分词效果
 
-![image-20220316162747400](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316162747400.png)
+![image-20220316162747400](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316162747400.png)
 
 ##### 4、head 插件安装
 
@@ -100,4 +100,4 @@ head 插件是 ES 的一个可视化管理插件，用来监视 ES 的状态，�
 
 本文使用浏览器插件方式：https://chrome.google.com/webstore/detail/elasticsearch-head/ffmkiejjmecolpfloofpjologoblkegm
 
-![image-20220316170641309](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316170641309.png)
+![image-20220316170641309](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316170641309.png)

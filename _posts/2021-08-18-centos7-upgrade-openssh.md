@@ -14,11 +14,11 @@ Centos7.6 升级后测试 ssh 登录及重启后 ssh 登录均无问题，升级
 
 升级前版本
 
-![image-20210818183950745](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818183950745.png)
+![image-20210818183950745](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818183950745.png)
 
 升级后版本
 
-![image-20210818210016091](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818210016091.png)
+![image-20210818210016091](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818210016091.png)
 
 > **注意事项：**
 >
@@ -34,7 +34,7 @@ Centos7.6 升级后测试 ssh 登录及重启后 ssh 登录均无问题，升级
 yum -y update openssh
 ```
 
-![image-20210818191234569](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818191234569.png)
+![image-20210818191234569](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818191234569.png)
 
 关闭 selinux：`vim /etc/selinux/config`，将`SELINUX=enforcing`改为`SELINUX=disabled`
 
@@ -87,11 +87,11 @@ systemctl start xinetd
 netstat -lntp|grep 23
 ```
 
-![image-20210819104413583](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819104413583.png)
+![image-20210819104413583](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819104413583.png)
 
 测试 telnet 登录
 
-![image-20210819104602717](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819104602717.png)
+![image-20210819104602717](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819104602717.png)
 
 以下升级操作均在 telnet 终端下操作，防止 ssh 连接意外中断造成升级失败
 
@@ -122,7 +122,7 @@ echo $?
 openssl version
 ```
 
-![image-20210818192248033](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818192248033.png)
+![image-20210818192248033](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818192248033.png)
 
 ##### 4、升级 openssh
 
@@ -179,7 +179,7 @@ systemctl status sshd.service
 ssh -V
 ```
 
-![image-20210818210216061](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818210216061.png)
+![image-20210818210216061](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818210216061.png)
 
 使用 systemd 方式测试
 
@@ -193,11 +193,11 @@ systemctl restart sshd
 netstat -lntp
 ```
 
-![image-20210818195309024](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818195309024.png)
+![image-20210818195309024](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818195309024.png)
 
 telnet 测试
 
-![image-20210819091246218](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819091246218.png)
+![image-20210819091246218](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819091246218.png)
 
 重启后再次测试均无问题，关闭 telnet
 
@@ -221,4 +221,4 @@ ssh -V
 ```
 回退后注意验证ssh登录是否正常
 
-![image-20210819102454585](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819102454585.png)
+![image-20210819102454585](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819102454585.png)

@@ -12,7 +12,7 @@ timezone: Asia/Shanghai
 encoding: "utf-8"
 repository: NineHolic/nineholic.github.io
 # 对 css 和 js 资源的 cdn 加速配置
-cdn:
+fastly:
     jsdelivr:
         enabled: true
 # 可选组件配置

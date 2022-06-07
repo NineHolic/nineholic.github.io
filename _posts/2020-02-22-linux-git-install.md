@@ -56,14 +56,14 @@ source /etc/profile
 git --version
 ```
 
-![image-20200613192918431](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200613192918431.png)
+![image-20200613192918431](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200613192918431.png)
 
-![image-20200613193019509](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200613193019509.png)
+![image-20200613193019509](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200613193019509.png)
 
 #### 二、脚本安装
 
 ```shell
 # 脚本默认下载 2.24.1 版本进行安装，若有版本要求，先 wget 下载脚本，修改版本号后再执行
-wget https://cdn.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/_posts/files/shell/install_git.sh && /bin/bash install_git.sh
+wget https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/_posts/files/shell/install_git.sh && /bin/bash install_git.sh
 ```
 

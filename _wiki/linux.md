@@ -10,12 +10,12 @@ keywords: Centos, Ubuntu, Linux, Skill
 
 ##### 用户名所在行高亮显示
 
-![image-20200307235437332](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200307235437332.png)
+![image-20200307235437332](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200307235437332.png)
 
 执行下面的脚本后重新登录即可
 
 ```shell
-wget https://cdn.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/_posts/files/shell/setcolor.sh && /bin/bash setcolor.sh
+wget https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/_posts/files/shell/setcolor.sh && /bin/bash setcolor.sh
 ```
 
 或者把以下内容添加对应用户到 .bashrc 中：
@@ -66,7 +66,7 @@ Ubuntu 下可直接修改对应用户目录下的 .bashrc 文件，把`# force_c
 
 （如果使用其他用户登录，其下的 .bashrc 也要修改，与终端软件无关）
 
-![image-20200307235430234](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200307235430234.png)
+![image-20200307235430234](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200307235430234.png)
 
 ##### 更换 yum 源
 
@@ -134,7 +134,7 @@ uname -a
 cat /etc/redhat-release
 ```
 
-![image-20200314233256451](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200314233256451.png)
+![image-20200314233256451](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200314233256451.png)
 
 ##### 域名无法ping通
 
@@ -144,13 +144,13 @@ nameserver 114.114.114.114
 nameserver 223.5.5.5
 ```
 
-![image-20210201190205276](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210201190205276.png)
+![image-20210201190205276](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210201190205276.png)
 
 ##### 修改主机名称
 
 修改 etc 目录下的 hosts 文件和 hostname 文件后重启系统
 
-![image-20200308201048591](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200308201048591.png)
+![image-20200308201048591](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200308201048591.png)
 
 ##### 修改 ssh 端口号
 
@@ -292,7 +292,7 @@ iptables -L -n
 
 脚本运行时出现问题
 
-![image-20200314174432913](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200511013057229.png)
+![image-20200314174432913](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200511013057229.png)
 
 原因：在 window 下编写脚本然后在上传到 Linux 上时，由于 window 上换行显示的为 \r\n，然而在 linux 上换行显示应该为 \n，所以在 Linux 下无法读取从 window 上传来的脚本，将 \r 替换成空即可（ Mac 系统里，每行结尾是回车，即 \r ）
 
@@ -305,7 +305,7 @@ sed -i 's/\r$//' color.sh
 
 使用 vi 编辑文件时小键盘数字会变成字母，要恢复输入数字状态需要在 Xshell 中修改 VT 模式设为普通
 
-![image-20200511013057229](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200314174432913.png)
+![image-20200511013057229](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200314174432913.png)
 
 ##### 为普通用户添加 sudo 权限
 
@@ -323,7 +323,7 @@ centos ALL=(ALL) ALL
 centos ALL=(ALL)NOPASSWD: ALL
 ```
 
- ![image-20200316221703192](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200316221703192.png)
+ ![image-20200316221703192](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200316221703192.png)
 
 注意： 有的时候你的将用户设了 nopasswd，但是不起作用，原因是被后面的 group 的设置覆盖了，需要把 group的设置也改为 nopasswd
 
@@ -339,14 +339,14 @@ joe ALL=(ALL)NOPASSWD: ALL
 find /home/oracle/impdir/ -name '*.DMP' -exec basename {} \;
 ```
 
-![image-20200804172734220](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200804172734220.png)
+![image-20200804172734220](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200804172734220.png)
 
 ```shell
 # 显示目录下的文件名，不带后缀
 for file_name in `ls /home/oracle/impdir/*.DMP`;do basename $file_name .DMP;done
 ```
 
-![image-20200804172457866](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200804172457866.png)
+![image-20200804172457866](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200804172457866.png)
 
 ##### Centos 永久关闭蜂鸣器
 

@@ -47,17 +47,17 @@ Jenkins.instance.getItemByFullName(jobName).builds.findAll {
 }
 ```
 
-![image-20200619150800677](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200619150800677.png)
+![image-20200619150800677](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200619150800677.png)
 
 ##### 离线安装插件
 
 插件下载地址：[https://updates.jenkins-ci.org/download/plugins](https://updates.jenkins-ci.org/download/plugins)，下载离线包，点击上传进行安装
 
-![image-20200706163221635](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200706163221635.png)
+![image-20200706163221635](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200706163221635.png)
 
 ##### shell 脚本进程被杀问题
 
-![image-20200702112856063](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200702112856063.png)
+![image-20200702112856063](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200702112856063.png)
 
 > 自 1.260 版本开始，Jenkins 默认会在构建完成后杀死构建过程中由 jenkins 中的 shell 命令触发的衍生进程ProcessTreeKiller: https://wiki.jenkins.io/display/JENKINS/ProcessTreeKiller](https://wiki.jenkins.io/display/JENKINS/ProcessTreeKiller)
 
@@ -68,7 +68,7 @@ Jenkins.instance.getItemByFullName(jobName).builds.findAll {
 在 JENKINS_JAVA_OPTIONS 中加入 `-Dhudson.util.ProcessTree.disable=true`
 
 重启 jenkins 生效：`systemctl restart jenkins`
-![image-20200703171005773](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200703171005773.png)
+![image-20200703171005773](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200703171005773.png)
 
 **方法二：**
 
@@ -101,11 +101,11 @@ echo $BUILD_ID
 
 使用 sonar 扫描项目时报警告：
 
-![image-20200706170135922](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200706170135922.png)
+![image-20200706170135922](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200706170135922.png)
 
 发现服务器上未装NodeJS，但是装好后 Jenkins 内执行 shell 命令无法获取环境变量
 
-![image-20200706165959947](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200706165959947.png)
+![image-20200706165959947](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200706165959947.png)
 
 于是搜索一番后找到原因：https://blog.csdn.net/zzusimon/article/details/57080337
 
@@ -122,13 +122,13 @@ echo $BUILD_ID
 
 （2）使用流水线语法生成脚本，将需要调用 NodeJS 的 shell 命令写在括号内：
 
-![image-20200706170928237](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200706171200545.png)
+![image-20200706170928237](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200706171200545.png)
 
 测试成功：
 
-![image-20200706171200545](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200706170928237.png)
+![image-20200706171200545](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200706170928237.png)
 
-![image-20200706171317860](https://cdn.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200706171317860.png)
+![image-20200706171317860](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/jenkins/image-20200706171317860.png)
 
 
 
