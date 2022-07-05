@@ -249,7 +249,7 @@ exit
 
 **添加SSL认证**
 
-参考 https://blog.csdn.net/qq_43626147/article/details/109160229
+参考 [https://blog.csdn.net/qq_43626147/article/details/109160229](https://blog.csdn.net/qq_43626147/article/details/109160229)
 
 **Gitlab 管理页面保存后报 500 错误**
 

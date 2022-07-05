@@ -34,7 +34,7 @@ Gitee 则在设置 -> 私人令牌下生成
 
 按 GitHub 仓库信息配置，自定义域名使用 jsdeliver 的 cdn：
 
-![image-20220609234326112](media/image-20220609234326112.png)
+![image-20220609234326112](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20220609234326112.png)
 
 按 Gitee 仓库信息配置：
 
