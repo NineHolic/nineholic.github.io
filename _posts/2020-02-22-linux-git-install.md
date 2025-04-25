@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Linux 下安装 Git 
-categories: [Git]
+categories: Git
 description: Linux 下 git 的安装
 keywords: Git, Linux
 ---
@@ -56,4 +56,3 @@ ln -s /usr/local/git/bin/git /usr/bin/git
 # 查看 git 是否安装完成
 git --version
 ```
-
