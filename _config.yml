@@ -2,7 +2,7 @@
 #   Main Configs   #
 # ---------------- #
 baseurl:
-url: https://nineholic.github.io
+url: https://blog.nine.a0001.net
 date_format: "ordinal"
 title: Nine
 subtitle: Blog
@@ -55,8 +55,8 @@ highlight_theme: base16.solarized.dark
 #      Author      #
 # ---------------- #
 author: Nine
-organization: 
-organization_url: 
+organization:
+organization_url:
 github_username: NineHolic
 location: Nanchang, China
 email: nineholic@qq.com
@@ -133,7 +133,7 @@ comments_provider: gitalk
 # !!!Important!!! Please modify infos below to yours
 # https://disqus.com
 disqus:
-    username: 
+    username:
 # https://imsun.net/posts/gitment-introduction/
 gitment:
     owner: nineholic
@@ -158,7 +158,7 @@ lazy_load_disqus : false
 # ---------------- #
 simple_jekyll_search:
     # 是否支持全文搜索
-    fulltext: false
+    fulltext: true
     # 最多显示多少条搜索结果
     limit: 10
 
@@ -174,4 +174,4 @@ google:
     content_header: false
     content_footer: false
 baidu:
-  analytics_id: 3fd54c46d439f000e85d6b98d52370ce
+  analytics_id: 53445f5c8ea5ee581a6cb6ffea15164e

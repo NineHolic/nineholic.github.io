@@ -1,7 +1,7 @@
-# 使用Ruby官方镜像作为基础镜像
+# 使用 Ruby 官方镜像作为基础镜像
 FROM ruby:3.3.4
- 
-# 创建一个新的目录用于存放Jekyll网站
+
+# 创建一个新的目录用于存放 Jekyll 网站
 RUN mkdir /blog
 WORKDIR /blog
  
