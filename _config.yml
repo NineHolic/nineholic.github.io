@@ -2,7 +2,7 @@
 #   Main Configs   #
 # ---------------- #
 baseurl:
-url: https://blog.nine.a0001.net
+url: https://blog.nine.gt.tc
 date_format: "ordinal"
 title: Nine
 subtitle: Blog
@@ -174,4 +174,4 @@ google:
     content_header: false
     content_footer: false
 baidu:
-  analytics_id: 53445f5c8ea5ee581a6cb6ffea15164e
+  analytics_id: 291b6bd8af9846f6fab5b11aa98b7415
