@@ -1,0 +1,1253 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://blog.nine.gt.tc/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.nine.gt.tc/" rel="alternate" type="text/html" /><updated>2025-09-28T11:09:33+08:00</updated><id>https://blog.nine.gt.tc/feed.xml</id><title type="html">Nine</title><subtitle>blog</subtitle><author><name>Nine</name></author><entry><title type="html">内网下使用 Nginx 转发邮件</title><link href="https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail/" rel="alternate" type="text/html" title="内网下使用 Nginx 转发邮件" /><published>2022-03-25T00:00:00+08:00</published><updated>2022-03-25T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail</id><content type="html" xml:base="https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail/"><![CDATA[<p>内网邮件通过 Nginx 代理进行转发</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/nginx/image-20220325133718280.png" alt="image-20220325133718280" /></p>
+
+<h5 id="1安装-stream">1、安装 stream</h5>
+
+<p>使用 stream 方式代理 smtp 协议的邮件服务，需安装 stream 模块</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 查看已安装模块</span>
+./nginx <span class="nt">-V</span>
+
+<span class="c"># 编译时需加上 stream 模块</span>
+./configure <span class="nt">--prefix</span><span class="o">=</span>/usr/local/nginx <span class="nt">--with-stream</span> ...
+make <span class="o">&amp;&amp;</span> make <span class="nb">install</span>
+</code></pre></div></div>
+
+<h5 id="2nginx-配置">2、nginx 配置</h5>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">stream</span> <span class="p">{</span>
+    <span class="c1"># 邮件转发</span>
+    <span class="kn">server</span> <span class="p">{</span>
+        <span class="kn">listen</span> <span class="mi">8765</span><span class="p">;</span>
+        <span class="kn">proxy_connect_timeout</span> <span class="s">5s</span><span class="p">;</span>
+        <span class="kn">proxy_timeout</span> <span class="s">5s</span><span class="p">;</span>
+        <span class="kn">proxy_pass</span> <span class="nf">smtp.qq.com</span><span class="p">:</span><span class="mi">587</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="3内网测试邮件发送">3、内网测试邮件发送</h5>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/nginx/image-20220325140602124.png" alt="image-20220325140602124" /></p>]]></content><author><name>Nine</name></author><category term="Nginx" /><summary type="html"><![CDATA[内网邮件转发]]></summary></entry><entry><title type="html">Centos7 下安装配置 Gitlab</title><link href="https://blog.nine.gt.tc/2021/12/30/centos7-install-gitlab/" rel="alternate" type="text/html" title="Centos7 下安装配置 Gitlab" /><published>2021-12-30T00:00:00+08:00</published><updated>2021-12-30T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/12/30/centos7-install-gitlab</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/12/30/centos7-install-gitlab/"><![CDATA[<p>Centos7 下 Gitlab 的安装配置与备份恢复</p>
+
+<h5 id="1gitlab-介绍">1、Gitlab 介绍</h5>
+
+<p>GitLab 是利用 Ruby on Rails 一个开源的版本管理系统，实现一个自托管的 Git 项目仓库，可通过 Web 界面进行访问公开的或者私人项目。</p>
+
+<p>GitLab 能够浏览源代码，管理缺陷和注释。可以管理团队对仓库的访问，它非常易于浏览提交过的版本并提供一个文件历史库。团队成员可以利用内置的简单聊天程序 (Wall) 进行交流。</p>
+
+<p>它还提供一个代码片段收集功能可以轻松实现代码复用，便于日后有需要的时候进行查找</p>
+
+<p><strong>Gitlab 服务构成</strong></p>
+
+<ul>
+  <li>Nginx：静态 web 服务器</li>
+  <li>gitlab-shell：用于处理 Git 命令和修改 authorized keys 列表</li>
+  <li>gitlab-workhorse: 轻量级的反向代理服务器</li>
+  <li>logrotate：日志文件管理工具</li>
+  <li>postgresql：数据库</li>
+  <li>redis：缓存数据库</li>
+  <li>sidekiq：用于在后台执行队列任务（异步执行）</li>
+  <li>unicorn：An HTTP server for Rack applications，GitLab Rails 应用是托管在这个服务器上面的</li>
+</ul>
+
+<p><strong>gitlab-ee 和 gitlab-ce 的区别</strong>
+关于 gitlab-ee（企业版）和 gitlab-ce（社区版），二者是基于同样的核心代码进行开发，只是 gitlab-ee 功能更强大，但需要付费使用，有 30 天试用期。但试用期过后如果不付费，它就跟 gitlab-ce 功能是完全一样的，只是需要付费的功能无法再继续使用而已。</p>
+
+<h5 id="2安装-gitlab">2、安装 Gitlab</h5>
+
+<p>安装要求：<a href="https://docs.gitlab.com/ee/install/requirements.html">https://docs.gitlab.com/ee/install/requirements.html</a></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 安装依赖</span>
+yum <span class="nb">install</span> <span class="nt">-y</span> curl policycoreutils-python openssh-server perl
+
+<span class="c"># 启动ssh</span>
+systemctl <span class="nb">enable </span>sshd
+systemctl start sshd
+
+<span class="c"># 将http和https加入防火墙策略，并重启防火墙。</span>
+systemctl start firewalld
+firewall-cmd <span class="nt">--permanent</span> <span class="nt">--add-service</span><span class="o">=</span>http
+firewall-cmd <span class="nt">--permanent</span> <span class="nt">--add-service</span><span class="o">=</span>https
+systemctl reload firewalld
+systemctl <span class="nb">enable </span>firewalld
+
+<span class="c"># 安装 postfix 发邮件功能，若使用外部 SMTP 服务器发送邮件可以不必安装</span>
+yum <span class="nb">install</span> <span class="nt">-y</span> postfix
+systemctl <span class="nb">enable </span>postfix
+systemctl start postfix
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>离线安装</p>
+
+    <p>rpm 镜像：<a href="https://packages.gitlab.com/gitlab/gitlab-ee">https://packages.gitlab.com/gitlab/gitlab-ee</a></p>
+
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 下载安装 rpm 包，本机为 centos7</span>
+wget <span class="nt">--content-disposition</span> https://packages.gitlab.com/gitlab/gitlab-ee/packages/el/7/gitlab-ee-14.6.0-ee.0.el7.x86_64.rpm/download.rpm
+  
+rpm <span class="nt">-ivh</span> gitlab-ee-14.6.0-ee.0.el7.x86_64.rpm
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>在线安装</p>
+
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 配置 gitlab-ce 的 yum 库</span>
+curl <span class="nt">-sS</span> https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh | <span class="nb">sudo </span>bash
+  
+<span class="c"># 在线安装gitlab-ee</span>
+yum <span class="nb">install</span> <span class="nt">-y</span> gitlab-ee
+  
+<span class="c"># 如果要安装指定的版本，在后面填上版本号即可</span>
+yum <span class="nb">install</span> <span class="nt">-y</span> gitlab-ee-14.6.0
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h5 id="3修改配置">3、修改配置</h5>
+
+<p>修改 Gitlab 主配置文件：<code class="language-plaintext highlighter-rouge">vim /etc/gitlab/gitlab.rb</code></p>
+
+<p>在 vim 下输入<code class="language-plaintext highlighter-rouge">/关键字</code> 快速查找，按 n 键查找下一个</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 改为需要配置的域名或 IP，内网则为本机 IP</span>
+<span class="s">external_url 'http://192.168.0.250'</span>
+
+<span class="c1"># 修改监听端口，默认 80</span>
+<span class="s">nginx['listen_port'] = </span><span class="m">22333</span>
+
+<span class="c1"># ssh 地址配置，端口保持与 ssh 登录端口一致</span>
+<span class="s">gitlab_rails['gitlab_ssh_host'] = '192.168.0.250'</span>
+<span class="s">gitlab_rails['gitlab_shell_ssh_port'] = </span><span class="m">30001</span>
+
+<span class="c1"># Email 设置</span>
+<span class="s">gitlab_rails['gitlab_email_enabled'] = </span><span class="no">true</span>
+<span class="s">gitlab_rails['gitlab_email_from'] = 'xxx@qq.com'</span>      <span class="c1"># 自己的邮箱</span>
+<span class="s">gitlab_rails['gitlab_email_display_name'] = 'Name'</span>    <span class="c1"># gitlab 给你发邮件时使用的名字。</span>
+</code></pre></div></div>
+
+<p>以下配置按需修改</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 若未安装 postfix，则需要配置 smtp</span>
+<span class="s">gitlab_rails['smtp_enable'] = </span><span class="no">true</span>
+<span class="s">gitlab_rails['smtp_address'] = "smtp.qq.com"</span>
+<span class="s">gitlab_rails['smtp_port'] = </span><span class="m">465</span>
+<span class="s">gitlab_rails['smtp_user_name'] = "xxxx@qq.com"</span>
+<span class="s">gitlab_rails['smtp_password'] = "xxxxxxxxxxx"</span>
+<span class="s">gitlab_rails['smtp_domain'] = "qq.com"</span>
+<span class="s">gitlab_rails['smtp_authentication'] = "login"</span>
+<span class="s">gitlab_rails['smtp_enable_starttls_auto'] = </span><span class="no">true</span>
+<span class="s">gitlab_rails['smtp_tls'] = </span><span class="no">false</span>
+
+<span class="c1"># 关闭普罗米修斯监控（内存低时可以关闭节省资源）</span>
+<span class="s">prometheus['enable'] = </span><span class="no">false</span>
+<span class="s">prometheus['monitor_kubernetes'] = </span><span class="no">false</span>
+</code></pre></div></div>
+
+<blockquote>
+  <ul>
+    <li>/etc/gitlab/gitlab.rb：主配置文件，包含外部URL、仓库目录、备份目录等</li>
+    <li>/etc/gitlab/gitlab-secrets.json：（执行gitlab-ctl reconfigure命令行后生成），包含各类密钥的加密信息</li>
+    <li>smtp 邮件服务商配置：<a href="https://docs.gitlab.com/omnibus/settings/smtp.html">https://docs.gitlab.com/omnibus/settings/smtp.html</a></li>
+  </ul>
+</blockquote>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 重新应用 gitlab 的配置，每次修改/etc/gitlab/gitlab.rb 文件之后执行</span>
+gitlab-ctl reconfigure
+
+<span class="c"># 查看初始密码</span>
+<span class="nb">cat</span> /etc/gitlab/initial_root_password
+
+<span class="c"># 或者直接重置密码，此命令从 13.9 版本后可用</span>
+gitlab-rake <span class="s2">"gitlab:password:reset"</span>
+
+<span class="c"># 开放端口</span>
+firewall-cmd <span class="nt">--zone</span><span class="o">=</span>public <span class="nt">--permanent</span> <span class="nt">--add-port</span><span class="o">=</span>22333/tcp
+firewall-cmd <span class="nt">--reload</span>
+
+<span class="c"># 查看状态</span>
+gitlab-ctl status
+</code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20220404235024738.png" alt="image-20220404235024738" /></p>
+
+<p>安装完成后建议关闭注册功能</p>
+
+<h5 id="4gitlab-备份">4、Gitlab 备份</h5>
+
+<p>默认备份目录：<code class="language-plaintext highlighter-rouge">/var/opt/gitlab/backups</code></p>
+
+<p>修改 gitlab 配置文件：<code class="language-plaintext highlighter-rouge">vim /etc/gitlab/gitlab.rb</code></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 指定备份后数据存放的路径、权限、时间配置</span>
+gitlab_rails[<span class="s1">'manage_backup_path'</span><span class="o">]</span> <span class="o">=</span> <span class="nb">true</span>                  <span class="c">#292行      开启备份功能</span>
+gitlab_rails[<span class="s1">'backup_path'</span><span class="o">]</span> <span class="o">=</span> <span class="s2">"/gitlab_backup"</span>         <span class="c">#293行      指定备份的路径</span>
+gitlab_rails[<span class="s1">'backup_archive_permissions'</span><span class="o">]</span> <span class="o">=</span> 0644          <span class="c">#296行      备份文件的权限</span>
+gitlab_rails[<span class="s1">'backup_keep_time'</span><span class="o">]</span> <span class="o">=</span> 604800                  <span class="c">#301行      备份保留时间（保留7天）</span>
+</code></pre></div></div>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 创建备份目录并授权</span>
+<span class="nb">mkdir</span> /gitlab_backup
+<span class="nb">chown</span> <span class="nt">-R</span> git:root /gitlab_backup/
+
+<span class="c"># 重新生效 gitlab 配置</span>
+gitlab-ctl reconfigure
+
+<span class="c"># 手动备份</span>
+gitlab-rake gitlab:backup:create
+
+<span class="c"># 定时备份</span>
+0 3 <span class="k">*</span> <span class="k">*</span> <span class="k">*</span> /opt/gitlab/bin/gitlab-rake gitlab:backup:create <span class="o">&gt;&gt;</span> /gitlab_backup/crontab.log 2&gt;&amp;1
+</code></pre></div></div>
+
+<h5 id="5gitlab-恢复">5、Gitlab 恢复</h5>
+
+<p><strong>只能还原到与备份文件相同的 gitlab 版本</strong></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 下载安装与备份相同版本的 gitlab</span>
+wget <span class="nt">--content-disposition</span> https://packages.gitlab.com/gitlab/gitlab-ee/packages/el/7/gitlab-ee-13.10.3-ee.0.el7.x86_64.rpm/download.rpm
+
+rpm <span class="nt">-ivh</span> gitlab-ee-13.10.3-ee.0.el7.x86_64.rpm
+
+<span class="c"># 参考上述安装修改配置</span>
+vim /etc/gitlab/gitlab.rb
+gitlab-ctl reconfigure
+
+<span class="c"># 停止相关数据连接服务</span>
+gitlab-ctl stop unicorn
+gitlab-ctl stop sidekiq
+
+<span class="c"># 将备份文件放在相应的备份路径下</span>
+<span class="nb">mv </span>1618907900_2021_04_20_13.10.3-ee_gitlab_backup.tar /var/opt/gitlab/backups/
+<span class="nb">chmod </span>777 1618907900_2021_04_20_13.10.3-ee_gitlab_backup.tar
+
+<span class="c"># gitlab 的恢复操作会先将当前所有的数据清空</span>
+gitlab-rake gitlab:backup:restore <span class="nv">BACKUP</span><span class="o">=</span>1618907900_2021_04_20_13.10.3-ee
+</code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20220317225958638.png" alt="image-20220317225958638" /></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 重启 gitlab</span>
+gitlab-ctl restart
+
+<span class="c"># 恢复命令完成后，可以 check 检查一下恢复情况</span>
+gitlab-rake gitlab:check <span class="nv">SANITIZE</span><span class="o">=</span><span class="nb">true</span>
+</code></pre></div></div>
+
+<p>其它命令</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 日志目录：/var/log/gitlab</span>
+<span class="c"># 查看 nginx 访问日志</span>
+gitlab-ctl <span class="nb">tail </span>nginx/gitlab_acces.log	
+
+<span class="c"># 查看 postgresql 日志</span>
+gitlab-ctl <span class="nb">tail </span>postgresql
+
+<span class="c"># 查看所有服务</span>
+gitlab-ctl service-list
+
+<span class="c"># 检查配置并启动</span>
+gitlab-ctl check-config
+</code></pre></div></div>
+
+<h5 id="6其他">6、其他</h5>
+
+<p><strong>修改 root 密码</strong></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 直接重置密码，此命令从 13.9 版本后可用</span>
+gitlab-rake <span class="s2">"gitlab:password:reset"</span>
+
+<span class="c"># 进控制台修改</span>
+gitlab-rails console <span class="nt">-e</span> production
+user.password <span class="o">=</span> <span class="s1">'new_password'</span>
+user.password_confirmation <span class="o">=</span> <span class="s1">'new_password'</span>
+user.save!
+<span class="nb">exit</span>
+</code></pre></div></div>
+
+<ul>
+  <li><a href="https://docs.gitlab.com/ee/security/reset_user_password.html#use-a-rails-console">https://docs.gitlab.com/ee/security/reset_user_password.html#use-a-rails-console</a></li>
+</ul>
+
+<p><strong>添加SSL认证</strong></p>
+
+<p>参考 <a href="https://blog.csdn.net/qq_43626147/article/details/109160229">https://blog.csdn.net/qq_43626147/article/details/109160229</a></p>
+
+<p><strong>Gitlab 管理页面保存后报 500 错误</strong></p>
+
+<p>首先，遍历数据库中所有可能的加密值，验证它们是否可使用 gitlab-secrets.json解密。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gitlab-rake gitlab:doctor:secrets
+</code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20211230095708439.png" alt="image-20211230095708439" /></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gitlab-rails dbconsole
+</code></pre></div></div>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Clear project tokens</span>
+<span class="k">UPDATE</span> <span class="n">projects</span> <span class="k">SET</span> <span class="n">runners_token</span> <span class="o">=</span> <span class="k">null</span><span class="p">,</span> <span class="n">runners_token_encrypted</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+
+<span class="c1">-- Clear project tokens</span>
+<span class="k">UPDATE</span> <span class="n">projects</span> <span class="k">SET</span> <span class="n">runners_token</span> <span class="o">=</span> <span class="k">null</span><span class="p">,</span> <span class="n">runners_token_encrypted</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+<span class="c1">-- Clear group tokens</span>
+<span class="k">UPDATE</span> <span class="n">namespaces</span> <span class="k">SET</span> <span class="n">runners_token</span> <span class="o">=</span> <span class="k">null</span><span class="p">,</span> <span class="n">runners_token_encrypted</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+<span class="c1">-- Clear instance tokens</span>
+<span class="k">UPDATE</span> <span class="n">application_settings</span> <span class="k">SET</span> <span class="n">runners_registration_token_encrypted</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+<span class="c1">-- Clear key used for JWT authentication</span>
+<span class="c1">-- This may break the $CI_JWT_TOKEN job variable:</span>
+<span class="c1">-- https://gitlab.com/gitlab-org/gitlab/-/issues/325965</span>
+<span class="k">UPDATE</span> <span class="n">application_settings</span> <span class="k">SET</span> <span class="n">encrypted_ci_jwt_signing_key</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+<span class="c1">-- Clear runner tokens</span>
+<span class="k">UPDATE</span> <span class="n">ci_runners</span> <span class="k">SET</span> <span class="n">token</span> <span class="o">=</span> <span class="k">null</span><span class="p">,</span> <span class="n">token_encrypted</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+
+<span class="c1">-- truncate web_hooks table</span>
+<span class="k">TRUNCATE</span> <span class="n">web_hooks</span> <span class="k">CASCADE</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>参考</strong></p>
+
+<ul>
+  <li><a href="https://docs.gitlab.com/ee/administration/raketasks/doctor.html#verify-database-values-can-be-decrypted-using-the-current-secrets">Doctor Rake tasks</a></li>
+  <li><a href="https://docs.gitlab.com/ee/raketasks/backup_restore.html#reset-runner-registration-tokens">Reset runner registration tokens</a></li>
+  <li><a href="https://gitlab.com/gitlab-org/gitlab/-/issues/26171">Issue-26171</a></li>
+  <li><a href="https://www.cnblogs.com/hgzero/p/14088215.html">Gitlab的安装及使用</a></li>
+</ul>]]></content><author><name>Nine</name></author><category term="Gitlab" /><summary type="html"><![CDATA[Gitlab 的安装与简单配置]]></summary></entry><entry><title type="html">Centos7 安装 Elasticsearch</title><link href="https://blog.nine.gt.tc/2021/11/17/centos7-install-elasticsearch/" rel="alternate" type="text/html" title="Centos7 安装 Elasticsearch" /><published>2021-11-17T00:00:00+08:00</published><updated>2021-11-17T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/11/17/centos7-install-elasticsearch</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/11/17/centos7-install-elasticsearch/"><![CDATA[<p>Elasticsearch 是一个高度可伸缩的开源全文搜索和分析引擎。它可以快速和接近实时地存储、搜索和分析大量数据</p>
+
+<h5 id="1安装-elasticsearch">1、安装 Elasticsearch</h5>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 下载安装</span>
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.12.0-x86_64.rpm
+rpm <span class="nt">-ivh</span> elasticsearch-7.12.0-x86_64.rpm
+</code></pre></div></div>
+
+<p>修改 ES 配置文件 elasticsearch.yml：<code class="language-plaintext highlighter-rouge">vim /etc/elasticsearch/elasticsearch.yml</code></p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">cluster.name</span><span class="pi">:</span> <span class="s">scientific-research</span>
+<span class="na">node.name</span><span class="pi">:</span> <span class="s">node-1</span>
+<span class="na">network.host</span><span class="pi">:</span> <span class="s">192.168.0.250</span>
+<span class="na">http.port</span><span class="pi">:</span> <span class="m">9200</span>
+<span class="na">cluster.initial_master_nodes</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">node-1"</span><span class="pi">]</span>
+</code></pre></div></div>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 设置开机自启</span>
+systemctl <span class="nb">enable </span>elasticsearch.service
+
+<span class="c"># 启动elasticsearch</span>
+systemctl start elasticsearch
+
+<span class="c"># 查看状态</span>
+systemctl status elasticsearch
+
+<span class="c"># 开放端口</span>
+firewall-cmd <span class="nt">--zone</span><span class="o">=</span>public <span class="nt">--permanent</span> <span class="nt">--add-port</span><span class="o">=</span>9200/tcp
+firewall-cmd <span class="nt">--reload</span>
+</code></pre></div></div>
+
+<p>浏览器打开：http://192.168.0.250:9200，出现以下信息表示启动成功</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316170035522.png" alt="image-20220316170035522" /></p>
+
+<h5 id="2安装ik分词器">2、安装ik分词器</h5>
+
+<p>下载与 ES 相同版本的 ik 分词器</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 安装 ik 分词器</span>
+<span class="nb">cd</span> /usr/share/elasticsearch/plugins
+<span class="nb">mkdir </span>ik
+<span class="nb">cd </span>ik
+wget https://github.com/medcl/elasticsearch-analysis-
+ik/releases/download/v7.12.0/elasticsearch-analysis-ik-7.12.0.zip
+unzip elasticsearch-analysis-ik-7.12.0.zip
+<span class="nb">rm </span>elasticsearch-analysis-ik-7.12.0.zip
+
+<span class="c"># 重启服务</span>
+systemctl restart elasticsearch
+</code></pre></div></div>
+
+<h5 id="3分词器的使用">3、分词器的使用</h5>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 使用 ES 内置分词器，只会将文字按个拆分</span>
+curl <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="nt">-XGET</span> <span class="s1">'192.168.0.250:9200/_analyze?pretty'</span> <span class="nt">-d</span> <span class="s1">'{"text":"飞流直下三千尺"}'</span>
+
+<span class="c"># 使用 analyzer-ik 分词器</span>
+curl <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="nt">-XGET</span> <span class="s1">'192.168.0.250:9200/_analyze?pretty'</span> <span class="nt">-d</span> <span class="s1">'{"analyzer":"ik_max_word","text":"飞流直下三千尺"}'</span>
+</code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316163049837.png" alt="image-20220316163049837" /></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 配置自定义词库</span>
+vim /usr/share/elasticsearch/plugins/ik/config/IKAnalyzer.cfg.xml
+
+<span class="c"># 增加自定义词库</span>
+<span class="nb">echo</span> <span class="s1">'三千尺'</span> <span class="o">&gt;</span> /usr/share/elasticsearch/plugins/ik/config/my.dic
+
+<span class="c"># 重启 es 服务</span>
+systemctl restart elasticsearch
+</code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316163012921.png" alt="image-20220316163012921" /></p>
+
+<p>使用自定义词库后的分词效果</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316162747400.png" alt="image-20220316162747400" /></p>
+
+<h5 id="4head-插件安装">4、head 插件安装</h5>
+
+<p>head 插件是 ES 的一个可视化管理插件，用来监视 ES 的状态，并通过 head 客户端和 ES 服务进行交互，比如创建映射、创建索引等。</p>
+
+<p>安装方式见：https://github.com/mobz/elasticsearch-head</p>
+
+<p>本文使用浏览器插件方式：https://chrome.google.com/webstore/detail/elasticsearch-head/ffmkiejjmecolpfloofpjologoblkegm</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316170641309.png" alt="image-20220316170641309" /></p>]]></content><author><name>Nine</name></author><category term="Elasticsearch" /><summary type="html"><![CDATA[Elasticsearch 的简单配置和使用]]></summary></entry><entry><title type="html">Centos7 升级 OpenSSH</title><link href="https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh/" rel="alternate" type="text/html" title="Centos7 升级 OpenSSH" /><published>2021-08-18T00:00:00+08:00</published><updated>2021-08-18T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh/"><![CDATA[<p>Centos7.6 升级后测试 ssh 登录及重启后 ssh 登录均无问题，升级无需卸载原先的 openssl 和 openssh</p>
+
+<p>系统环境为服务器安装镜像时自带的 openssh，没有经历过手动编译安装方式</p>
+
+<h5 id="1升级准备">1、升级准备</h5>
+
+<p>升级前版本</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818183950745.png" alt="image-20210818183950745" /></p>
+
+<p>升级后版本</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818210016091.png" alt="image-20210818210016091" /></p>
+
+<blockquote>
+  <p><strong>注意事项：</strong></p>
+
+  <p>升级前先关闭 selinux</p>
+
+  <p>使用 telnet 登录升级，备份ssh 相关文件，避免失败时无法回退版本</p>
+
+  <p>先在相同版本的测试环境进行升级，ssh 服务重启、服务器重启、su 切换用户等无问题后再到生产环境操作</p>
+</blockquote>
+
+<p>先使用 yum 升级到目前 yum 仓库默认的 openssh7.4p1 版本，再进行编译安装升级到 openssh8.6p1</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum <span class="nt">-y</span> update openssh
+</code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818191234569.png" alt="image-20210818191234569" /></p>
+
+<p>关闭 selinux：<code class="language-plaintext highlighter-rouge">vim /etc/selinux/config</code>，将<code class="language-plaintext highlighter-rouge">SELINUX=enforcing</code>改为<code class="language-plaintext highlighter-rouge">SELINUX=disabled</code></p>
+
+<p>重启服务器：<code class="language-plaintext highlighter-rouge">shutdown -r now</code></p>
+
+<h5 id="2安装配置-telnet">2、安装配置 telnet</h5>
+
+<p>防止SSH远程控制时，升级过程中出现连接中断，可通过telnet备用方式进行远程连接（由于telnet是明文传输，不安全，只作为临时使用，升级完成后，必须停止卸载该服务）</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum <span class="nt">-y</span> <span class="nb">install </span>xinetd telnet-server
+</code></pre></div></div>
+
+<p>修改配置文件：<code class="language-plaintext highlighter-rouge">vim /etc/xinetd.d/telnet</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># default: on
+# # description: The telnet server serves telnet sessions; it uses \
+# #   unencrypted username/password pairs for authentication.
+service telnet
+{
+     disable     = yes
+     flags       = REUSE
+     socket_type = stream               
+     wait        = no
+     user        = root
+     server      = /usr/sbin/in.telnetd
+     log_on_failure  += USERID
+}
+</code></pre></div></div>
+
+<p>配置 telnet 登录的终端类型：<code class="language-plaintext highlighter-rouge">vim /etc/securetty</code>，再文件末尾增加一些 pts 终端</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pts/0
+pts/1
+pts/2
+pts/3
+</code></pre></div></div>
+
+<p>设为开机自动启动</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl <span class="nb">enable </span>xinetd
+systemctl <span class="nb">enable </span>telnet.socket
+systemctl start telnet.socket
+systemctl start xinetd
+
+<span class="c"># 查看服务是否启动</span>
+netstat <span class="nt">-lntp</span>|grep 23
+</code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819104413583.png" alt="image-20210819104413583" /></p>
+
+<p>测试 telnet 登录</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819104602717.png" alt="image-20210819104602717" /></p>
+
+<p>以下升级操作均在 telnet 终端下操作，防止 ssh 连接意外中断造成升级失败</p>
+
+<h5 id="3升级-openssl">3、升级 openssl</h5>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 安装依赖包</span>
+yum <span class="nt">-y</span> <span class="nb">install </span>gcc gcc-c++ glibc make autoconf openssl openssl-devel pcre-devel  pam-devel
+yum <span class="nt">-y</span> <span class="nb">install </span>pam<span class="k">*</span> zlib<span class="k">*</span>
+
+<span class="c"># 下载解压 openssl 包</span>
+wget https://www.openssl.org/source/openssl-1.1.1g.tar.gz
+<span class="nb">tar</span> <span class="nt">-zxvf</span> openssl-1.1.1g.tar.gz
+
+<span class="c"># 备份 openssl (存在就备份)</span>
+<span class="nb">mv</span> /usr/bin/openssl /usr/bin/openssl_bak
+<span class="nb">mv</span> /usr/include/openssl /usr/include/openssl_bak
+
+<span class="c"># 编译安装 openssl</span>
+<span class="nb">cd </span>openssl-1.1.1g
+./config <span class="nt">--prefix</span><span class="o">=</span>/usr/ <span class="nt">--openssldir</span><span class="o">=</span>/usr/ shared
+make <span class="nt">-j2</span> <span class="o">&amp;&amp;</span> make <span class="nt">-j2</span> <span class="nb">install</span>
+
+<span class="c"># 查看最后的命令 make install 是否有报错，0 表示无问题</span>
+<span class="nb">echo</span> <span class="nv">$?</span>
+
+<span class="c"># 查看升级后的 openssl 版本</span>
+openssl version
+</code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818192248033.png" alt="image-20210818192248033" /></p>
+
+<h5 id="4升级-openssh">4、升级 openssh</h5>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 下载解压 openssh 包</span>
+wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.6p1.tar.gz
+<span class="nb">tar</span> <span class="nt">-zxvf</span> openssh-8.6p1.tar.gz
+<span class="nb">chown</span> <span class="nt">-R</span> root:root openssh-8.6p1
+
+<span class="c"># 备份ssh</span>
+<span class="nb">mv</span> /etc/ssh /etc/ssh.bak
+<span class="nb">mv</span> /usr/bin/ssh /usr/bin/ssh.bak
+<span class="nb">mv</span> /usr/sbin/sshd /usr/sbin/sshd.bak
+
+<span class="c"># 编译安装 openssh</span>
+<span class="nb">cd </span>openssh-8.6p1
+./configure <span class="nt">--prefix</span><span class="o">=</span>/usr <span class="nt">--sysconfdir</span><span class="o">=</span>/etc/ssh <span class="nt">--with-ssl-dir</span><span class="o">=</span>/usr/local/ssl <span class="nt">--with-md5-passwords</span> <span class="nt">--with-pam</span> <span class="nt">--with-zlib</span> <span class="nt">--with-tcp-wrappers</span> <span class="nt">--without-hardening</span>
+make <span class="nt">-j2</span> <span class="o">&amp;&amp;</span> make <span class="nt">-j2</span> <span class="nb">install</span>
+
+<span class="c"># 查看最后的命令 make install 是否有报错</span>
+<span class="nb">echo</span> <span class="nv">$?</span>
+
+<span class="c"># 授权</span>
+<span class="nb">chmod </span>600 /etc/ssh/ssh_host_rsa_key /etc/ssh/ssh_host_ecdsa_key /etc/ssh/ssh_host_ed25519_key
+
+<span class="c"># 从原先的解压的包中拷贝一些文件到目标位置</span>
+<span class="nb">cp</span> <span class="nt">-a</span> contrib/redhat/sshd.init  /etc/init.d/sshd
+<span class="nb">cp</span> <span class="nt">-a</span> contrib/redhat/sshd.pam /etc/pam.d/sshd.pam
+<span class="nb">chmod </span>u+x /etc/init.d/sshd
+
+<span class="c"># 将原先 systemd 管理的 sshd 文件删除或者移走，否则会影响重启 sshd 服务</span>
+<span class="nb">mv</span> /usr/lib/systemd/system/sshd.service /usr/lib/systemd/system/sshd.service.bak
+
+<span class="c"># 修改 ssh 配置</span>
+vim /etc/ssh/sshd_config
+
+UseDNS no
+UsePAM <span class="nb">yes
+</span>PermitRootLogin <span class="nb">yes
+</span>PasswordAuthentication <span class="nb">yes</span>
+
+<span class="c"># 设置开机自启</span>
+chkconfig <span class="nt">--add</span> sshd
+chkconfig sshd on
+
+<span class="c"># 重启 ssh 服务</span>
+systemctl daemon-reload
+systemctl restart sshd
+
+<span class="c"># 查看 ssh 状态</span>
+systemctl status sshd.service
+
+<span class="c"># 查看升级后的 openssh 版本</span>
+ssh <span class="nt">-V</span>
+</code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818210216061.png" alt="image-20210818210216061" /></p>
+
+<p>使用 systemd 方式测试</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>netstat <span class="nt">-lntp</span>
+systemctl stop sshd
+netstat <span class="nt">-lntp</span>
+systemctl start sshd
+netstat <span class="nt">-lntp</span>
+systemctl restart sshd
+netstat <span class="nt">-lntp</span>
+</code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818195309024.png" alt="image-20210818195309024" /></p>
+
+<p>telnet 测试</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819091246218.png" alt="image-20210819091246218" /></p>
+
+<p>重启后再次测试均无问题，关闭 telnet</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl disable xinetd.service
+systemctl stop xinetd.service
+systemctl disable telnet.socket
+systemctl stop telnet.socket
+netstat <span class="nt">-lntp</span>
+</code></pre></div></div>
+
+<h5 id="5版本回退">5、版本回退</h5>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">rm</span> <span class="nt">-rf</span> /etc/ssh
+<span class="nb">mv</span> /etc/ssh.bak /etc/ssh
+<span class="nb">mv</span> /usr/bin/ssh.bak /usr/bin/ssh
+<span class="nb">mv</span> /usr/sbin/sshd.bak /usr/sbin/sshd
+systemctl restart sshd
+ssh <span class="nt">-V</span>
+</code></pre></div></div>
+<p>回退后注意验证ssh登录是否正常</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819102454585.png" alt="image-20210819102454585" /></p>]]></content><author><name>Nine</name></author><category term="OpenSSH" /><summary type="html"><![CDATA[Centos7 下的 openssl、openssh 升级]]></summary></entry><entry><title type="html">Docker 本地部署 Jekyll 静态博客</title><link href="https://blog.nine.gt.tc/2021/05/18/blog-with-jekyll/" rel="alternate" type="text/html" title="Docker 本地部署 Jekyll 静态博客" /><published>2021-05-18T00:00:00+08:00</published><updated>2021-05-18T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/05/18/blog-with-jekyll</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/05/18/blog-with-jekyll/"><![CDATA[<p>使用 Docker 本地部署 Jekyll 项目，可供服务器上搭建个人博客、本地实时预览调试代码。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 拉取项目</span>
+git clone https://github.com/NineHolic/nineholic.github.io
+<span class="nb">cd </span>nineholic.github.io
+
+<span class="c"># 构建镜像</span>
+docker build <span class="nt">-t</span> nine_blog:20241031 <span class="nb">.</span>
+
+<span class="c"># 查看镜像</span>
+docker images
+
+<span class="c"># 使用宿主机端口启动容器，并在修改源文件时自动重新构建</span>
+docker run <span class="nt">--network</span> host <span class="nt">--name</span> blog <span class="nt">-v</span> <span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span>:/blog nine_blog:20241031 bash <span class="nt">-c</span> <span class="s2">"jekyll serve -w --host=192.168.216.128"</span>
+
+<span class="c"># 开放端口</span>
+firewall-cmd <span class="nt">--zone</span><span class="o">=</span>public <span class="nt">--permanent</span> <span class="nt">--add-port</span><span class="o">=</span>4000/tcp
+firewall-cmd <span class="nt">--reload</span>
+</code></pre></div></div>
+
+<p>Dockerfile 文件内容：</p>
+
+<div class="language-Dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 使用 Ruby 官方镜像作为基础镜像</span>
+<span class="k">FROM</span><span class="s"> ruby:3.3.4</span>
+ 
+<span class="c"># 创建一个新的目录用于存放 Jekyll 网站</span>
+<span class="k">RUN </span><span class="nb">mkdir</span> /blog
+<span class="k">WORKDIR</span><span class="s"> /blog</span>
+ 
+<span class="c"># 安装依赖</span>
+<span class="k">COPY</span><span class="s"> Gemfile /blog</span>
+<span class="k">RUN </span>bundle config mirror.https://rubygems.org https://mirrors.tuna.tsinghua.edu.cn/rubygems
+<span class="k">RUN </span>bundle <span class="nb">install</span> <span class="nt">--verbose</span>
+
+<span class="c"># 容器启动时执行的命令</span>
+<span class="k">CMD</span><span class="s"> jekyll --version</span>
+</code></pre></div></div>
+
+<p>浏览器访问查看效果：<a href="http://192.168.216.128:4000">http://192.168.216.128:4000</a></p>
+
+<p>镜像使用版本参考：<a href="https://pages.github.com/versions.json">Github Pages 运行环境</a></p>]]></content><author><name>Nine</name></author><category term="Docker" /><summary type="html"><![CDATA[本地运行 Jekyll 博客，方便调试]]></summary></entry><entry><title type="html">PicGo 结合 GitHub 搭建图床</title><link href="https://blog.nine.gt.tc/2021/02/07/picgo-github-cloudimg/" rel="alternate" type="text/html" title="PicGo 结合 GitHub 搭建图床" /><published>2021-02-07T00:00:00+08:00</published><updated>2021-02-07T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/02/07/picgo-github-cloudimg</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/02/07/picgo-github-cloudimg/"><![CDATA[<p>PicGo 结合 GitHub/Gitee 搭建图床，用于存储博客图片</p>
+
+<h5 id="1安装-picgo">1、安装 PicGo</h5>
+
+<p>下载地址：<a href="https://github.com/Molunerfinn/PicGo/releases">https://github.com/Molunerfinn/PicGo/releases</a>，<a href="https://picgo.github.io/PicGo-Doc/zh/guide/getting-started.html">说明文档</a></p>
+
+<blockquote>
+  <p>安装插件需有 Node.js 环境，否则安装时会一直显示安装中</p>
+
+  <p>Gitee 上的图片目前已取消了外部链接访问，网站图片无法显示，仅本地可显示</p>
+</blockquote>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521100351986.png" alt="image-20210521100351986" /></p>
+
+<h5 id="2新建图床仓库">2、新建图床仓库</h5>
+
+<p>在  GitHub 上新建一个公开的非空仓库（空仓库上传图片时会报 500 错误），然后在<code class="language-plaintext highlighter-rouge">Settings / Developer settings</code>下生成一个新 token 用于 PicGo 上传图片，权限勾选 repo 下所有选项</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20220609234116020.png" alt="image-20220609234116020" /></p>
+
+<p>Gitee 则在设置 -&gt; 私人令牌下生成</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521135839665.png" alt="image-20210521135839665" /></p>
+
+<h5 id="3图床设置">3、图床设置</h5>
+
+<p>参数说明见<a href="https://github.com/lizhuangs/picgo-plugin-gitee-uploader">插件文档</a></p>
+
+<p>按 GitHub 仓库信息配置，自定义域名使用 jsdeliver 的 cdn：</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20220609234326112.png" alt="image-20220609234326112" /></p>
+
+<p>按 Gitee 仓库信息配置：</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521104752973.png" alt="image-20210521110641031" /></p>
+
+<blockquote>
+  <ul>
+    <li>customPath 选择 default ，则实际的 path 值为 linux</li>
+    <li>customPath 选择年，则实际的 path 值为 linux/2021</li>
+    <li>customPath 选择年季，则实际的 path 值为 linux/2021/summer</li>
+    <li>customPath 选择年月，则实际的 path 值为 linux/2021/02</li>
+  </ul>
+</blockquote>
+
+<h5 id="4图片上传">4、图片上传</h5>
+
+<p>上传区选择 GitHub 或 Gitee，文件会上传至仓库 linux 文件夹下，上传后可在相册下查看和删除（远程仓库也会同步删除）。</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521110641031.png" alt="image-20210521104752973" /></p>
+
+<h5 id="5结合-typora-使用">5、结合 Typora 使用</h5>
+
+<p>在文件 -&gt; 偏好设置 -&gt; 图像设置下配置上传服务设定：</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521112728115.png" alt="image-20210521112858130" /></p>
+
+<p>点击验证图片上传选项，上传成功。</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521112858130.png" alt="image-20210521103849517" /></p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521103849517.png" alt="image-20210521112728115" /></p>
+
+<p>对于 md 文件内的本地或其它外链图片，也可单独或者上传全部图片到远程仓库中。</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/2021-05-21_11-35-49.png" alt="2021-05-21_11-35-49" /></p>
+
+<p>慎用上传所有本地图片，图片较多时会打乱图片在文章中的位置，应该是 Typora 的 bug</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521140022177.png" alt="image-20210521140022177" /></p>]]></content><author><name>Nine</name></author><category term="GitHub" /><summary type="html"><![CDATA[GitHub/Gitee 作为图床介绍]]></summary></entry><entry><title type="html">Centos7 下安装配置 MongoDB</title><link href="https://blog.nine.gt.tc/2021/01/31/centos7-install-mongodb/" rel="alternate" type="text/html" title="Centos7 下安装配置 MongoDB" /><published>2021-01-31T00:00:00+08:00</published><updated>2021-01-31T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/01/31/centos7-install-mongodb</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/01/31/centos7-install-mongodb/"><![CDATA[<p>MongoDB 是免费开源的跨平台 NoSQL 数据库，命名源于英文单词 humongous，意思是「巨大无比」。与关系型数据库不同，MongoDB 的数据以类似于 JSON 格式的二进制文档存储</p>
+
+<h5 id="1官方源安装">1、官方源安装</h5>
+
+<p>官方文档：<a href="https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-red-hat/">https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-red-hat/</a></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 设置官方安装源</span>
+vim /etc/yum.repos.d/mongodb-org-4.4.repo
+
+<span class="c"># 写入以下内容</span>
+<span class="o">[</span>mongodb-org-4.4]
+<span class="nv">name</span><span class="o">=</span>MongoDB Repository
+<span class="nv">baseurl</span><span class="o">=</span>https://repo.mongodb.org/yum/redhat/<span class="nv">$releasever</span>/mongodb-org/4.4/x86_64/
+<span class="nv">gpgcheck</span><span class="o">=</span>1
+<span class="nv">enabled</span><span class="o">=</span>1
+<span class="nv">gpgkey</span><span class="o">=</span>https://www.mongodb.org/static/pgp/server-4.4.asc
+
+<span class="c"># 安装 4.4 最新稳定版</span>
+yum <span class="nb">install</span> <span class="nt">-y</span> mongodb-org
+
+<span class="c"># 安装指定版本</span>
+yum <span class="nb">install</span> <span class="nt">-y</span> mongodb-org-4.4.13
+
+<span class="c"># 启动MongoDB</span>
+systemctl start mongod
+
+<span class="c"># 设置开机自启</span>
+systemctl <span class="nb">enable </span>mongod
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>包名</th>
+      <th style="text-align: left">描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>mongodb-org</td>
+      <td style="text-align: left">一个将自动安装以下四个组件包的组合包</td>
+    </tr>
+    <tr>
+      <td>mongodb-org-server</td>
+      <td style="text-align: left">包含mongod守护程序，关联的init脚本和配置文件（/etc/mongod.conf）。您可以使用初始化脚本从mongod配置文件开始</td>
+    </tr>
+    <tr>
+      <td>mongodb-org-mongos</td>
+      <td style="text-align: left">包含mongos守护进程</td>
+    </tr>
+    <tr>
+      <td>mongodb-org-shell</td>
+      <td style="text-align: left">包含mongoshell</td>
+    </tr>
+    <tr>
+      <td>mongodb-org-tools</td>
+      <td style="text-align: left">包含以下的MongoDB工具：mongoimport bsondump, mongodump, mongoexport, mongofiles, mongorestore, mongostat, 和 mongotop</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="2修改配置">2、修改配置</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 连接</span>
+mongo localhost:27017
+
+<span class="c"># 进入 admin 数据库</span>
+use admin
+
+<span class="c"># 创建root用户</span>
+db.createUser<span class="o">({</span> user: <span class="s2">"root"</span>, <span class="nb">pwd</span>: <span class="s2">"db123456"</span>, roles: <span class="o">[{</span> role: <span class="s2">"userAdminAnyDatabase"</span>, db: <span class="s2">"admin"</span> <span class="o">}]</span> <span class="o">})</span>
+
+<span class="c"># 测试密码</span>
+db.auth<span class="o">(</span><span class="s1">'root'</span>,<span class="s1">'db123456'</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>修改配置文件：<code class="language-plaintext highlighter-rouge">vim /etc/mongod.conf</code></p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 开启密码验证</span>
+<span class="na">security</span><span class="pi">:</span>
+  <span class="na">authorization</span><span class="pi">:</span> <span class="s">enabled</span>
+
+<span class="c1"># 修改默认端口，仅允许本机IP进行连接</span>
+<span class="na">net</span><span class="pi">:</span>
+  <span class="na">port</span><span class="pi">:</span> <span class="m">27027</span>
+  <span class="na">bindIp</span><span class="pi">:</span> <span class="s">127.0.0.1,192.168.159.138</span>
+</code></pre></div></div>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 重启服务</span>
+systemctl restart mongod
+
+<span class="c"># 登录测试</span>
+mongo <span class="nt">-uroot</span> 192.168.159.138:27027/admin <span class="nt">-p</span>
+
+<span class="c"># 用户查询</span>
+db.system.users.find<span class="o">()</span>
+
+<span class="c"># 创建数据库</span>
+use <span class="nb">test</span>
+
+<span class="c">## 创建 sr_db 数据库的用户</span>
+db.createUser<span class="o">({</span> user: <span class="s2">"db_user"</span>, <span class="nb">pwd</span>: <span class="s2">"db123456"</span>, roles: <span class="o">[{</span> role: <span class="s2">"readWrite"</span>, db: <span class="s2">"test_db"</span> <span class="o">}]</span> <span class="o">})</span>
+
+<span class="c"># 删除用户</span>
+use <span class="nb">test
+</span>db.dropUser<span class="o">(</span><span class="s1">'test_db'</span><span class="o">)</span>
+</code></pre></div></div>
+
+<h5 id="3导入导出">3、导入导出</h5>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 备份</span>
+mongodump <span class="nt">-h</span> 192.168.159.138:27027 <span class="nt">-u</span> db_user <span class="nt">-p</span><span class="o">=</span>db123456 <span class="nt">-d</span> test_db <span class="nt">-o</span> /root/mongodb_bak/<span class="si">$(</span><span class="nb">date</span> +%Y%m%d<span class="si">)</span> <span class="nt">--authenticationDatabase</span> <span class="nb">test</span>
+
+<span class="c"># 恢复</span>
+mongorestore <span class="nt">-h</span> 192.168.159.138:27027 <span class="nt">-u</span> db_user <span class="nt">-p</span><span class="o">=</span>db123456 <span class="nt">-d</span> test_db <span class="nt">--drop</span> <span class="nt">--authenticationDatabase</span> <span class="nb">test</span> /root/sr_db/
+</code></pre></div></div>
+
+<blockquote>
+  <p>–drop 用于指定，恢复是如果对应数据库或者 colleciton 存在，则先删除然后在恢复</p>
+</blockquote>
+
+<p>定时备份脚本：<code class="language-plaintext highlighter-rouge">00 03 * * * /bin/bash /root/mongodb_bak/export_mongodb.sh &gt;&gt; /root/mongodb_bak/crontab.log 2&gt;&amp;1</code></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nb">echo </span>start <span class="nb">export </span><span class="k">in</span> <span class="si">$(</span><span class="nb">date</span> +<span class="s1">'%F %T'</span><span class="si">)</span>
+
+<span class="c"># 导出数据库</span>
+mongodump <span class="nt">-h</span> 192.168.159.138:27027 <span class="nt">-u</span> db_user <span class="nt">-p</span><span class="o">=</span>db123456 <span class="nt">-d</span> test_db <span class="nt">-o</span> /root/mongodb_bak/<span class="si">$(</span><span class="nb">date</span> +%Y%m%d<span class="si">)</span> <span class="nt">--authenticationDatabase</span> <span class="nb">test</span>
+
+<span class="c"># 删除 30 天前的目录</span>
+find /root/mongodb_bak <span class="nt">-mindepth</span> 1 <span class="nt">-maxdepth</span> 1 <span class="nt">-type</span> d <span class="nt">-mtime</span> +30 <span class="nt">-exec</span> <span class="nb">rm</span> <span class="nt">-rfv</span> <span class="o">{}</span> <span class="se">\;</span>
+
+<span class="nb">echo </span>end <span class="nb">export </span><span class="k">in</span> <span class="si">$(</span><span class="nb">date</span> +<span class="s1">'%F %T'</span><span class="si">)</span>
+</code></pre></div></div>
+
+<h5 id="4登录报错">4、登录报错</h5>
+
+<p>输入正确的密码后无法登录，报错如下</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220607235645573.png" alt="image-20220607235645573" /></p>
+
+<p>这是因为 SELinux 当前为<code class="language-plaintext highlighter-rouge">enforcing</code>模式，可改为<code class="language-plaintext highlighter-rouge">disabled</code>后重启服务器即可：<code class="language-plaintext highlighter-rouge">vim /etc/selinux/config</code></p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220608000038638.png" alt="image-20220608000038638" /></p>
+
+<p>或者采用官网文档进行配置</p>
+
+<p><a href="https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-red-hat/#configure-selinux">https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-red-hat/#configure-selinux</a></p>]]></content><author><name>Nine</name></author><category term="MongoDB" /><summary type="html"><![CDATA[MongoDB 的安装与简单配置]]></summary></entry><entry><title type="html">Windows 上使用 OpenSSH 服务</title><link href="https://blog.nine.gt.tc/2020/11/21/windows-install-openssh/" rel="alternate" type="text/html" title="Windows 上使用 OpenSSH 服务" /><published>2020-11-21T00:00:00+08:00</published><updated>2020-11-21T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2020/11/21/windows-install-openssh</id><content type="html" xml:base="https://blog.nine.gt.tc/2020/11/21/windows-install-openssh/"><![CDATA[<p>在 Windows 上配置使用 OpenSSH 服务</p>
+
+<h5 id="1openssh-简介">1、OpenSSH 简介</h5>
+
+<p>OpenSSH 是安全 Shell (SSH) 工具的开放源代码版本，Linux 及其他非 Windows 系统的管理员使用此类工具跨平台管理远程系统。SSH 基于客户端-服务器体系结构，用户在其中工作的系统是客户端，所管理的远程系统是服务器。 OpenSSH 包含一系列组件和工具，用于提供一种安全且简单的远程系统管理方法，其中包括：</p>
+
+<ul>
+  <li>sshd.exe，它是远程所管理的系统上必须运行的 SSH 服务器组件</li>
+  <li>ssh.exe，它是在用户的本地系统上运行的 SSH 客户端组件</li>
+  <li>ssh-keygen.exe，为 SSH 生成、管理和转换身份验证密钥</li>
+  <li>ssh-agent.exe，存储用于公钥身份验证的私钥</li>
+  <li>ssh-add.exe，将私钥添加到服务器允许的列表中</li>
+  <li>ssh-keyscan.exe，帮助从许多主机收集公用 SSH 主机密钥</li>
+  <li>sftp.exe，这是提供安全文件传输协议的服务，通过 SSH 运行</li>
+  <li>scp.exe 是在 SSH 上运行的文件复制实用工具</li>
+</ul>
+
+<p>从 Windows 10 1809 和 Windows Server 2019 开始 Windows 开始支持 OpenSSH Server，其它版本需要额外安装</p>
+
+<h5 id="2下载-openssh">2、下载 OpenSSH</h5>
+
+<p>本机为 windows 2016，根据不同的系统下载不同的压缩包，如果是 64 位系统，选择 32 位也可以：<a href="https://github.com/PowerShell/Win32-OpenSSH/releases">https://github.com/PowerShell/Win32-OpenSSH/releases</a>，解压到 C:\Program Files 目录下，重命名为 OpenSSH，将 OpenSSH 目录加入 PATH 系统环境变量中：</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201112161638698.png" alt="image-20201112161638698" /></p>
+
+<h5 id="3安装-openssh">3、安装 OpenSSH</h5>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 使用管理员运行命令提示符在本 OpenSSH 目录下安装服务</span><span class="w">
+</span><span class="n">powershell.exe</span><span class="w"> </span><span class="nt">-ExecutionPolicy</span><span class="w"> </span><span class="nx">Bypass</span><span class="w"> </span><span class="nt">-File</span><span class="w"> </span><span class="nx">install-sshd.ps1</span><span class="w">
+
+</span><span class="c"># 在防火墙入站规则中开放 22333 端口或执行以下命令，服务器安全组开放 22333 端口</span><span class="w">
+</span><span class="n">netsh</span><span class="w"> </span><span class="nx">advfirewall</span><span class="w"> </span><span class="nx">firewall</span><span class="w"> </span><span class="nx">add</span><span class="w"> </span><span class="nx">rule</span><span class="w"> </span><span class="nx">name</span><span class="o">=</span><span class="n">sshd</span><span class="w"> </span><span class="nx">dir</span><span class="o">=</span><span class="kr">in</span><span class="w"> </span><span class="n">action</span><span class="o">=</span><span class="n">allow</span><span class="w"> </span><span class="nx">protocol</span><span class="o">=</span><span class="n">TCP</span><span class="w"> </span><span class="nx">localport</span><span class="o">=</span><span class="mi">22333</span><span class="w">
+
+</span><span class="c"># 启动 ssh 服务，会在 C:\ProgramData\ 下生成 ssh 目录</span><span class="w">
+</span><span class="n">net</span><span class="w"> </span><span class="nx">start</span><span class="w"> </span><span class="nx">sshd</span><span class="w">
+
+</span><span class="c"># 修改 C:\ProgramData\ssh\sshd_config 文件默认端口号为 22333 后重启 ssh 服务</span><span class="w">
+</span><span class="n">net</span><span class="w"> </span><span class="nx">stop</span><span class="w"> </span><span class="nx">sshd</span><span class="w">
+</span><span class="n">net</span><span class="w"> </span><span class="nx">start</span><span class="w"> </span><span class="nx">sshd</span><span class="w">
+
+</span><span class="c"># 配置开机自启 sshd 服务</span><span class="w">
+</span><span class="n">sc</span><span class="w"> </span><span class="nx">config</span><span class="w"> </span><span class="nx">sshd</span><span class="w"> </span><span class="nx">start</span><span class="o">=</span><span class="w"> </span><span class="n">auto</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201112175015594.png" alt="image-20201112174718680" /></p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201112174718680.png" alt="image-20201116152208341" /></p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116152208341.png" alt="image-20201112174851796" /></p>
+
+<h5 id="4测试连接">4、测试连接</h5>
+
+<p>ssh 连接成功，默认会进入 windows 的命令行下（cmd）</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116153601121.png" alt="image-20201112175015594" /></p>
+
+<p>可以把默认的 shell 设置为 PowerShell，以管理员运行 PowerShell 执行：</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">New-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="s2">"HKLM:\SOFTWARE\OpenSSH"</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">DefaultShell</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="s2">"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe"</span><span class="w"> </span><span class="nt">-PropertyType</span><span class="w"> </span><span class="nx">String</span><span class="w"> </span><span class="nt">-Force</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116154738862.png" alt="image-20201116153601121" /></p>
+
+<p>执行后会在注册表<code class="language-plaintext highlighter-rouge">HKEY_LOCAL_MACHINE\SOFTWARE\OpenSSH</code>下添加一条 DefaultShell 字符串值，删除后恢复为原来默认 shell，下次登陆时会进入 PowerShell 下</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116155055181.png" alt="image-20201116155055181" /></p>
+
+<p>也可使用 Xshell、FlashFXP 等工具进行连接，传输文件时比远程桌面直接复制更方便</p>
+
+<h5 id="5配置ssh免密登录">5、配置ssh免密登录</h5>
+
+<p>1)、生成SSH密钥</p>
+
+<p>默认加密方式为dsa，使用参数 -t 指定 rsa 加密方式先在本地生成秘钥</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201113154858419.png" alt="image-20201113154858419" /></p>
+
+<p>2)、将公钥上传到服务器.ssh目录下</p>
+
+<p>PowerShell 中没有 ssh-copy-id 命令，手动将本地的 .ssh 目录上传到 windows 服务器用户目录下（避免文件权限问题），删除id_rsa 和 known_hosts 并将 id_rsa.pub 重命名为 authorized_keys</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116155609812.png" alt="image-20201116155609812" /></p>
+
+<p>3)、修改 ssh 服务的配置文件</p>
+
+<p>修改服务器 C:\ProgramData\ssh 目录下的 sshd_config 文件，注释最后两行内容</p>
+
+<p>若有安全级别较高可以将 PasswordAuthentication 改成 no（不允许密码登录，只能通过秘钥登录）：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Match Group administrators
+#       AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys
+</code></pre></div></div>
+
+<p>重启 sshd、sshd-agent 服务，并将启动类型改为自动</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116161117405.png" alt="image-20201116161117405" /></p>
+
+<p>使用 Xshell 测试</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116161237093.png" alt="image-20201116161237093" /></p>]]></content><author><name>Nine</name></author><category term="OpenSSH" /><summary type="html"><![CDATA[OpenSSH 在 Windows 上的使用]]></summary></entry><entry><title type="html">Linux 下安装 Redis</title><link href="https://blog.nine.gt.tc/2020/07/08/centos-install-redis/" rel="alternate" type="text/html" title="Linux 下安装 Redis" /><published>2020-07-08T00:00:00+08:00</published><updated>2020-07-08T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2020/07/08/centos-install-redis</id><content type="html" xml:base="https://blog.nine.gt.tc/2020/07/08/centos-install-redis/"><![CDATA[<p>Linux 下编译安装 Redis 以及使用脚本安装</p>
+
+<h5 id="1编译安装-redis">1、编译安装 Redis</h5>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 下载解压文件</span>
+wget http://download.redis.io/releases/redis-5.0.7.tar.gz
+<span class="nb">tar</span> <span class="nt">-zxvf</span> redis-5.0.7.tar.gz
+
+<span class="c"># 安装依赖</span>
+yum <span class="nt">-y</span> <span class="nb">install </span>gcc gcc-c++ tcl
+
+<span class="c"># 编译 redis6.x 需要高版本的 gcc</span>
+yum <span class="nt">-y</span> <span class="nb">install </span>centos-release-scl
+yum <span class="nt">-y</span> <span class="nb">install </span>devtoolset-9-gcc devtoolset-9-gcc-c++ devtoolset-9-binutils
+<span class="nb">source</span> /opt/rh/devtoolset-9/enable
+<span class="nb">echo</span> <span class="s2">"source /opt/rh/devtoolset-9/enable"</span> <span class="o">&gt;&gt;</span>/etc/profile
+gcc <span class="nt">--version</span>
+
+<span class="c"># 编译 redis 源码</span>
+<span class="nb">cd </span>redis-5.0.7
+make <span class="nt">-j2</span>
+
+<span class="c"># 安装到指定目录</span>
+<span class="nb">cd </span>src
+make <span class="nt">-j2</span> <span class="nb">install </span><span class="nv">PREFIX</span><span class="o">=</span>/usr/local/redis
+</code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200708174648619.png" alt="image-20200708175841687" /></p>
+
+<h5 id="2配置-redis">2、配置 redis</h5>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 移动配置文件到安装目录下</span>
+<span class="nb">mkdir</span> /usr/local/redis/etc
+<span class="nb">mv</span> ../redis.conf /usr/local/redis/etc
+</code></pre></div></div>
+
+<p>修改配置文件：<code class="language-plaintext highlighter-rouge">vim /usr/local/redis/etc/redis.conf</code></p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 配置 redis 为后台启动
+# 将 daemonize no 改成 daemonize yes
+# 在 bind 127.0.0.1 后添加本机 ip 供局域网访问
+# 将 requirepass foobared 改为 requirepass 1234，1234 为 redis 密码
+</span></code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200708175841687.png" alt="image-20200708174648619" /><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200708182146625.png" alt="image-20200708175529165" /><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200708175529165.png" alt="image-20200708182146625" /></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 创建软连接，让 redis-server、redis-cli 可以在任意目录下直接使用</span>
+<span class="nb">ln</span> <span class="nt">-s</span> /usr/local/redis/bin/redis-server /usr/local/bin/
+<span class="nb">ln</span> <span class="nt">-s</span> /usr/local/redis/bin/redis-cli /usr/local/bin/
+
+<span class="c"># 启动 redis</span>
+redis-server /usr/local/redis/etc/redis.conf
+
+<span class="c"># 开放6379端口，重启防火墙</span>
+firewall-cmd <span class="nt">--zone</span><span class="o">=</span>public <span class="nt">--add-port</span><span class="o">=</span>6379/tcp <span class="nt">--permanent</span>
+systemctl restart firewalld
+</code></pre></div></div>
+
+<h5 id="3设置开机自启">3、设置开机自启</h5>
+
+<ul>
+  <li><strong>方法一</strong></li>
+</ul>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 在 /etc/rc.local 末尾添加一行内容</span>
+<span class="nb">echo</span> <span class="s1">'/usr/local/redis/bin/redis-server /usr/local/redis/etc/redis.conf'</span> <span class="o">&gt;&gt;</span> /etc/rc.d/rc.local
+
+<span class="c"># 添加执行权限</span>
+<span class="nb">chmod</span> +x /etc/rc.d/rc.local
+</code></pre></div></div>
+
+<ul>
+  <li><strong>方法二</strong></li>
+</ul>
+
+<p>添加启动文件：<code class="language-plaintext highlighter-rouge">vim /lib/systemd/system/redis.service</code>，写入以下配置</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span>
+<span class="py">Description</span><span class="p">=</span><span class="s">The redis-server Process Manager</span>
+<span class="py">Documentation</span><span class="p">=</span><span class="s">https://redis.io/</span>
+<span class="py">After</span><span class="p">=</span><span class="s">network.target</span>
+<span class="nn">[Service]</span>
+<span class="py">Type</span><span class="p">=</span><span class="s">forking</span>
+<span class="py">ExecStart</span><span class="p">=</span><span class="s">/usr/local/redis/bin/redis-server /usr/local/redis/etc/redis.conf</span>
+<span class="c"># 有密码则需要在 redis-cli 后面加 -a "密码"
+</span><span class="py">ExecStop</span><span class="p">=</span><span class="s">/usr/local/redis/bin/redis-cli -a "1234" shutdown </span>
+<span class="nn">[Install]</span>
+<span class="py">WantedBy</span><span class="p">=</span><span class="s">multi-user.target</span>
+</code></pre></div></div>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 设置开机自启动</span>
+systemctl <span class="nb">enable </span>redis
+
+<span class="c"># 开启服务</span>
+systemctl start redis
+
+<span class="c"># 停止服务</span>
+systemctl stop redis
+
+<span class="c"># 查看运行状态</span>
+systemctl status redis
+</code></pre></div></div>
+
+<h5 id="可能遇到的问题">可能遇到的问题：</h5>
+
+<p>make 时，发生以下错误，使用<code class="language-plaintext highlighter-rouge">make MALLOC=libc</code>执行</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20201123153608469.png" alt="image-20201123153608469" /></p>]]></content><author><name>Nine</name></author><category term="Redis" /><summary type="html"><![CDATA[Linux 下 Redis 的安装以及配置开机自启]]></summary></entry><entry><title type="html">Git 基础</title><link href="https://blog.nine.gt.tc/2020/04/22/git-basis/" rel="alternate" type="text/html" title="Git 基础" /><published>2020-04-22T00:00:00+08:00</published><updated>2020-04-22T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2020/04/22/git-basis</id><content type="html" xml:base="https://blog.nine.gt.tc/2020/04/22/git-basis/"><![CDATA[<p>Git 基础知识介绍</p>
+
+<h4 id="1git-与-github-的区别">1、Git 与 Github 的区别</h4>
+
+<ul>
+  <li>
+    <p>Git 是一个分布式版本控制系统，简单的说其就是一个软件，用于记录一个或若干文件内容变化，以便将来查阅特定版本修订情况的软件。</p>
+  </li>
+  <li>
+    <p>Github（https://www.github.com）是一个为用户提供 Git 服务的网站，简单说就是一个可以放代码的地方（不过可以放的当然不仅是代码）。Github 除了提供管理 Git 的 web 界面外，还提供了订阅、关注、讨论组、在线编辑器等丰富的功能。Github 被称之为全球最大的基友网站。</p>
+  </li>
+</ul>
+
+<h4 id="2本地仓库">2、本地仓库</h4>
+
+<h5 id="21工作流程">2.1、工作流程</h5>
+
+<p>Git 本地操作的三个区域：</p>
+
+<ol>
+  <li>工作区：本地电脑存放项目文件的地方；</li>
+  <li>暂存区（Index/Stage）：在使用 git 管理项目文件的时候，其本地的项目文件会多出一个 .git 的文件夹，将这个 .git 文件夹称之为版本库。其中 .git 文件夹中包含了两个部分，一个是暂存区（Index/Stage），顾名思义就是暂时存放文件的地方，通常使用 <code class="language-plaintext highlighter-rouge">add</code> 命令将工作区的文件添加到暂存区里；</li>
+  <li>本地仓库：.git 文件夹里还包括 git 自动创建的 master 分支，并且将HEAD指针指向 <code class="language-plaintext highlighter-rouge">master</code> 分支。使用 <code class="language-plaintext highlighter-rouge">commit</code> 命令可以将暂存区中的文件添加到本地仓库中；</li>
+</ol>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/工作流程.png" alt="三个区域" /></p>
+
+<p>工作流程：</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/三个区域.png" alt="工作流程" /></p>
+
+<h5 id="22本地仓库操作">2.2、本地仓库操作</h5>
+
+<p>仓库又名版本库，英文名 repository ，我们可以简单理解成是一个目录，用于存放代码的，这个目录里面的所有文件都可以被 Git 管理起来，每个文件的修改、删除等操作 Git 都能跟踪到。</p>
+
+<p>① 在安装好后首次使用需要先进行全局配置
+桌面空白处右键，点击 Git Bash Here 以打开 Git 命令行窗口</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git config <span class="nt">--global</span> user.name <span class="s2">"用户名"</span>
+<span class="nv">$ </span>git config <span class="nt">--global</span> user.email <span class="s2">"邮箱地址"</span>
+</code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221193654605.png" alt="image-20200221193040545" /></p>
+
+<p>② 创建仓库，创建一个文件夹，进入文件夹内，将git仓库初始化：<code class="language-plaintext highlighter-rouge">git init</code>，初始化成功后会在该目录下有 .git 名字的隐藏文件夹</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221193040545.png" alt="image-20200221193654605" /></p>
+
+<p>③ Git 常用指令操作</p>
+
+<p>查看当前状态：<code class="language-plaintext highlighter-rouge">git status</code> 【非必要】</p>
+
+<p>添加到暂存区：<code class="language-plaintext highlighter-rouge">git add 文件名</code></p>
+
+<p>提交至版本库：<code class="language-plaintext highlighter-rouge">git commit -m "注释内容"</code></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 语法</span>
+git add 文件名
+git add 文件名1 文件名2 文件名3 …
+git add <span class="nb">.</span>		      //添加当前目录到缓存区中
+</code></pre></div></div>
+
+<p>在后续对于文件（可以操作 1 个或多个）操作之后，重复使用 <code class="language-plaintext highlighter-rouge">git add</code> 与 <code class="language-plaintext highlighter-rouge">git commit</code> 指令即可</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221203621284.png" alt="image-20200221203621284" /></p>
+
+<h5 id="23版本回退">2.3、版本回退</h5>
+
+<p>版本回退分为两步骤进行操作：
+① 查看版本，确定需要回到的时刻点
+			指令：<code class="language-plaintext highlighter-rouge">git log</code>、<code class="language-plaintext highlighter-rouge">git log --pretty=oneline</code></p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221204428390.png" alt="image-20200221204428390" /></p>
+
+<p>② 回退操作
+​			指令：<code class="language-plaintext highlighter-rouge">git reset --hard</code> 提交编号</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221204702981.png" alt="image-20200221204702981" /></p>
+
+<p>③ 查看历史操作，以得到最新的 commit id</p>
+
+<p>指令：<code class="language-plaintext highlighter-rouge">git reflog</code></p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221204953023.png" alt="image-20200221204953023" /></p>
+
+<h5 id="24忽略文件">2.4、忽略文件</h5>
+
+<p>忽略文件需要新建一个名为 .gitignore 的文件，该文件用于声明忽略文件或不忽略文件的规则，规则对当前目录及其子目录生效。</p>
+
+<blockquote>
+  <p>PS：该文件因为没有文件名，无法直接在 windows 目录下直接创建，可以通过命令行 Git Bash 来<code class="language-plaintext highlighter-rouge">touch</code>创建</p>
+</blockquote>
+
+<p>常见规则写法有如下几种：</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">1）/mtk/</span>               <span class="err">过滤整个文件夹</span>
+<span class="err">2）*.zip</span>               <span class="err">过滤所有.zip</span> <span class="err">文件</span>
+<span class="err">3）/mtk/do.c</span>           <span class="err">过滤某个具体文件</span>
+<span class="err">4)</span> <span class="err">!index.php</span>	       <span class="err">不过滤具体某个文件</span>
+</code></pre></div></div>
+
+<h4 id="3两种常规使用方式">3、两种常规使用方式</h4>
+
+<h5 id="31基于-httphttps-协议">3.1、基于 http/https 协议</h5>
+
+<p>a. 使用 <code class="language-plaintext highlighter-rouge">clone</code> 指令克隆线上仓库到本地
+语法： <code class="language-plaintext highlighter-rouge">git clone</code>  线上仓库地址</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221212548678.png" alt="image-20200221212548678" /></p>
+
+<p>b. 在仓库上做对应的操作（提交暂存区、提交本地仓库、提交线上仓库、拉取线上仓库）
+将本地仓库同步到 git 远程仓库中：<code class="language-plaintext highlighter-rouge">git push</code></p>
+
+<p>在 push 前需要修改 .git/config 文件内容：</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[core]</span>
+	<span class="py">repositoryformatversion</span> <span class="p">=</span> <span class="s">0</span>
+	<span class="py">filemode</span> <span class="p">=</span> <span class="s">false</span>
+	<span class="py">bare</span> <span class="p">=</span> <span class="s">false</span>
+	<span class="py">logallrefupdates</span> <span class="p">=</span> <span class="s">true</span>
+	<span class="py">symlinks</span> <span class="p">=</span> <span class="s">false</span>
+	<span class="py">ignorecase</span> <span class="p">=</span> <span class="s">true</span>
+<span class="nn">[remote "origin"]</span>
+	<span class="py">url</span> <span class="p">=</span> <span class="s">https://用户名:密码@github.com/用户名/仓库名.git</span>
+	<span class="py">fetch</span> <span class="p">=</span> <span class="s">+refs/heads/*:refs/remotes/origin/*</span>
+<span class="nn">[branch "master"]</span>
+	<span class="py">remote</span> <span class="p">=</span> <span class="s">origin</span>
+	<span class="py">merge</span> <span class="p">=</span> <span class="s">refs/heads/master</span>
+</code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221212803927.png" alt="image-20200221212803927" /></p>
+
+<p>拉取线上仓库：<code class="language-plaintext highlighter-rouge">git pull</code></p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221214620172.png" alt="image-20200221214620172" /></p>
+
+<h5 id="32基于-ssh-协议">3.2、基于 ssh 协议</h5>
+
+<p>生成公私玥对指令：<code class="language-plaintext highlighter-rouge">ssh-keygen -t rsa -C "注册邮箱"</code></p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221223827885.png" alt="image-20200221223827885" /></p>
+
+<p>上传公钥文件内容（id_rsa.pub）到 github 中，<code class="language-plaintext highlighter-rouge">clone</code> 远程仓库</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221222922406.png" alt="image-20200221222922406" /></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 查看分支</span>
+git branch
+
+<span class="c"># 创建分支</span>
+git branch 分支名
+
+<span class="c"># 切换分支</span>
+git checkout 分支名 
+
+<span class="c"># 删除分支</span>
+git branch <span class="nt">-d</span> 分支名
+
+<span class="c"># 合并分支</span>
+git merge 被合并的分支名
+</code></pre></div></div>
+
+<p>查看、创建分支：</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221225058586.png" alt="image-20200221225058586" /></p>
+
+<p>切换分支、合并分支、删除分支：</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221230146089.png" alt="image-20200221230146089" /></p>
+
+<p>将 <code class="language-plaintext highlighter-rouge">master</code> 分支提交到远程仓库</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221230327303.png" alt="image-20200221230327303" /></p>
+
+<h4 id="4解决冲突">4、解决冲突</h4>
+
+<p>多人开发同一个项目时，如果两个人修改了同一个文件同一个地方，push 时会发生冲突</p>
+
+<p>解决方式：<code class="language-plaintext highlighter-rouge">git pull</code> -&gt; 手动解决冲突 -&gt;<code class="language-plaintext highlighter-rouge">git push</code></p>]]></content><author><name>Nine</name></author><category term="Git" /><summary type="html"><![CDATA[Git 基础知识介绍]]></summary></entry></feed>

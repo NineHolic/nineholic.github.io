@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="zh-cmn-Hans" prefix="og: http://ogp.me/ns#" class="han-init"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /><title>Centos7 升级 OpenSSH &mdash; Nine</title><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/vendor/primer-css/css/primer.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/css/components/collection.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/css/components/repo-card.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/css/sections/repo-list.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/css/components/boxed-group.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/css/globals/common.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/css/globals/responsive.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/css/posts/index.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/vendor/octicons/octicons/octicons.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/mzlogin/rouge-themes@master/dist/base16.solarized.dark.css"><link rel="canonical" href="https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh/"><link rel="alternate" type="application/atom+xml" title="Nine" href="https://blog.nine.gt.tc/feed.xml"><link rel="shortcut icon" href="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/favicon.ico"><meta property="og:title" content="Centos7 升级 OpenSSH"><meta name="keywords" content="Linux, Centos, OpenSSH"><meta name="og:keywords" content="Linux, Centos, OpenSSH"><meta name="description" content="Centos7.6 升级后测试 ssh 登录及重启后 ssh 登录均无问题，升级无需卸载原先的 openssl 和 openssh"><meta name="og:description" content="Centos7.6 升级后测试 ssh 登录及重启后 ssh 登录均无问题，升级无需卸载原先的 openssl 和 openssh"><meta property="og:url" content="https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh/"><meta property="og:site_name" content="Nine"><meta property="og:type" content="article"><meta property="og:locale" content="zh_CN" /><meta property="article:published_time" content="2021-08-18"> <script src="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/vendor/jquery/dist/jquery.min.js"></script> <script src="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/js/jquery-ui.js"></script> <script src="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/js/main.js"></script> <script async src="https://www.googletagmanager.com/gtag/js?id=UA-196771212-1"></script> <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'UA-196771212-1'); </script><div style="display:none"> <script> var _hmt = _hmt || []; (function () { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?291b6bd8af9846f6fab5b11aa98b7415"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script></div></head><body class="" data-mz=""><header class="site-header"><div class="container"><h1 > <a href="https://blog.nine.gt.tc/" title="Nine" class="title-info"> <img src="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/images/avatar.jpeg" class="avatar-top avatar-user avatar avatar-small">Nine </a></h1><button class="collapsed mobile-visible" type="button" onclick="toggleMenu();"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button><nav class="site-header-nav" role="navigation"> <a href="https://blog.nine.gt.tc/" class=" site-header-nav-item" target="" title="首页">首页</a> <a href="https://blog.nine.gt.tc/categories/" class=" site-header-nav-item" target="" title="分类">分类</a> <a href="https://blog.nine.gt.tc/archives/" class=" site-header-nav-item" target="" title="归档">归档</a> <a href="https://blog.nine.gt.tc/wiki/" class=" site-header-nav-item" target="" title="维基">维基</a> <a href="https://blog.nine.gt.tc/links/" class=" site-header-nav-item" target="" title="链接">链接</a> <a href="https://blog.nine.gt.tc/about/" class=" site-header-nav-item" target="" title="关于">关于</a></nav></div></header><section class="collection-head small geopattern" data-pattern-id="Centos7 升级 Open"><div class="container"><div class="columns"><div class="column three-fourths"><div class="collection-title"><h1 class="collection-header">Centos7 升级 OpenSSH</h1><div class="collection-info"> <span class="meta-info"> <span class="octicon octicon-calendar"></span> 2021/08/18 </span> <span class="meta-info"> <span class="octicon octicon-file-directory"></span> <a href="https://blog.nine.gt.tc/categories/#OpenSSH" title="OpenSSH">OpenSSH</a> </span> <span class="meta-info octicon octicon-eye"> <span id="busuanzi_container_page_pv meta-info"> 浏览量 <span id="busuanzi_value_page_pv"></span> 次 </span> </span> <span class="meta-info"> <span class="octicon octicon-clock"></span> 共 2993 字，约 9 分钟 </span></div></div></div><div class="column one-fourth mobile-hidden"><div class="collection-title "></div></div></div></div></section><section class="container content"><div class="columns"><div class="column three-fourths" ><article class="article-content markdown-body"><p>Centos7.6 升级后测试 ssh 登录及重启后 ssh 登录均无问题，升级无需卸载原先的 openssl 和 openssh</p><p>系统环境为服务器安装镜像时自带的 openssh，没有经历过手动编译安装方式</p><h5 id="1升级准备">1、升级准备</h5><p>升级前版本</p><p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818183950745.png" alt="image-20210818183950745" /></p><p>升级后版本</p><p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818210016091.png" alt="image-20210818210016091" /></p><blockquote><p><strong>注意事项：</strong></p><p>升级前先关闭 selinux</p><p>使用 telnet 登录升级，备份ssh 相关文件，避免失败时无法回退版本</p><p>先在相同版本的测试环境进行升级，ssh 服务重启、服务器重启、su 切换用户等无问题后再到生产环境操作</p></blockquote><p>先使用 yum 升级到目前 yum 仓库默认的 openssh7.4p1 版本，再进行编译安装升级到 openssh8.6p1</p><div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum <span class="nt">-y</span> update openssh
+</code></pre></div></div><p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818191234569.png" alt="image-20210818191234569" /></p><p>关闭 selinux：<code class="language-plaintext highlighter-rouge">vim /etc/selinux/config</code>，将<code class="language-plaintext highlighter-rouge">SELINUX=enforcing</code>改为<code class="language-plaintext highlighter-rouge">SELINUX=disabled</code></p><p>重启服务器：<code class="language-plaintext highlighter-rouge">shutdown -r now</code></p><h5 id="2安装配置-telnet">2、安装配置 telnet</h5><p>防止SSH远程控制时，升级过程中出现连接中断，可通过telnet备用方式进行远程连接（由于telnet是明文传输，不安全，只作为临时使用，升级完成后，必须停止卸载该服务）</p><div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum <span class="nt">-y</span> <span class="nb">install </span>xinetd telnet-server
+</code></pre></div></div><p>修改配置文件：<code class="language-plaintext highlighter-rouge">vim /etc/xinetd.d/telnet</code></p><div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># default: on
+# # description: The telnet server serves telnet sessions; it uses \
+# #   unencrypted username/password pairs for authentication.
+service telnet
+{
+     disable     = yes
+     flags       = REUSE
+     socket_type = stream               
+     wait        = no
+     user        = root
+     server      = /usr/sbin/in.telnetd
+     log_on_failure  += USERID
+}
+</code></pre></div></div><p>配置 telnet 登录的终端类型：<code class="language-plaintext highlighter-rouge">vim /etc/securetty</code>，再文件末尾增加一些 pts 终端</p><div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pts/0
+pts/1
+pts/2
+pts/3
+</code></pre></div></div><p>设为开机自动启动</p><div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl <span class="nb">enable </span>xinetd
+systemctl <span class="nb">enable </span>telnet.socket
+systemctl start telnet.socket
+systemctl start xinetd
+
+<span class="c"># 查看服务是否启动</span>
+netstat <span class="nt">-lntp</span>|grep 23
+</code></pre></div></div><p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819104413583.png" alt="image-20210819104413583" /></p><p>测试 telnet 登录</p><p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819104602717.png" alt="image-20210819104602717" /></p><p>以下升级操作均在 telnet 终端下操作，防止 ssh 连接意外中断造成升级失败</p><h5 id="3升级-openssl">3、升级 openssl</h5><div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 安装依赖包</span>
+yum <span class="nt">-y</span> <span class="nb">install </span>gcc gcc-c++ glibc make autoconf openssl openssl-devel pcre-devel  pam-devel
+yum <span class="nt">-y</span> <span class="nb">install </span>pam<span class="k">*</span> zlib<span class="k">*</span>
+
+<span class="c"># 下载解压 openssl 包</span>
+wget https://www.openssl.org/source/openssl-1.1.1g.tar.gz
+<span class="nb">tar</span> <span class="nt">-zxvf</span> openssl-1.1.1g.tar.gz
+
+<span class="c"># 备份 openssl (存在就备份)</span>
+<span class="nb">mv</span> /usr/bin/openssl /usr/bin/openssl_bak
+<span class="nb">mv</span> /usr/include/openssl /usr/include/openssl_bak
+
+<span class="c"># 编译安装 openssl</span>
+<span class="nb">cd </span>openssl-1.1.1g
+./config <span class="nt">--prefix</span><span class="o">=</span>/usr/ <span class="nt">--openssldir</span><span class="o">=</span>/usr/ shared
+make <span class="nt">-j2</span> <span class="o">&amp;&amp;</span> make <span class="nt">-j2</span> <span class="nb">install</span>
+
+<span class="c"># 查看最后的命令 make install 是否有报错，0 表示无问题</span>
+<span class="nb">echo</span> <span class="nv">$?</span>
+
+<span class="c"># 查看升级后的 openssl 版本</span>
+openssl version
+</code></pre></div></div><p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818192248033.png" alt="image-20210818192248033" /></p><h5 id="4升级-openssh">4、升级 openssh</h5><div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 下载解压 openssh 包</span>
+wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.6p1.tar.gz
+<span class="nb">tar</span> <span class="nt">-zxvf</span> openssh-8.6p1.tar.gz
+<span class="nb">chown</span> <span class="nt">-R</span> root:root openssh-8.6p1
+
+<span class="c"># 备份ssh</span>
+<span class="nb">mv</span> /etc/ssh /etc/ssh.bak
+<span class="nb">mv</span> /usr/bin/ssh /usr/bin/ssh.bak
+<span class="nb">mv</span> /usr/sbin/sshd /usr/sbin/sshd.bak
+
+<span class="c"># 编译安装 openssh</span>
+<span class="nb">cd </span>openssh-8.6p1
+./configure <span class="nt">--prefix</span><span class="o">=</span>/usr <span class="nt">--sysconfdir</span><span class="o">=</span>/etc/ssh <span class="nt">--with-ssl-dir</span><span class="o">=</span>/usr/local/ssl <span class="nt">--with-md5-passwords</span> <span class="nt">--with-pam</span> <span class="nt">--with-zlib</span> <span class="nt">--with-tcp-wrappers</span> <span class="nt">--without-hardening</span>
+make <span class="nt">-j2</span> <span class="o">&amp;&amp;</span> make <span class="nt">-j2</span> <span class="nb">install</span>
+
+<span class="c"># 查看最后的命令 make install 是否有报错</span>
+<span class="nb">echo</span> <span class="nv">$?</span>
+
+<span class="c"># 授权</span>
+<span class="nb">chmod </span>600 /etc/ssh/ssh_host_rsa_key /etc/ssh/ssh_host_ecdsa_key /etc/ssh/ssh_host_ed25519_key
+
+<span class="c"># 从原先的解压的包中拷贝一些文件到目标位置</span>
+<span class="nb">cp</span> <span class="nt">-a</span> contrib/redhat/sshd.init  /etc/init.d/sshd
+<span class="nb">cp</span> <span class="nt">-a</span> contrib/redhat/sshd.pam /etc/pam.d/sshd.pam
+<span class="nb">chmod </span>u+x /etc/init.d/sshd
+
+<span class="c"># 将原先 systemd 管理的 sshd 文件删除或者移走，否则会影响重启 sshd 服务</span>
+<span class="nb">mv</span> /usr/lib/systemd/system/sshd.service /usr/lib/systemd/system/sshd.service.bak
+
+<span class="c"># 修改 ssh 配置</span>
+vim /etc/ssh/sshd_config
+
+UseDNS no
+UsePAM <span class="nb">yes
+</span>PermitRootLogin <span class="nb">yes
+</span>PasswordAuthentication <span class="nb">yes</span>
+
+<span class="c"># 设置开机自启</span>
+chkconfig <span class="nt">--add</span> sshd
+chkconfig sshd on
+
+<span class="c"># 重启 ssh 服务</span>
+systemctl daemon-reload
+systemctl restart sshd
+
+<span class="c"># 查看 ssh 状态</span>
+systemctl status sshd.service
+
+<span class="c"># 查看升级后的 openssh 版本</span>
+ssh <span class="nt">-V</span>
+</code></pre></div></div><p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818210216061.png" alt="image-20210818210216061" /></p><p>使用 systemd 方式测试</p><div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>netstat <span class="nt">-lntp</span>
+systemctl stop sshd
+netstat <span class="nt">-lntp</span>
+systemctl start sshd
+netstat <span class="nt">-lntp</span>
+systemctl restart sshd
+netstat <span class="nt">-lntp</span>
+</code></pre></div></div><p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818195309024.png" alt="image-20210818195309024" /></p><p>telnet 测试</p><p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819091246218.png" alt="image-20210819091246218" /></p><p>重启后再次测试均无问题，关闭 telnet</p><div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl disable xinetd.service
+systemctl stop xinetd.service
+systemctl disable telnet.socket
+systemctl stop telnet.socket
+netstat <span class="nt">-lntp</span>
+</code></pre></div></div><h5 id="5版本回退">5、版本回退</h5><div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">rm</span> <span class="nt">-rf</span> /etc/ssh
+<span class="nb">mv</span> /etc/ssh.bak /etc/ssh
+<span class="nb">mv</span> /usr/bin/ssh.bak /usr/bin/ssh
+<span class="nb">mv</span> /usr/sbin/sshd.bak /usr/sbin/sshd
+systemctl restart sshd
+ssh <span class="nt">-V</span>
+</code></pre></div></div><p>回退后注意验证ssh登录是否正常</p><p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819102454585.png" alt="image-20210819102454585" /></p><div style="font-size: 16px;border-left: 3px solid #3498db;background-color:#f0f8ff;padding: 16px 0px 1px 1px;border-radius: 3px;"><ul><li>本文作者：<a href="https://blog.nine.gt.tc" target="_blank">Nine</a></li><li>本文链接：<a href="https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh/" target="_blank">https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh/</a></li><li>版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank">创意共享3.0许可证</a>）</li></ul></div></article><div class="share"></div><div class="comment"><div id="gitalk-container"></div><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/vendor/gitalk/gitalk.css"> <script src="https://fastly.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script> <script> var gitalk = new Gitalk({ id: '/2021/08/18/centos7-upgrade-openssh/', clientID: 'f78c6d97082d9e075113', clientSecret: 'b7ac22c3b5a365ef167381f88f9b5d2cedaa7203', repo: 'blog-comments', owner: 'nineholic', admin: ['nineholic'], labels: ['gitment'], perPage: 50, }); gitalk.render('gitalk-container'); </script></div></div><div class="column one-fourth"><h3>Search</h3><div id="site_search"> <input style="width:96%" type="text" id="search_box" placeholder="Search"></div><ul id="search_results" style="font-size:14px;list-style-type:none;padding-top:10px;padding-left:10px;"></ul><script src="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/js/simple-jekyll-search.min.js"></script> <script type="text/javascript"> SimpleJekyllSearch({ searchInput: document.getElementById('search_box'), resultsContainer: document.getElementById('search_results'), json: 'https://blog.nine.gt.tc/assets/search_data.json?v=1759028974', searchResultTemplate: '<li><a href="{url}" title="{title}">{title}</a></li>', noResultsText: 'No results found', limit: 10, fuzzy: false, exclude: ['Welcome'] }) </script><h3 class="post-directory-title mobile-hidden">Table of Contents</h3><div id="post-directory-module" class="mobile-hidden"><section class="post-directory"><dl></dl></section></div><script src="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/js/jquery.toc.js"></script></div></div></section><footer class="container"><div class="site-footer" role="contentinfo"><div class="copyright left mobile-block"> Copyright © <script>document.write(new Date().getFullYear())</script> <span title="Nine">Nine</span> <a href="javascript:window.scrollTo(0,0)" class="right mobile-visible">TOP</a></div><ul class="site-footer-links right mobile-hidden"><li> <a href="javascript:window.scrollTo(0,0)" >TOP</a></li></ul><a href="https://github.com/NineHolic/nineholic.github.io" target="_blank" aria-label="view source code"> <span class="mega-octicon octicon-mark-github" title="GitHub"></span> </a><ul class="site-footer-links mobile-hidden"><li> <a href="https://blog.nine.gt.tc/" title="首页" target="">首页</a></li><li> <a href="https://blog.nine.gt.tc/categories/" title="分类" target="">分类</a></li><li> <a href="https://blog.nine.gt.tc/archives/" title="归档" target="">归档</a></li><li> <a href="https://blog.nine.gt.tc/wiki/" title="维基" target="">维基</a></li><li> <a href="https://blog.nine.gt.tc/links/" title="链接" target="">链接</a></li><li> <a href="https://blog.nine.gt.tc/about/" title="关于" target="">关于</a></li><li><a href="https://blog.nine.gt.tc/feed.xml"><span class="octicon octicon-rss" style="color:orange;"></span></a></li></ul><div class="mobile-hidden" style="margin-top:8px"> <span id="busuanzi_container_site_pv"> 本站访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次 </span> <span id="busuanzi_container_site_uv"> &nbsp;&nbsp;本站访客数&nbsp;<span id="busuanzi_value_site_uv"></span>&nbsp;人 </span> /&nbsp;统计始于&nbsp;2021-05-01 <span id="runtime_span"></span> <script type="text/javascript"> function show_runtime() { window.setTimeout("show_runtime()", 1000); X = new Date("05/10/2021 16:20:00"); Y = new Date(); T = (Y.getTime() - X.getTime()); M = 24 * 60 * 60 * 1000; a = T / M; A = Math.floor(a); b = (a - A) * 24; B = Math.floor(b); c = (b - B) * 60; C = Math.floor((b - B) * 60); D = Math.floor((c - C) * 60); runtime_span.innerHTML = "本站已运行 " + A + " 天 " + B + " 小时 " + C + " 分 " + D + " 秒" } show_runtime(); </script></div></div></footer><div class="tools-wrapper"> <a class="gotop" href="#" title="回到顶部"><span class="octicon octicon-arrow-up"></span></a></div><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> <script src="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/js/geopattern.js"></script> <script> jQuery(document).ready(function($) { $('.geopattern').each(function(){ $(this).geopattern($(this).data('pattern-id')); }); /* hljs.initHighlightingOnLoad(); */ }); </script> <script src="https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/assets/js/mouse-click.js"></script></body></html>
