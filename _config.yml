@@ -12,9 +12,9 @@ timezone: Asia/Shanghai
 encoding: "utf-8"
 repository: NineHolic/nineholic.github.io
 # 对 css 和 js 资源的 cdn 加速配置
-fastly:
+cdn:
     jsdelivr:
-        enabled: true
+        enabled: false
 # 可选组件配置
 components:
     # 分享
@@ -36,20 +36,23 @@ components:
     # 鼠标点击烟火效果
     firework:
       enabled: true
-    # 禁用网页 F12 调试
-    html_debug:
-      enabled: false
-    # 页面右上角，天气插件
-    weather:
-        enabled: true
+    # 页面右上角，以及「关于」页面的二维码
+    # 修改图片请替换 assets/images/qrcode.jpg
+    qrcode:
+        enabled: false
         image_alt:
+    # 维基索引页使用哪种视图，支持 列表（list）/分类（cate）
+    wiki:
+        view: cate
+    # 图片灯箱效果功能
+    fancybox:
+        enabled: false
 # 压缩页面内容
 compress_html:
   clippings: all
   comments: ["<!--", "-->"]
 # 代码高亮风格，支持的 theme 列表见 https://github.com/mzlogin/rouge-themes
-highlight_theme: base16.solarized.dark
-# highlight_theme: base16.dark
+highlight_theme: github
 
 # ---------------- #
 #      Author      #
@@ -74,12 +77,18 @@ navs:
     label: 分类
 
   -
-     href: /archives/
-     label: 归档
+    href: /archives/
+    label: 归档
+    mobile-hidden: true
 
-#   -
-#     href: /open-source/
-#     label: 开源
+#  -
+#    href: /open-source/
+#    label: 开源
+#    mobile-hidden: true
+
+  -
+    href: /fragments/
+    label: 片段
 
   -
     href: /wiki/
@@ -88,6 +97,7 @@ navs:
   -
     href: /links/
     label: 链接
+    mobile-hidden: true
 
   -
     href: /about/
@@ -97,6 +107,22 @@ navs:
 #       RSS        #
 # ---------------- #
 subscribe_rss: /feed.xml
+
+# ---------------- #
+#      INDEX       #
+# ---------------- #
+index:
+    banner:
+        # 首页 banner 区文字颜色
+        color: "#fff"
+        # 首页导航栏文字颜色
+        nav-color: "rgba(255, 255, 255, .5)"
+        # 首页 banner 区背景颜色
+        background-color: "#4183c4"
+        # 首页 banner 区背景图片
+        # background-image: "/assets/images/octicons-bg.png"
+        # background-repeat: "no-repeat"
+        # background-size: "cover"
 
 # ---------------- #
 #      Jekyll      #
@@ -123,33 +149,45 @@ collections:
     wiki:
         output: true
         permalink: /wiki/:path/
+    fragments:
+        output: true
+        permalink: /fragment/:path/
 
 # ---------------- #
 #      Comments    #
 # ---------------- #
-# support provider: disqus, gitment, gitalk, utterances
-comments_provider: gitalk
+# support provider: disqus, gitment, gitalk, utterances, beaudar, giscus
+comments_provider: giscus
 # !!!重要!!! 请修改下面这些信息为你自己申请的
 # !!!Important!!! Please modify infos below to yours
-# https://disqus.com
+# disqus 配置参考：https://disqus.com
 disqus:
-    username:
-# https://imsun.net/posts/gitment-introduction/
+    username: 
+# gitment 配置参考：https://imsun.net/posts/gitment-introduction/
 gitment:
     owner: nineholic
     repo: blog-comments
     oauth:
         client_id: f78c6d97082d9e075113
         client_secret: b7ac22c3b5a365ef167381f88f9b5d2cedaa7203
-# https://github.com/gitalk/gitalk#install
+# gitalk 配置参考：https://github.com/gitalk/gitalk#install
 gitalk:
     owner: nineholic
     repo: blog-comments
     clientID: f78c6d97082d9e075113
     clientSecret: b7ac22c3b5a365ef167381f88f9b5d2cedaa7203
-# https://utteranc.es/
+# utterances 配置参考：https://utteranc.es/
 utterances:
-  repo: NineHolic/blog-comments
+    repo: NineHolic/blog-comments
+# beaudar 配置参考：https://beaudar.lipk.org/
+beaudar:
+    repo: NineHolic/blog-comments
+# giscus 配置参考：https://giscus.app/zh-CN
+giscus:
+    repo: NineHolic/blog-comments
+    repo-id: MDEwOlJlcG9zaXRvcnkzNjU4ODk4MzQ=
+    category: Announcements
+    category-id: DIC_kwDOFc8JKs4CwE7i
 # 在使用其它评论组件时可点击显示 Disqus
 lazy_load_disqus : false
 
@@ -158,7 +196,7 @@ lazy_load_disqus : false
 # ---------------- #
 simple_jekyll_search:
     # 是否支持全文搜索
-    fulltext: true
+    fulltext: false
     # 最多显示多少条搜索结果
     limit: 10
 
@@ -166,12 +204,13 @@ simple_jekyll_search:
 #      Google      #
 # ---------------- #
 google:
-  analytics_id: UA-196771212-1
-  adsense:
-    footer: true
-    sidebar: true
-    sidebar-detail: false
-    content_header: false
-    content_footer: false
+    analytics_id: UA-196771212-1
+    adsense:
+        enabled: true
+        footer: true
+        sidebar: true
+        sidebar-detail: false
+        content_header: false
+        content_footer: false
 baidu:
-  analytics_id: 291b6bd8af9846f6fab5b11aa98b7415
+    analytics_id: 291b6bd8af9846f6fab5b11aa98b7415

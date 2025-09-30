@@ -13,7 +13,7 @@ permalink: /about/
 ## Contact
 
 {% for website in site.data.social %}
-* {{ website.sitename }}：[{{ website.name }}]({{ website.url }})
+<li>{{website.sitename }}：<a href="{{ website.url }}" target="_blank">@{{ website.name }}</a></li>
 {% endfor %}
 
 ## Skill Keywords

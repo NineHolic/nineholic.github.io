@@ -40,9 +40,9 @@
       {% if site.disqus and site.disqus.username %}
         {% assign load_disqus = true %}
         <!-- Disqus Protection, see https://github.com/mzlogin/mzlogin.github.io/issues/2 -->
-        {% if site.disqus.username == 'mzlogin' %}
+        {% if site.disqus.username == 'NineHolic' %}
           {% assign load_disqus = false %}
-          {% if site.url contains 'mazhuang.org' %}
+          {% if site.url contains 'blog.nine.gt.tc' %}
             {% assign load_disqus = true %}
           {% endif %}
         {% endif %}
@@ -104,12 +104,41 @@
         });
         gitalk.render('gitalk-container');
         </script>
-    {% when 'utterances' %}
+  {% when 'utterances' %}
         <script src="https://utteranc.es/client.js"
                 repo="{{ site.utterances.repo }}"
                 issue-term="title"
                 label="gitment"
                 theme="github-light"
+                crossorigin="anonymous"
+                async>
+        </script>
+  {% when 'beaudar' %}
+        <script src="https://beaudar.lipk.org/client.js"
+                repo="{{ site.beaudar.repo }}"
+                issue-term="title"
+                issue-label="{{ page.url | truncate: 50, '' }}"
+                label="gitment"
+                theme="github-light"
+                comment-order="desc"
+                input-position="top"
+                crossorigin="anonymous"
+                async>
+        </script>
+  {% when 'giscus' %}
+        <script src="https://giscus.app/client.js"
+                data-repo="{{ site.giscus.repo }}"
+                data-repo-id="{{ site.giscus.repo-id }}"
+                data-category="{{ site.giscus.category }}"
+                data-category-id="{{ site.giscus.category-id }}"
+                data-mapping="title"
+                data-strict="1"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="top"
+                data-theme="light"
+                data-lang="zh-CN"
+                data-loading="lazy"
                 crossorigin="anonymous"
                 async>
         </script>

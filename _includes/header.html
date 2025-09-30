@@ -14,13 +14,16 @@
     <link rel="stylesheet" href="{{ assets_base_url }}/assets/css/globals/responsive.css">
     <link rel="stylesheet" href="{{ assets_base_url }}/assets/css/posts/index.css">
     <link rel="stylesheet" href="{{ assets_base_url }}/assets/vendor/octicons/octicons/octicons.css">
-    {% assign highlight_base_url = 'https://mazhuang.org/rouge-themes/dist' %}
-    {% if site.fastly.jsdelivr.enabled %}
+    {% assign highlight_base_url = 'https://blog.nine.gt.tc/rouge-themes/dist' %}
+    {% if site.cdn.jsdelivr.enabled %}
     {% assign highlight_base_url = 'https://fastly.jsdelivr.net/gh/mzlogin/rouge-themes@master/dist' %}
     {% endif %}
     <link rel="stylesheet" href="{{ highlight_base_url }}/{{ site.highlight_theme}}.css">
     {% if site.components.share.enabled %}
     <link rel="stylesheet" href="{{ assets_base_url }}/assets/vendor/share.js/dist/css/share.min.css">
+    {% endif %}
+    {% if site.components.fancybox.enabled %}
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css"/>
     {% endif %}
     <!-- Latest compiled and minified CSS -->
     {% for css in page.css %}
@@ -73,41 +76,28 @@
     {% endif %}
 
     <script src="{{ assets_base_url }}/assets/vendor/jquery/dist/jquery.min.js"></script>
-    <script src="{{ assets_base_url }}/assets/js/jquery-ui.js"></script>
     <script src="{{ assets_base_url }}/assets/js/main.js"></script>
 
-    {% if site.url contains 'flynine.top' %}
-    <script data-ad-client="" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    {% if site.google.adsense.enabled and site.url contains 'blog.nine.gt.tc' %}
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7093222719567591" crossorigin="anonymous"></script>
     {% endif %}
 
     {% if site.google.analytics_id %}
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{site.google.analytics_id}}"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google.analytics_id }}"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-        gtag('config', '{{site.google.analytics_id}}');
+      gtag('config', '{{ site.google.analytics_id }}');
     </script>
-    {% endif %}
-    {% if site.baidu.analytics_id %}
-    <div style="display:none">
-        <script>
-            var _hmt = _hmt || [];
-            (function () {
-                var hm = document.createElement("script");
-                hm.src = "https://hm.baidu.com/hm.js?{{site.baidu.analytics_id}}";
-                var s = document.getElementsByTagName("script")[0];
-                s.parentNode.insertBefore(hm, s);
-            })();
-        </script>
-    </div>
     {% endif %}
 </head>
 <body class="{{ page.class }}" data-mz="{{ page.class }}">
     <header class="site-header">
         <div class="container">
-            <h1 >
+            <h1>
                 <a href="{{ site.url }}/" title="{{ site.title }}" class="title-info">
                     <img src="{{ assets_base_url }}/assets/images/avatar.jpeg" class="avatar-top avatar-user avatar avatar-small">{{ site.title }}
                 </a>
@@ -119,21 +109,10 @@
             </button>
             <nav class="site-header-nav" role="navigation">
                 {% for nav in site.navs %}
-                <a href="{{ site.url }}{{ nav.href }}" class="{% if page.menu == nav.label %} selected {% endif %} site-header-nav-item" target="{{ nav.target | default: _self }}" title="{{ nav.label }}">{{ nav.label }}</a>
+                <a href="{{ site.url }}{{ nav.href }}" class="{% if nav.mobile-hidden %}mobile-hidden {% endif %}{% if page.menu == nav.label %}selected {% endif %}site-header-nav-item" target="{{ nav.target | default: _self }}" title="{{ nav.label }}">{{ nav.label }}</a>
                 {% endfor %}
+                <a class="mobile-hidden" href="{{ site.url }}{{ site.subscribe_rss }}"><span class="octicon octicon-rss" style="color:orange;"></span></a>
             </nav>
         </div>
-        {% if site.components.html_debug.enabled %}
-        <script>
-            document.oncontextmenu = function () { return false; };
-            document.onkeydown = function () {
-                if (window.event && window.event.keyCode == 123) {
-                    event.keyCode = 0;
-                    event.returnValue = false;
-                    return false;
-                }
-            };
-        </script>
-        {% endif %}
     </header>
     <!-- / header -->
