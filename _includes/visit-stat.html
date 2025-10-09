@@ -1,0 +1,39 @@
+<!-- 不蒜子访问统计 -->
+{% if site.components.busuanzi.enabled == true and page.visit-stat != 'hidden' and page.layout != 'mindmap' %}
+<script async src="{{ assets_base_url }}/assets/vendor/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="mobile-hidden" style="margin-top:8px">
+  <span id="busuanzi_container_site_pv" style="display:none">
+    本站访问量 <span id="busuanzi_value_site_pv"></span> 次
+  </span>
+  <span id="busuanzi_container_site_uv" style="display:none">
+    / 本站访客数 <span id="busuanzi_value_site_uv"></span> 人
+  </span>
+  <span id="busuanzi_container_page_pv" style="display:none">
+    / 本页访问量 <span id="busuanzi_value_page_pv"></span> 次
+    {% if site.components.busuanzi.start_date %}
+    / 统计始于 {{ site.components.busuanzi.start_date }}
+    {% endif %}
+  </span>
+  <span id="runtime_span">
+    <script type="text/javascript">
+      function show_runtime() {
+          window.setTimeout("show_runtime()", 1000);
+          X = new
+          Date("05/10/2021 16:20:00");
+          Y = new Date();
+          T = (Y.getTime() - X.getTime());
+          M = 24 * 60 * 60 * 1000;
+          a = T / M;
+          A = Math.floor(a);
+          b = (a - A) * 24;
+          B = Math.floor(b);
+          c = (b - B) * 60;
+          C = Math.floor((b - B) * 60);
+          D = Math.floor((c - C) * 60);
+          runtime_span.innerHTML = "/ 本站已运行 " + A + " 天 " + B + " 小时 " + C + " 分 " + D + " 秒"
+      }
+      show_runtime();
+    </script>
+  </span>
+</div>
+{% endif %}
