@@ -35,7 +35,7 @@ components:
         enabled: true
     # 鼠标点击烟火效果
     firework:
-      enabled: true
+      enabled: false
     # 页面右上角，以及「关于」页面的二维码
     # 修改图片请替换 assets/images/qrcode.jpg
     qrcode:
