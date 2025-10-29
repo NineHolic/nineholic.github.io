@@ -211,6 +211,14 @@
     } ,
   
     {
+      "title"    : "termux 的简单使用",
+      "category" : "Android",
+      
+      "url"      : "https://blog.nine.gt.tc/2024/03/12/termux-with-android/",
+      "keywords" : "Android, termux"
+    } ,
+  
+    {
       "title"    : "Git 总结",
       "category" : "Git",
       

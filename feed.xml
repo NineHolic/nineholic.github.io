@@ -1,4 +1,92 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://blog.nine.gt.tc/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.nine.gt.tc/" rel="alternate" type="text/html" /><updated>2025-10-16T10:56:34+08:00</updated><id>https://blog.nine.gt.tc/feed.xml</id><title type="html">Nine</title><subtitle>blog</subtitle><author><name>Nine</name></author><entry><title type="html">内网下使用 Nginx 转发邮件</title><link href="https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail/" rel="alternate" type="text/html" title="内网下使用 Nginx 转发邮件" /><published>2022-03-25T00:00:00+08:00</published><updated>2022-03-25T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail</id><content type="html" xml:base="https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail/"><![CDATA[<p>内网邮件通过 Nginx 代理进行转发</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://blog.nine.gt.tc/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.nine.gt.tc/" rel="alternate" type="text/html" /><updated>2025-10-29T21:54:45+08:00</updated><id>https://blog.nine.gt.tc/feed.xml</id><title type="html">Nine</title><subtitle>blog</subtitle><author><name>Nine</name></author><entry><title type="html">termux 的简单使用</title><link href="https://blog.nine.gt.tc/2024/03/12/termux-with-android/" rel="alternate" type="text/html" title="termux 的简单使用" /><published>2024-03-12T00:00:00+08:00</published><updated>2024-03-12T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2024/03/12/termux-with-android</id><content type="html" xml:base="https://blog.nine.gt.tc/2024/03/12/termux-with-android/"><![CDATA[<p>Termux 是一个 Android 下一个高级的终端模拟器，开源且不需要 root，支持 apt 管理软件包，十分方便安装软件包，完美支持 Python、 PHP、 Ruby、 Nodejs、 MySQL 等。</p>
+
+<p>首次启动 Termux 时需要从<a href="http://termux.net/bootstrap/">远程服务器</a>加载数据，可能会遇到以下报错，可尝试使用代理或流量再重试：</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/android/image-20240312102411238.png" alt="image-20240312102411238" /></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 替换官方源为 TUNA 镜像源</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/apt/termux-main stable main@'</span> <span class="nv">$PREFIX</span>/etc/apt/sources.list
+apt update <span class="o">&amp;&amp;</span> apt upgrade
+
+<span class="c"># 安装基本工具</span>
+pkg <span class="nb">install </span>vim curl wget git unzip <span class="nt">-y</span>
+</code></pre></div></div>
+
+<p>Termux 除了支持 <code class="language-plaintext highlighter-rouge">apt</code> 命令外，还在此基础上封装了 <code class="language-plaintext highlighter-rouge">pkg</code> 命令，<code class="language-plaintext highlighter-rouge">pkg</code> 命令向下兼容 <code class="language-plaintext highlighter-rouge">apt</code> 命令</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pkg search &lt;query&gt;              <span class="c"># 搜索包</span>
+pkg <span class="nb">install</span> &lt;package&gt;           <span class="c"># 安装包</span>
+pkg uninstall &lt;package&gt;         <span class="c"># 卸载包</span>
+pkg reinstall &lt;package&gt;         <span class="c"># 重新安装包</span>
+pkg update                      <span class="c"># 更新源</span>
+pkg upgrade                     <span class="c"># 升级软件包</span>
+pkg list-all                    <span class="c"># 列出可供安装的所有包</span>
+pkg list-installed              <span class="c"># 列出已经安装的包</span>
+pkg show &lt;package&gt;              <span class="c"># 显示某个包的详细信息</span>
+pkg files &lt;package&gt;             <span class="c"># 显示某个包的相关文件夹路径</span>
+
+<span class="c"># 相关目录</span>
+<span class="nb">echo</span> <span class="nv">$HOME</span>
+/data/data/com.termux/files/home
+
+<span class="nb">echo</span> <span class="nv">$PREFIX</span>
+/data/data/com.termux/files/usr
+
+<span class="nb">echo</span> <span class="nv">$TMPPREFIX</span>
+/data/data/com.termux/files/usr/tmp/zsh
+</code></pre></div></div>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 终端配色，github 访问不了的可以使用第二个地址</span>
+sh <span class="nt">-c</span> <span class="s2">"</span><span class="si">$(</span>curl <span class="nt">-fsSL</span> https://github.com/Cabbagec/termux-ohmyzsh/raw/master/install.sh<span class="si">)</span><span class="s2">"</span>
+sh <span class="nt">-c</span> <span class="s2">"</span><span class="si">$(</span>curl <span class="nt">-fsSL</span> https://html.sqlsec.com/termux-install.sh<span class="si">)</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>Android6.0 以上会弹框确认是否授权访问文件，点击<code class="language-plaintext highlighter-rouge">允许</code>授权后 Termux 可以方便的访问 SD 卡文件</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/android/image-20240314213753019.png" alt="image-20240314213753019" /></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 脚本允许后先后有如下两个选项，分别是背景色和字体</span>
+Enter a number, leave blank to not to change: 14
+Enter a number, leave blank to not to change: 22
+
+<span class="c"># 想要继续更改挑选配色的话，可以运行脚本再次选择</span>
+~/.termux/colors.sh
+~/.termux/fonts.sh
+</code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/android/image-20240314202804546.png" alt="image-20240314202804546" /></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 查看本机 ip </span>
+ifconfig
+
+<span class="c"># 启动 SSH 服务并配置自启动</span>
+sshd <span class="o">&amp;&amp;</span> <span class="nb">echo </span>sshd <span class="o">&gt;&gt;</span> ~/.bashrc
+
+<span class="c"># 查看当前用户</span>
+<span class="nb">whoami</span>
+
+<span class="c"># 设置密码</span>
+passwd
+
+<span class="c"># 查看 ssh 端口，一般为 8022</span>
+netstat <span class="nt">-tnlp</span>
+</code></pre></div></div>
+
+<p>然后可以使用 xshell 等工具进行连接</p>
+
+<p>proot-distro 支持几乎所有常用的 Linux 发行版：Alpine、Arch、Debian、ubuntu、manjaro 等等</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pkg <span class="nb">install </span>proot-distro <span class="nt">-y</span>
+
+<span class="c"># 查看本机支持安装的 linux 环境</span>
+proot-distro list
+
+<span class="c"># 安装 ubuntu 环境，等待安装完成</span>
+proot-distro <span class="nb">install </span>ubuntu
+
+<span class="c"># 进入 ubuntu shell 环境</span>
+proot-distro login ubuntu
+</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="Android" /><summary type="html"><![CDATA[Android 上终端模拟器简单使用]]></summary></entry><entry><title type="html">内网下使用 Nginx 转发邮件</title><link href="https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail/" rel="alternate" type="text/html" title="内网下使用 Nginx 转发邮件" /><published>2022-03-25T00:00:00+08:00</published><updated>2022-03-25T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail</id><content type="html" xml:base="https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail/"><![CDATA[<p>内网邮件通过 Nginx 代理进行转发</p>
 
 <p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/nginx/image-20220325133718280.png" alt="image-20220325133718280" /></p>
 
@@ -1072,182 +1160,4 @@ systemctl status redis
 
 <p>make 时，发生以下错误，使用<code class="language-plaintext highlighter-rouge">make MALLOC=libc</code>执行</p>
 
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20201123153608469.png" alt="image-20201123153608469" /></p>]]></content><author><name>Nine</name></author><category term="Redis" /><summary type="html"><![CDATA[Linux 下 Redis 的安装以及配置开机自启]]></summary></entry><entry><title type="html">Git 基础</title><link href="https://blog.nine.gt.tc/2020/04/22/git-basis/" rel="alternate" type="text/html" title="Git 基础" /><published>2020-04-22T00:00:00+08:00</published><updated>2020-04-22T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2020/04/22/git-basis</id><content type="html" xml:base="https://blog.nine.gt.tc/2020/04/22/git-basis/"><![CDATA[<p>Git 基础知识介绍</p>
-
-<h4 id="1git-与-github-的区别">1、Git 与 Github 的区别</h4>
-
-<ul>
-  <li>
-    <p>Git 是一个分布式版本控制系统，简单的说其就是一个软件，用于记录一个或若干文件内容变化，以便将来查阅特定版本修订情况的软件。</p>
-  </li>
-  <li>
-    <p>Github（https://www.github.com）是一个为用户提供 Git 服务的网站，简单说就是一个可以放代码的地方（不过可以放的当然不仅是代码）。Github 除了提供管理 Git 的 web 界面外，还提供了订阅、关注、讨论组、在线编辑器等丰富的功能。Github 被称之为全球最大的基友网站。</p>
-  </li>
-</ul>
-
-<h4 id="2本地仓库">2、本地仓库</h4>
-
-<h5 id="21工作流程">2.1、工作流程</h5>
-
-<p>Git 本地操作的三个区域：</p>
-
-<ol>
-  <li>工作区：本地电脑存放项目文件的地方；</li>
-  <li>暂存区（Index/Stage）：在使用 git 管理项目文件的时候，其本地的项目文件会多出一个 .git 的文件夹，将这个 .git 文件夹称之为版本库。其中 .git 文件夹中包含了两个部分，一个是暂存区（Index/Stage），顾名思义就是暂时存放文件的地方，通常使用 <code class="language-plaintext highlighter-rouge">add</code> 命令将工作区的文件添加到暂存区里；</li>
-  <li>本地仓库：.git 文件夹里还包括 git 自动创建的 master 分支，并且将HEAD指针指向 <code class="language-plaintext highlighter-rouge">master</code> 分支。使用 <code class="language-plaintext highlighter-rouge">commit</code> 命令可以将暂存区中的文件添加到本地仓库中；</li>
-</ol>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/工作流程.png" alt="三个区域" /></p>
-
-<p>工作流程：</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/三个区域.png" alt="工作流程" /></p>
-
-<h5 id="22本地仓库操作">2.2、本地仓库操作</h5>
-
-<p>仓库又名版本库，英文名 repository ，我们可以简单理解成是一个目录，用于存放代码的，这个目录里面的所有文件都可以被 Git 管理起来，每个文件的修改、删除等操作 Git 都能跟踪到。</p>
-
-<p>① 在安装好后首次使用需要先进行全局配置
-桌面空白处右键，点击 Git Bash Here 以打开 Git 命令行窗口</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git config <span class="nt">--global</span> user.name <span class="s2">"用户名"</span>
-<span class="nv">$ </span>git config <span class="nt">--global</span> user.email <span class="s2">"邮箱地址"</span>
-</code></pre></div></div>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221193654605.png" alt="image-20200221193040545" /></p>
-
-<p>② 创建仓库，创建一个文件夹，进入文件夹内，将git仓库初始化：<code class="language-plaintext highlighter-rouge">git init</code>，初始化成功后会在该目录下有 .git 名字的隐藏文件夹</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221193040545.png" alt="image-20200221193654605" /></p>
-
-<p>③ Git 常用指令操作</p>
-
-<p>查看当前状态：<code class="language-plaintext highlighter-rouge">git status</code> 【非必要】</p>
-
-<p>添加到暂存区：<code class="language-plaintext highlighter-rouge">git add 文件名</code></p>
-
-<p>提交至版本库：<code class="language-plaintext highlighter-rouge">git commit -m "注释内容"</code></p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 语法</span>
-git add 文件名
-git add 文件名1 文件名2 文件名3 …
-git add <span class="nb">.</span>		      //添加当前目录到缓存区中
-</code></pre></div></div>
-
-<p>在后续对于文件（可以操作 1 个或多个）操作之后，重复使用 <code class="language-plaintext highlighter-rouge">git add</code> 与 <code class="language-plaintext highlighter-rouge">git commit</code> 指令即可</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221203621284.png" alt="image-20200221203621284" /></p>
-
-<h5 id="23版本回退">2.3、版本回退</h5>
-
-<p>版本回退分为两步骤进行操作：
-① 查看版本，确定需要回到的时刻点
-			指令：<code class="language-plaintext highlighter-rouge">git log</code>、<code class="language-plaintext highlighter-rouge">git log --pretty=oneline</code></p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221204428390.png" alt="image-20200221204428390" /></p>
-
-<p>② 回退操作
-​			指令：<code class="language-plaintext highlighter-rouge">git reset --hard</code> 提交编号</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221204702981.png" alt="image-20200221204702981" /></p>
-
-<p>③ 查看历史操作，以得到最新的 commit id</p>
-
-<p>指令：<code class="language-plaintext highlighter-rouge">git reflog</code></p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221204953023.png" alt="image-20200221204953023" /></p>
-
-<h5 id="24忽略文件">2.4、忽略文件</h5>
-
-<p>忽略文件需要新建一个名为 .gitignore 的文件，该文件用于声明忽略文件或不忽略文件的规则，规则对当前目录及其子目录生效。</p>
-
-<blockquote>
-  <p>PS：该文件因为没有文件名，无法直接在 windows 目录下直接创建，可以通过命令行 Git Bash 来<code class="language-plaintext highlighter-rouge">touch</code>创建</p>
-</blockquote>
-
-<p>常见规则写法有如下几种：</p>
-
-<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">1）/mtk/</span>               <span class="err">过滤整个文件夹</span>
-<span class="err">2）*.zip</span>               <span class="err">过滤所有.zip</span> <span class="err">文件</span>
-<span class="err">3）/mtk/do.c</span>           <span class="err">过滤某个具体文件</span>
-<span class="err">4)</span> <span class="err">!index.php</span>	       <span class="err">不过滤具体某个文件</span>
-</code></pre></div></div>
-
-<h4 id="3两种常规使用方式">3、两种常规使用方式</h4>
-
-<h5 id="31基于-httphttps-协议">3.1、基于 http/https 协议</h5>
-
-<p>a. 使用 <code class="language-plaintext highlighter-rouge">clone</code> 指令克隆线上仓库到本地
-语法： <code class="language-plaintext highlighter-rouge">git clone</code>  线上仓库地址</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221212548678.png" alt="image-20200221212548678" /></p>
-
-<p>b. 在仓库上做对应的操作（提交暂存区、提交本地仓库、提交线上仓库、拉取线上仓库）
-将本地仓库同步到 git 远程仓库中：<code class="language-plaintext highlighter-rouge">git push</code></p>
-
-<p>在 push 前需要修改 .git/config 文件内容：</p>
-
-<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[core]</span>
-	<span class="py">repositoryformatversion</span> <span class="p">=</span> <span class="s">0</span>
-	<span class="py">filemode</span> <span class="p">=</span> <span class="s">false</span>
-	<span class="py">bare</span> <span class="p">=</span> <span class="s">false</span>
-	<span class="py">logallrefupdates</span> <span class="p">=</span> <span class="s">true</span>
-	<span class="py">symlinks</span> <span class="p">=</span> <span class="s">false</span>
-	<span class="py">ignorecase</span> <span class="p">=</span> <span class="s">true</span>
-<span class="nn">[remote "origin"]</span>
-	<span class="py">url</span> <span class="p">=</span> <span class="s">https://用户名:密码@github.com/用户名/仓库名.git</span>
-	<span class="py">fetch</span> <span class="p">=</span> <span class="s">+refs/heads/*:refs/remotes/origin/*</span>
-<span class="nn">[branch "master"]</span>
-	<span class="py">remote</span> <span class="p">=</span> <span class="s">origin</span>
-	<span class="py">merge</span> <span class="p">=</span> <span class="s">refs/heads/master</span>
-</code></pre></div></div>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221212803927.png" alt="image-20200221212803927" /></p>
-
-<p>拉取线上仓库：<code class="language-plaintext highlighter-rouge">git pull</code></p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221214620172.png" alt="image-20200221214620172" /></p>
-
-<h5 id="32基于-ssh-协议">3.2、基于 ssh 协议</h5>
-
-<p>生成公私玥对指令：<code class="language-plaintext highlighter-rouge">ssh-keygen -t rsa -C "注册邮箱"</code></p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221223827885.png" alt="image-20200221223827885" /></p>
-
-<p>上传公钥文件内容（id_rsa.pub）到 github 中，<code class="language-plaintext highlighter-rouge">clone</code> 远程仓库</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221222922406.png" alt="image-20200221222922406" /></p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 查看分支</span>
-git branch
-
-<span class="c"># 创建分支</span>
-git branch 分支名
-
-<span class="c"># 切换分支</span>
-git checkout 分支名 
-
-<span class="c"># 删除分支</span>
-git branch <span class="nt">-d</span> 分支名
-
-<span class="c"># 合并分支</span>
-git merge 被合并的分支名
-</code></pre></div></div>
-
-<p>查看、创建分支：</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221225058586.png" alt="image-20200221225058586" /></p>
-
-<p>切换分支、合并分支、删除分支：</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221230146089.png" alt="image-20200221230146089" /></p>
-
-<p>将 <code class="language-plaintext highlighter-rouge">master</code> 分支提交到远程仓库</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20200221230327303.png" alt="image-20200221230327303" /></p>
-
-<h4 id="4解决冲突">4、解决冲突</h4>
-
-<p>多人开发同一个项目时，如果两个人修改了同一个文件同一个地方，push 时会发生冲突</p>
-
-<p>解决方式：<code class="language-plaintext highlighter-rouge">git pull</code> -&gt; 手动解决冲突 -&gt;<code class="language-plaintext highlighter-rouge">git push</code></p>]]></content><author><name>Nine</name></author><category term="Git" /><summary type="html"><![CDATA[Git 基础知识介绍]]></summary></entry></feed>
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20201123153608469.png" alt="image-20201123153608469" /></p>]]></content><author><name>Nine</name></author><category term="Redis" /><summary type="html"><![CDATA[Linux 下 Redis 的安装以及配置开机自启]]></summary></entry></feed>
