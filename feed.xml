@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://blog.nine.gt.tc/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.nine.gt.tc/" rel="alternate" type="text/html" /><updated>2025-11-03T22:19:42+08:00</updated><id>https://blog.nine.gt.tc/feed.xml</id><title type="html">Nine</title><subtitle>blog</subtitle><author><name>Nine</name></author><entry><title type="html">termux 的简单使用</title><link href="https://blog.nine.gt.tc/2024/03/12/termux-with-android/" rel="alternate" type="text/html" title="termux 的简单使用" /><published>2024-03-12T00:00:00+08:00</published><updated>2024-03-12T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2024/03/12/termux-with-android</id><content type="html" xml:base="https://blog.nine.gt.tc/2024/03/12/termux-with-android/"><![CDATA[<p>Termux 是一个 Android 下一个高级的终端模拟器，开源且不需要 root，支持 apt 管理软件包，十分方便安装软件包，完美支持 Python、 PHP、 Ruby、 Nodejs、 MySQL 等。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://blog.nine.gt.tc/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.nine.gt.tc/" rel="alternate" type="text/html" /><updated>2025-11-10T22:48:06+08:00</updated><id>https://blog.nine.gt.tc/feed.xml</id><title type="html">Nine</title><subtitle>blog</subtitle><author><name>Nine</name></author><entry><title type="html">Termux 的简单使用</title><link href="https://blog.nine.gt.tc/2024/03/12/termux-with-android/" rel="alternate" type="text/html" title="Termux 的简单使用" /><published>2024-03-12T00:00:00+08:00</published><updated>2024-03-12T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2024/03/12/termux-with-android</id><content type="html" xml:base="https://blog.nine.gt.tc/2024/03/12/termux-with-android/"><![CDATA[<p>Termux 是一个 Android 下一个高级的终端模拟器，开源且不需要 root，支持 apt 管理软件包，十分方便安装软件包，完美支持 Python、 PHP、 Ruby、 Nodejs、 MySQL 等。</p>
 
 <p>首次启动 Termux 时需要从<a href="http://termux.net/bootstrap/">远程服务器</a>加载数据，可能会遇到以下报错，可尝试使用代理或流量再重试：</p>
 
@@ -490,7 +490,163 @@ systemctl restart elasticsearch
 
 <p>本文使用浏览器插件方式：https://chrome.google.com/webstore/detail/elasticsearch-head/ffmkiejjmecolpfloofpjologoblkegm</p>
 
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316170641309.png" alt="image-20220316170641309" /></p>]]></content><author><name>Nine</name></author><category term="Elasticsearch" /><summary type="html"><![CDATA[Elasticsearch 的简单配置和使用]]></summary></entry><entry><title type="html">Centos7 升级 OpenSSH</title><link href="https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh/" rel="alternate" type="text/html" title="Centos7 升级 OpenSSH" /><published>2021-08-18T00:00:00+08:00</published><updated>2021-08-18T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh/"><![CDATA[<p>Centos7.6 升级后测试 ssh 登录及重启后 ssh 登录均无问题，升级无需卸载原先的 openssl 和 openssh</p>
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316170641309.png" alt="image-20220316170641309" /></p>]]></content><author><name>Nine</name></author><category term="Elasticsearch" /><summary type="html"><![CDATA[Elasticsearch 的简单配置和使用]]></summary></entry><entry><title type="html">MySQL 的安装与使用</title><link href="https://blog.nine.gt.tc/2021/10/17/linux-install-mysql/" rel="alternate" type="text/html" title="MySQL 的安装与使用" /><published>2021-10-17T00:00:00+08:00</published><updated>2021-10-17T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/10/17/linux-install-mysql</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/10/17/linux-install-mysql/"><![CDATA[<p>使用离线包方式安装 MySQL</p>
+
+<h5 id="1下载-mysql">1、下载 MySQL</h5>
+
+<p>官网：<a href="https://downloads.mysql.com/archives/community/">https://downloads.mysql.com/archives/community/</a>，本机为 Centos 7.7</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/mysql/image-20211017190131138.png" alt="image-20211017190131138" /></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 下载安装包</span>
+wget https://cdn.mysql.com/archives/mysql-8.0/mysql-8.0.34-linux-glibc2.12-x86_64.tar.xz
+
+<span class="c"># 查看系统自带的 Mariadb</span>
+rpm <span class="nt">-qa</span> | <span class="nb">grep </span>mariadb
+
+<span class="c"># 卸载系统自带的 Mariadb</span>
+rpm <span class="nt">-e</span> <span class="nt">--nodeps</span> mariadb-libs-5.5.64-1.el7.x86_64
+
+<span class="c"># 查看是否安装过 MySQL，删除相关目录和配置文件</span>
+rpm <span class="nt">-qa</span> | <span class="nb">grep </span>mysql
+
+<span class="c"># 安装依赖</span>
+yum <span class="nb">install </span>libaio
+</code></pre></div></div>
+
+<h5 id="2环境配置">2、环境配置</h5>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 解压</span>
+<span class="nb">tar</span> <span class="nt">-xvf</span> mysql-8.0.34-linux-glibc2.12-x86_64.tar.xz <span class="nt">-C</span> /data
+<span class="nb">mv</span> /data/mysql-8.0.34-linux-glibc2.12-x86_64 /data/mysql
+
+<span class="c"># 创建数据目录，修改目录权限</span>
+<span class="nb">mkdir</span> <span class="nt">-p</span> /data/mysql/<span class="o">{</span>data,conf,run,log<span class="o">}</span>
+<span class="nb">chmod </span>750 /data/mysql/data
+
+<span class="c"># 创建 mysql 组</span>
+groupadd mysql
+
+<span class="c"># 创建 mysql 用户，使用 -g 参数指定组，-r 参数表示 mysql 用户是系统用户，不可用于登录系统</span>
+useradd <span class="nt">-r</span> <span class="nt">-g</span> mysql mysql
+
+<span class="c"># 修改 mysql 的用户和组</span>
+<span class="nb">chown</span> <span class="nt">-R</span> mysql:mysql /data/mysql
+
+<span class="c"># 配置环境变量</span>
+<span class="nb">echo</span> <span class="s1">'export PATH=$PATH:/data/mysql/bin'</span> <span class="o">&gt;&gt;</span> /etc/profile
+<span class="nb">source</span> /etc/profile
+</code></pre></div></div>
+
+<p>创建配置文件：<code class="language-plaintext highlighter-rouge">vim /etc/my.cnf</code></p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[mysql]</span>
+<span class="c"># 设置 MySQL 客户端默认字符集
+</span><span class="py">default-character-set</span><span class="p">=</span><span class="s">utf8</span>
+<span class="py">socket</span><span class="p">=</span><span class="s">/data/mysql/run/mysql.sock</span>
+
+<span class="nn">[mysqld]</span>
+<span class="py">port</span><span class="p">=</span><span class="s">3306</span>
+<span class="py">socket</span><span class="p">=</span><span class="s">/data/mysql/run/mysql.sock</span>
+<span class="py">pid-file</span><span class="p">=</span><span class="s">/data/mysql/run/mysql.pid</span>
+
+<span class="py">mysqlx_port</span> <span class="p">=</span> <span class="s">33060</span>
+<span class="py">mysqlx_socket</span><span class="p">=</span><span class="s">/data/mysql/run/mysqlx.sock</span>
+
+<span class="c"># 设置时区
+</span><span class="py">default-time-zone</span><span class="p">=</span><span class="s">'+8:00'</span>
+<span class="py">log_timestamps</span> <span class="p">=</span> <span class="s">SYSTEM</span>
+
+<span class="c"># 设置 MySQL 的安装目录、数据目录
+</span><span class="py">basedir</span><span class="p">=</span><span class="s">/data/mysql</span>
+<span class="py">datadir</span><span class="p">=</span><span class="s">/data/mysql/data</span>
+
+<span class="c"># 允许最大连接数
+</span><span class="py">max_connections</span><span class="p">=</span><span class="s">2000</span>
+
+<span class="c"># 默认数据库字符集
+</span><span class="py">character-set-server</span><span class="p">=</span><span class="s">utf8mb4</span>
+<span class="py">collation-server</span> <span class="p">=</span> <span class="s">utf8mb4_unicode_ci</span>
+<span class="py">init_connect</span> <span class="p">=</span> <span class="s">'SET NAMES utf8mb4'</span>
+
+<span class="c"># 创建新表时将使用的默认存储引擎
+</span><span class="py">default-storage-engine</span><span class="p">=</span><span class="s">INNODB</span>
+
+<span class="c"># MYSQL 大小写不敏感
+</span><span class="py">lower_case_table_names</span><span class="p">=</span><span class="s">1</span>
+<span class="py">max_allowed_packet</span><span class="p">=</span><span class="s">16M</span>
+<span class="py">default-authentication-plugin</span><span class="p">=</span><span class="s">caching_sha2_password</span>
+<span class="py">innodb_file_per_table</span><span class="p">=</span><span class="s">1</span>
+
+<span class="c"># InnoDB 核心参数
+</span><span class="py">innodb_buffer_pool_size</span><span class="p">=</span><span class="s">1G</span>
+<span class="py">innodb_buffer_pool_instances</span><span class="p">=</span><span class="s">8</span>
+<span class="py">innodb_redo_log_capacity</span><span class="p">=</span><span class="s">2G</span>
+<span class="py">innodb_log_buffer_size</span><span class="p">=</span><span class="s">32M</span>
+
+<span class="c"># 日志
+</span><span class="py">log_error</span><span class="p">=</span><span class="s">/data/mysql/log/mysql-error.log</span>
+<span class="py">slow_query_log</span><span class="p">=</span><span class="s">1</span>
+<span class="py">slow_query_log_file</span><span class="p">=</span><span class="s">/data/mysql/log/slow-query.log</span>
+<span class="py">long_query_time</span><span class="p">=</span><span class="s">2</span>
+<span class="py">log_queries_not_using_indexes</span><span class="p">=</span><span class="s">1</span>
+<span class="py">log_throttle_queries_not_using_indexes</span><span class="p">=</span><span class="s">60</span>
+
+<span class="c"># 跳过 DNS 反向解析
+</span><span class="py">skip-name-resolve</span><span class="p">=</span><span class="s">1</span>
+</code></pre></div></div>
+
+<h5 id="3安装-mysql">3、安装 MySQL</h5>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 初始化 mysqld</span>
+/data/mysql/bin/mysqld <span class="nt">--initialize</span> <span class="nt">--user</span><span class="o">=</span>mysql
+
+<span class="c"># 查看临时密码和日志是否有报错</span>
+<span class="nb">cat</span> /data/mysql/log/mysql-error.log
+
+<span class="c"># 启动 MySQL</span>
+/data/mysql/support-files/mysql.server start
+
+<span class="c"># 登录 MySQL</span>
+mysql <span class="nt">-u</span> root <span class="nt">-p</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>此处登录 MySQL 可能会报错：mysql: error while loading shared libraries: libtinfo.so.5: cannot open shared object file: No such file or directory</p>
+
+  <p>执行此命令修复：<code class="language-plaintext highlighter-rouge">ln -s /usr/lib64/libtinfo.so.6.1 /usr/lib64/libtinfo.so.5</code></p>
+</blockquote>
+
+<pre><code class="language-mysql"># 修改 root 用户密码
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'mysql1234!';
+
+# 对指定 ip 段开放 root 用户远程连接权限
+use mysql;
+UPDATE user SET user.Host='192.168.216.%' WHERE user.User='root';
+FLUSH PRIVILEGES;
+
+# 查询已有用户
+SELECT Host, User FROM mysql.user;
+
+# 删除远程登录用户
+DELETE FROM USER WHERE User='root' and Host='%';
+</code></pre>
+
+<h5 id="4配置开机自启">4、配置开机自启</h5>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 开放端口</span>
+firewall-cmd <span class="nt">--zone</span><span class="o">=</span>public <span class="nt">--permanent</span> <span class="nt">--add-port</span><span class="o">=</span>3306/tcp
+firewall-cmd <span class="nt">--reload</span>
+
+<span class="c"># 将 mysql.server 复制到 /etc/init.d 下面</span>
+<span class="nb">cp</span> /data/mysql/support-files/mysql.server /etc/init.d/mysqld
+
+<span class="c"># 通过 chkconfig 将 mysql 服务添加到开机启动的列表</span>
+chkconfig <span class="nt">--add</span> mysqld
+
+<span class="c"># 重启 mysql</span>
+systemctl restart mysqld
+</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="DB" /><summary type="html"><![CDATA[MySQL 安装与使用]]></summary></entry><entry><title type="html">Centos7 升级 OpenSSH</title><link href="https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh/" rel="alternate" type="text/html" title="Centos7 升级 OpenSSH" /><published>2021-08-18T00:00:00+08:00</published><updated>2021-08-18T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh/"><![CDATA[<p>Centos7.6 升级后测试 ssh 登录及重启后 ssh 登录均无问题，升级无需卸载原先的 openssl 和 openssh</p>
 
 <p>系统环境为服务器安装镜像时自带的 openssh，没有经历过手动编译安装方式</p>
 
@@ -1053,111 +1209,4 @@ find /root/mongodb_bak <span class="nt">-mindepth</span> 1 <span class="nt">-max
 
 <p>使用 Xshell 测试</p>
 
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116161237093.png" alt="image-20201116161237093" /></p>]]></content><author><name>Nine</name></author><category term="OpenSSH" /><summary type="html"><![CDATA[OpenSSH 在 Windows 上的使用]]></summary></entry><entry><title type="html">Linux 下安装 Redis</title><link href="https://blog.nine.gt.tc/2020/07/08/centos-install-redis/" rel="alternate" type="text/html" title="Linux 下安装 Redis" /><published>2020-07-08T00:00:00+08:00</published><updated>2020-07-08T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2020/07/08/centos-install-redis</id><content type="html" xml:base="https://blog.nine.gt.tc/2020/07/08/centos-install-redis/"><![CDATA[<p>Linux 下编译安装 Redis 以及使用脚本安装</p>
-
-<h5 id="1编译安装-redis">1、编译安装 Redis</h5>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 下载解压文件</span>
-wget http://download.redis.io/releases/redis-5.0.7.tar.gz
-<span class="nb">tar</span> <span class="nt">-zxvf</span> redis-5.0.7.tar.gz
-
-<span class="c"># 安装依赖</span>
-yum <span class="nt">-y</span> <span class="nb">install </span>gcc gcc-c++ tcl
-
-<span class="c"># 编译 redis6.x 需要高版本的 gcc</span>
-yum <span class="nt">-y</span> <span class="nb">install </span>centos-release-scl
-yum <span class="nt">-y</span> <span class="nb">install </span>devtoolset-9-gcc devtoolset-9-gcc-c++ devtoolset-9-binutils
-<span class="nb">source</span> /opt/rh/devtoolset-9/enable
-<span class="nb">echo</span> <span class="s2">"source /opt/rh/devtoolset-9/enable"</span> <span class="o">&gt;&gt;</span>/etc/profile
-gcc <span class="nt">--version</span>
-
-<span class="c"># 编译 redis 源码</span>
-<span class="nb">cd </span>redis-5.0.7
-make <span class="nt">-j2</span>
-
-<span class="c"># 安装到指定目录</span>
-<span class="nb">cd </span>src
-make <span class="nt">-j2</span> <span class="nb">install </span><span class="nv">PREFIX</span><span class="o">=</span>/usr/local/redis
-</code></pre></div></div>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200708174648619.png" alt="image-20200708175841687" /></p>
-
-<h5 id="2配置-redis">2、配置 redis</h5>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 移动配置文件到安装目录下</span>
-<span class="nb">mkdir</span> /usr/local/redis/etc
-<span class="nb">mv</span> ../redis.conf /usr/local/redis/etc
-</code></pre></div></div>
-
-<p>修改配置文件：<code class="language-plaintext highlighter-rouge">vim /usr/local/redis/etc/redis.conf</code></p>
-
-<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 配置 redis 为后台启动
-# 将 daemonize no 改成 daemonize yes
-# 在 bind 127.0.0.1 后添加本机 ip 供局域网访问
-# 将 requirepass foobared 改为 requirepass 1234，1234 为 redis 密码
-</span></code></pre></div></div>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200708175841687.png" alt="image-20200708174648619" /><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200708182146625.png" alt="image-20200708175529165" /><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200708175529165.png" alt="image-20200708182146625" /></p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 创建软连接，让 redis-server、redis-cli 可以在任意目录下直接使用</span>
-<span class="nb">ln</span> <span class="nt">-s</span> /usr/local/redis/bin/redis-server /usr/local/bin/
-<span class="nb">ln</span> <span class="nt">-s</span> /usr/local/redis/bin/redis-cli /usr/local/bin/
-
-<span class="c"># 启动 redis</span>
-redis-server /usr/local/redis/etc/redis.conf
-
-<span class="c"># 开放6379端口，重启防火墙</span>
-firewall-cmd <span class="nt">--zone</span><span class="o">=</span>public <span class="nt">--add-port</span><span class="o">=</span>6379/tcp <span class="nt">--permanent</span>
-systemctl restart firewalld
-</code></pre></div></div>
-
-<h5 id="3设置开机自启">3、设置开机自启</h5>
-
-<ul>
-  <li><strong>方法一</strong></li>
-</ul>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 在 /etc/rc.local 末尾添加一行内容</span>
-<span class="nb">echo</span> <span class="s1">'/usr/local/redis/bin/redis-server /usr/local/redis/etc/redis.conf'</span> <span class="o">&gt;&gt;</span> /etc/rc.d/rc.local
-
-<span class="c"># 添加执行权限</span>
-<span class="nb">chmod</span> +x /etc/rc.d/rc.local
-</code></pre></div></div>
-
-<ul>
-  <li><strong>方法二</strong></li>
-</ul>
-
-<p>添加启动文件：<code class="language-plaintext highlighter-rouge">vim /lib/systemd/system/redis.service</code>，写入以下配置</p>
-
-<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span>
-<span class="py">Description</span><span class="p">=</span><span class="s">The redis-server Process Manager</span>
-<span class="py">Documentation</span><span class="p">=</span><span class="s">https://redis.io/</span>
-<span class="py">After</span><span class="p">=</span><span class="s">network.target</span>
-<span class="nn">[Service]</span>
-<span class="py">Type</span><span class="p">=</span><span class="s">forking</span>
-<span class="py">ExecStart</span><span class="p">=</span><span class="s">/usr/local/redis/bin/redis-server /usr/local/redis/etc/redis.conf</span>
-<span class="c"># 有密码则需要在 redis-cli 后面加 -a "密码"
-</span><span class="py">ExecStop</span><span class="p">=</span><span class="s">/usr/local/redis/bin/redis-cli -a "1234" shutdown </span>
-<span class="nn">[Install]</span>
-<span class="py">WantedBy</span><span class="p">=</span><span class="s">multi-user.target</span>
-</code></pre></div></div>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 设置开机自启动</span>
-systemctl <span class="nb">enable </span>redis
-
-<span class="c"># 开启服务</span>
-systemctl start redis
-
-<span class="c"># 停止服务</span>
-systemctl stop redis
-
-<span class="c"># 查看运行状态</span>
-systemctl status redis
-</code></pre></div></div>
-
-<h5 id="可能遇到的问题">可能遇到的问题：</h5>
-
-<p>make 时，发生以下错误，使用<code class="language-plaintext highlighter-rouge">make MALLOC=libc</code>执行</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20201123153608469.png" alt="image-20201123153608469" /></p>]]></content><author><name>Nine</name></author><category term="Redis" /><summary type="html"><![CDATA[Linux 下 Redis 的安装以及配置开机自启]]></summary></entry></feed>
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116161237093.png" alt="image-20201116161237093" /></p>]]></content><author><name>Nine</name></author><category term="OpenSSH" /><summary type="html"><![CDATA[OpenSSH 在 Windows 上的使用]]></summary></entry></feed>

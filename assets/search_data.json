@@ -187,6 +187,14 @@
     } ,
   
     {
+      "title"    : "MySQL 的安装与使用",
+      "category" : "DB",
+      
+      "url"      : "https://blog.nine.gt.tc/2021/10/17/linux-install-mysql/",
+      "keywords" : "MySQL, Linux, Centos"
+    } ,
+  
+    {
       "title"    : "Centos7 安装 Elasticsearch",
       "category" : "Elasticsearch",
       
@@ -211,11 +219,11 @@
     } ,
   
     {
-      "title"    : "termux 的简单使用",
+      "title"    : "Termux 的简单使用",
       "category" : "Android",
       
       "url"      : "https://blog.nine.gt.tc/2024/03/12/termux-with-android/",
-      "keywords" : "Android, termux"
+      "keywords" : "Android, Termux"
     } ,
   
     {
