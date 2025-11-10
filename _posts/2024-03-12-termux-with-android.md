@@ -1,9 +1,9 @@
 ---
 layout: post
-title: termux 的简单使用
+title: Termux 的简单使用
 categories: [Android]
 description: Android 上终端模拟器简单使用
-keywords: Android, termux
+keywords: Android, Termux
 mermaid: false
 sequence: false
 flow: false
