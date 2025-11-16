@@ -1,4 +1,111 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://blog.nine.gt.tc/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.nine.gt.tc/" rel="alternate" type="text/html" /><updated>2025-11-16T14:07:16+08:00</updated><id>https://blog.nine.gt.tc/feed.xml</id><title type="html">Nine</title><subtitle>blog</subtitle><author><name>Nine</name></author><entry><title type="html">Termux 的简单使用</title><link href="https://blog.nine.gt.tc/2024/03/12/termux-with-android/" rel="alternate" type="text/html" title="Termux 的简单使用" /><published>2024-03-12T00:00:00+08:00</published><updated>2024-03-12T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2024/03/12/termux-with-android</id><content type="html" xml:base="https://blog.nine.gt.tc/2024/03/12/termux-with-android/"><![CDATA[<p>Termux 是一个 Android 下一个高级的终端模拟器，开源且不需要 root，支持 apt 管理软件包，十分方便安装软件包，完美支持 Python、 PHP、 Ruby、 Nodejs、 MySQL 等。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://blog.nine.gt.tc/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.nine.gt.tc/" rel="alternate" type="text/html" /><updated>2025-11-16T20:19:07+08:00</updated><id>https://blog.nine.gt.tc/feed.xml</id><title type="html">Nine</title><subtitle>blog</subtitle><author><name>Nine</name></author><entry><title type="html">Confluence 的安装与使用</title><link href="https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/" rel="alternate" type="text/html" title="Confluence 的安装与使用" /><published>2024-04-19T00:00:00+08:00</published><updated>2024-04-19T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2024/04/19/linux-install-confluence</id><content type="html" xml:base="https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/"><![CDATA[<p>Confluence 是由 Atlassian 公司推出的一款企业级团队协作与知识管理工具。它是一个团队协作空间，将知识与协作无缝融合，让团队能够在一个平台上创建、协作和组织所有工作。</p>
+
+<h5 id="1安装部署">1、安装部署</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 禁用 selinux 后重启服务器</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/^SELINUX=.*/SELINUX=disabled/'</span> /etc/selinux/config
+
+<span class="c"># 新建安装目录</span>
+<span class="nb">mkdir</span> <span class="nt">-p</span> /data/confluence/wiki/data <span class="o">&amp;&amp;</span> <span class="nb">chmod </span>777 /data/confluence/wiki/data
+
+<span class="c"># 保证当前目录下存在 docker-compose.yml，根据配置启动服务</span>
+docker compose up <span class="nt">-d</span>
+
+<span class="c"># 查看日志</span>
+docker logs <span class="nt">--tail</span> 300 <span class="nt">-f</span> confluence
+
+<span class="c"># 访问服务：http://192.168.216.131:18090</span>
+点击 Next -&gt; License key 页面记录下 Server ID
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">docker-compose.yml</code>内容如下：</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">services:</span>
+  <span class="err">mysql8-confluence:</span>
+    <span class="err">image:</span> <span class="err">mysql:8.0</span>
+    <span class="err">container_name:</span> <span class="err">mysql8-confluence</span>
+    <span class="err">ports:</span>
+      <span class="err">-</span> <span class="err">3308:3306</span>
+    <span class="err">volumes:</span>
+      <span class="err">-</span> <span class="err">/data/confluence/wiki/mysql/conf.d:/etc/mysql/conf.d</span>
+      <span class="err">-</span> <span class="err">/data/confluence/wiki/mysql/data:/var/lib/mysql</span>
+    <span class="err">security_opt:</span> 
+      <span class="err">-</span> <span class="err">seccomp:unconfined</span>
+    <span class="err">environment:</span>
+      <span class="err">TZ:</span> <span class="err">Asia/Shanghai</span>
+      <span class="err">MYSQL_ROOT_PASSWORD:</span> <span class="err">'root1234!'</span>
+    <span class="err">command:</span> <span class="py">--default-authentication-plugin</span><span class="p">=</span><span class="s">mysql_native_password --lower-case-table-names=1</span>
+
+  <span class="err">confluence:</span>
+    <span class="err">image:</span> <span class="err">atlassian/confluence:7.9.0</span>
+    <span class="err">container_name:</span> <span class="err">confluence</span>
+    <span class="err">environment:</span>
+      <span class="err">TZ:</span> <span class="err">Asia/Shanghai</span>
+    <span class="err">ports:</span>
+      <span class="err">-</span> <span class="err">18090:8090</span>
+    <span class="err">volumes:</span>
+      <span class="err">-</span> <span class="err">/data/confluence/wiki/data:/var/atlassian/confluence</span>
+</code></pre></div></div>
+
+<h5 id="2环境配置">2、环境配置</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 进入 mysql 容器中</span>
+docker <span class="nb">exec</span> <span class="nt">-it</span> mysql8-confluence bash
+
+<span class="c"># 登录 mysql</span>
+mysql <span class="nt">-uroot</span> <span class="nt">-p</span>
+
+<span class="c"># 创建数据库</span>
+CREATE DATABASE confluence CHARACTER SET utf8mb4 COLLATE utf8mb4_bin<span class="p">;</span>
+quit
+<span class="nb">exit</span>
+
+<span class="c"># 网页下载插件</span>
+https://flynine.lanzoul.com/iziJq3b9sumj
+
+<span class="c"># 复制插件到容器 confluence 中</span>
+docker <span class="nb">cp </span>atlassian-agent.jar confluence:/home/
+
+<span class="c"># 修改环境变量脚本，增加一行配置</span>
+docker <span class="nb">cp </span>confluence:/opt/atlassian/confluence/bin/setenv.sh <span class="nb">.</span>
+vim setenv.sh
+
+<span class="nv">CATALINA_OPTS</span><span class="o">=</span><span class="s2">"-javaagent:/home/atlassian-agent.jar </span><span class="k">${</span><span class="nv">CATALINA_OPTS</span><span class="k">}</span><span class="s2">"</span>
+
+docker <span class="nb">cp </span>setenv.sh confluence:/opt/atlassian/confluence/bin/
+
+<span class="c"># 下载 mysql 驱动</span>
+wget https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-j-9.5.0.tar.gz
+
+<span class="c"># 解压，复制 jar 包到容器中</span>
+<span class="nb">tar</span> <span class="nt">-zxvf</span> mysql-connector-j-9.5.0.tar.gz
+docker <span class="nb">cp </span>mysql-connector-j-9.5.0/mysql-connector-j-9.5.0.jar confluence:/opt/atlassian/confluence/confluence/WEB-INF/lib
+
+<span class="c"># 重启容器</span>
+docker restart confluence
+
+<span class="c"># 有打印 agent working 则说明插件加载成功</span>
+docker logs <span class="nt">--tail</span> 100 <span class="nt">-f</span> confluence
+
+<span class="c"># 重启容器</span>
+docker restart confluence
+
+<span class="c"># 有打印 agent working 则说明破解插件加载成功</span>
+docker logs <span class="nt">--tail</span> 300 <span class="nt">-f</span> confluence
+
+<span class="c"># 根据上面记录的 Server ID 来生成授权码</span>
+docker <span class="nb">exec</span> <span class="nt">-it</span> confluence bash <span class="nt">-c</span> <span class="s2">"java -jar /home/atlassian-agent.jar -p conf -m test.com -m test -o http://192.168.216.131:18090 -s BRJ3-T8L7-J5M3-UIZH"</span>
+
+<span class="c"># 刷新网页：http://192.168.216.131:18090</span>
+填入上面生成的 license code —&gt; 选择 My own database -&gt; 选择 MySQL，Setup <span class="nb">type </span>选择 By connection string：jdbc:mysql://192.168.216.131:3308/confluence?useUnicode<span class="o">=</span><span class="nb">true</span>&amp;zeroDateTimeBehavior<span class="o">=</span>convertToNull&amp;characterEncoding<span class="o">=</span>UTF-8&amp;useSSL<span class="o">=</span><span class="nb">false</span>&amp;sessionVariables<span class="o">=</span><span class="nv">transaction_isolation</span><span class="o">=</span><span class="s1">'READ-COMMITTED'</span>
+用户名 root，密码在 docker-compose.yml 中有写明，填写后 Test connection，成功后 Next，等待设置完成 -&gt; 选择 empty site -&gt; 设置账号
+</code></pre></div></div>
+
+<p><strong>参考</strong></p>
+
+<ul>
+  <li><a href="https://zhile.io/2018/12/20/atlassian-license-crack.html">Atlassian系列产品及插件激活方法 JIRA8.19.0+</a></li>
+</ul>]]></content><author><name>Nine</name></author><category term="Confluence" /><summary type="html"><![CDATA[Confluence 的安装与使用]]></summary></entry><entry><title type="html">Termux 的简单使用</title><link href="https://blog.nine.gt.tc/2024/03/12/termux-with-android/" rel="alternate" type="text/html" title="Termux 的简单使用" /><published>2024-03-12T00:00:00+08:00</published><updated>2024-03-12T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2024/03/12/termux-with-android</id><content type="html" xml:base="https://blog.nine.gt.tc/2024/03/12/termux-with-android/"><![CDATA[<p>Termux 是一个 Android 下一个高级的终端模拟器，开源且不需要 root，支持 apt 管理软件包，十分方便安装软件包，完美支持 Python、 PHP、 Ruby、 Nodejs、 MySQL 等。</p>
 
 <p>首次启动 Termux 时需要从<a href="http://termux.net/bootstrap/">远程服务器</a>加载数据，可能会遇到以下报错，可尝试使用代理或流量再重试：</p>
 
@@ -86,7 +193,327 @@ proot-distro <span class="nb">install </span>ubuntu
 
 <span class="c"># 进入 ubuntu shell 环境</span>
 proot-distro login ubuntu
-</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="Android" /><summary type="html"><![CDATA[Android 上终端模拟器简单使用]]></summary></entry><entry><title type="html">内网下使用 Nginx 转发邮件</title><link href="https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail/" rel="alternate" type="text/html" title="内网下使用 Nginx 转发邮件" /><published>2022-03-25T00:00:00+08:00</published><updated>2022-03-25T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail</id><content type="html" xml:base="https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail/"><![CDATA[<p>内网邮件通过 Nginx 代理进行转发</p>
+</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="Android" /><summary type="html"><![CDATA[Android 上终端模拟器简单使用]]></summary></entry><entry><title type="html">Docker 的安装与使用</title><link href="https://blog.nine.gt.tc/2023/07/09/linux-install-docker/" rel="alternate" type="text/html" title="Docker 的安装与使用" /><published>2023-07-09T00:00:00+08:00</published><updated>2023-07-09T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2023/07/09/linux-install-docker</id><content type="html" xml:base="https://blog.nine.gt.tc/2023/07/09/linux-install-docker/"><![CDATA[<p>Docker 是一个开源的应用容器引擎，可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。 容器是完全使用沙箱机制，相互之间不会有任何接口（类似 iPhone 的 app），更重要的是容器性能开销极低。</p>
+
+<h5 id="1centos-安装-docker">1、centos 安装 docker</h5>
+
+<p>Docker 从 17.03 版本之后分为 CE 和 EE 两大版本。CE 即社区版（免费，支持周期 7 个月），EE 即企业版，强调安全，付费使用，支持周期 24 个月。</p>
+
+<p>Docker CE 支持 64 位版本 CentOS 7，并且要求内核版本不低于 3.10， CentOS 7 满足最低内核的要求</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 卸载旧版 docker</span>
+yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
+
+<span class="c"># 设置 docker 存储库，docker 官网地址无法访问的可以使用国内其它镜像地址</span>
+curl <span class="nt">-o</span> /etc/yum.repos.d/docker-ce.repo https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/docker-ce.repo <span class="o">&amp;&amp;</span> <span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/download.docker.com/mirrors.tuna.tsinghua.edu.cn\/docker-ce/g'</span> /etc/yum.repos.d/docker-ce.repo
+
+curl <span class="nt">-o</span> /etc/yum.repos.d/docker-ce.repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+
+<span class="c"># 安装最新版 docker 引擎和容器</span>
+yum <span class="nt">-y</span> <span class="nb">install </span>docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+<span class="c"># 启动 docker</span>
+systemctl start docker
+
+<span class="c"># 开机自启</span>
+systemctl <span class="nb">enable </span>docker
+
+<span class="c"># 查看版本</span>
+docker <span class="nt">-v</span>
+</code></pre></div></div>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 安装指定版本</span>
+yum list docker-ce <span class="nt">--showduplicates</span> | <span class="nb">sort</span> <span class="nt">-r</span>
+yum <span class="nb">install </span>docker-ce-3:24.0.0-1.el8 docker-ce-cli-3:24.0.0-1.el8 containerd.io docker-buildx-plugin docker-compose-plugin
+</code></pre></div></div>
+
+<blockquote>
+  <p>官方文档：https://docs.docker.com/engine/install/centos/</p>
+</blockquote>
+
+<h5 id="2ubuntu-安装-docker">2、ubuntu 安装 docker</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Add Docker's official GPG key:</span>
+<span class="nb">sudo </span>apt-get update
+<span class="nb">sudo </span>apt-get <span class="nb">install </span>ca-certificates curl
+<span class="nb">sudo install</span> <span class="nt">-m</span> 0755 <span class="nt">-d</span> /etc/apt/keyrings
+<span class="nb">sudo </span>curl <span class="nt">-fsSL</span> https://download.docker.com/linux/ubuntu/gpg <span class="nt">-o</span> /etc/apt/keyrings/docker.asc
+<span class="nb">sudo chmod </span>a+r /etc/apt/keyrings/docker.asc
+
+<span class="c"># 设置 docker 存储库</span>
+<span class="nb">echo</span> <span class="s2">"deb [arch=</span><span class="si">$(</span>dpkg <span class="nt">--print-architecture</span><span class="si">)</span><span class="s2"> signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu </span><span class="si">$(</span><span class="nb">.</span> /etc/os-release <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">"</span><span class="k">${</span><span class="nv">UBUNTU_CODENAME</span><span class="k">:-</span><span class="nv">$VERSION_CODENAME</span><span class="k">}</span><span class="s2">"</span><span class="si">)</span><span class="s2"> stable"</span> | <span class="nb">tee</span> /etc/apt/sources.list.d/docker.list <span class="o">&gt;</span> /dev/null
+apt-get update
+
+apt-get <span class="nb">install </span>docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+<span class="c"># 查看版本</span>
+docker <span class="nt">-v</span>
+
+<span class="c"># 启动 docker</span>
+service docker start
+</code></pre></div></div>
+
+<h5 id="3配置镜像源">3、配置镜像源</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 国内拉取速度过慢时可以配置镜像源来访问</span>
+<span class="nb">tee</span> /etc/docker/daemon.json <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh">
+{
+    "registry-mirrors": [
+        "https://docker.m.daocloud.io",
+        "https://docker.1panel.live",
+        "https://hub.rat.dev"
+    ],
+    "dns": ["8.8.8.8", "8.8.4.4"]
+}
+</span><span class="no">EOF
+
+</span><span class="c"># 重启 docker</span>
+systemctl daemon-reload <span class="o">&amp;&amp;</span> systemctl restart docker
+</code></pre></div></div>
+
+<h5 id="4常用命令">4、常用命令</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 普通用户赋予 docker 命令执行权限</span>
+usermod <span class="nt">-aG</span> docker guest
+
+<span class="c"># 查看运行中的 docker 进程</span>
+docker ps <span class="nt">-a</span>
+
+<span class="c"># 启动/停止/重启容器</span>
+docker start/stop/restart <span class="nb">id</span>/name
+
+<span class="c"># 查看已安装的镜像</span>
+docker images
+
+<span class="c"># 删除某个容器</span>
+docker <span class="nb">rm id</span>/name
+
+<span class="c"># 删除某个镜像</span>
+docker rmi <span class="nb">id</span>/name
+
+<span class="c"># 获取 Docker 对象（容器、镜像、卷、网络等）的详细信息</span>
+docker inspect <span class="nb">id</span>/name
+
+<span class="c"># 实时显示 Docker 容器的资源使用情况</span>
+docker stats
+</code></pre></div></div>
+
+<p><strong>参考</strong></p>
+
+<ul>
+  <li><a href="https://www.runoob.com/docker/docker-command-manual.html">Docker 命令大全 | 菜鸟教程</a></li>
+</ul>]]></content><author><name>Nine</name></author><category term="Docker" /><summary type="html"><![CDATA[Docker 的安装与使用]]></summary></entry><entry><title type="html">PostgreSQL 的安装与使用</title><link href="https://blog.nine.gt.tc/2022/12/13/linux-install-postgresql/" rel="alternate" type="text/html" title="PostgreSQL 的安装与使用" /><published>2022-12-13T00:00:00+08:00</published><updated>2022-12-13T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2022/12/13/linux-install-postgresql</id><content type="html" xml:base="https://blog.nine.gt.tc/2022/12/13/linux-install-postgresql/"><![CDATA[<p>服务器系统版本为 centos 7.7。</p>
+
+<h4 id="1软件安装">1、软件安装</h4>
+
+<p>选择其中 1 种方式安装即可</p>
+
+<h5 id="1yum-安装">(1)、yum 安装</h5>
+
+<p>官方说明：<a href="https://www.postgresql.org/download/linux/redhat/">https://www.postgresql.org/download/linux/redhat/</a></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 安装 PostgreSQL 软件仓库</span>
+yum <span class="nb">install</span> <span class="nt">-y</span> https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+
+<span class="c"># 查询支持的版本</span>
+yum <span class="nt">-y</span> search <span class="s1">'PostgreSQL client programs'</span>
+
+<span class="c"># 安装 PostgreSQL，默认安装目录：/var/lib/</span>
+yum <span class="nb">install</span> <span class="nt">-y</span> postgresql15-server
+
+<span class="c"># 初始化数据库</span>
+/usr/pgsql-15/bin/postgresql-15-setup initdb
+
+<span class="c"># 按需修改数据库配置文件</span>
+vim /var/lib/pgsql/15/data/postgresql.conf
+
+listen_addresses <span class="o">=</span> <span class="s1">'*'</span>
+max_connections <span class="o">=</span> 200
+
+logging_collector <span class="o">=</span> on
+log_directory <span class="o">=</span> <span class="s1">'log'</span>
+log_filename <span class="o">=</span> <span class="s1">'postgresql-%Y-%m-%d_%H%M%S.log'</span>
+log_file_mode <span class="o">=</span> 0644
+log_line_prefix <span class="o">=</span> <span class="s1">'%m %u %d %p %r %e'</span>
+log_statement <span class="o">=</span> <span class="s1">'ddl'</span>
+
+<span class="c"># 设置开机自启</span>
+systemctl <span class="nb">enable </span>postgresql-15
+
+<span class="c"># 启动数据库</span>
+systemctl start postgresql-15
+
+<span class="c"># 开放防火墙端口</span>
+firewall-cmd <span class="nt">--add-port</span><span class="o">=</span>5432/tcp <span class="nt">--permanent</span>
+firewall-cmd <span class="nt">--reload</span>
+</code></pre></div></div>
+
+<h5 id="2源码安装">(2)、源码安装</h5>
+
+<p>源码安装包：<a href="https://www.postgresql.org/ftp/source">https://www.postgresql.org/ftp/source</a></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 安装依赖</span>
+yum <span class="nb">install</span> <span class="nt">-y</span> gcc gcc-c++ make libicu-devel bison flex readline-devel zlib-devel wget vim
+
+<span class="c"># 下载解压安装包</span>
+wget https://ftp.postgresql.org/pub/source/v17.6/postgresql-17.6.tar.gz
+<span class="nb">tar</span> <span class="nt">-zxvf</span> postgresql-17.6.tar.gz <span class="o">&amp;&amp;</span> <span class="nb">cd </span>postgresql-17.6
+./configure <span class="nt">--prefix</span><span class="o">=</span>/usr/local/pgsql
+make <span class="nt">-j2</span> <span class="o">&amp;&amp;</span> make <span class="nt">-j2</span> <span class="nb">install</span>
+
+<span class="c"># 添加用户并创建数据目录</span>
+useradd postgres
+<span class="nb">mkdir</span> <span class="nt">-p</span> /data/pgsql/data
+<span class="nb">chown</span> <span class="nt">-R</span> postgres:postgres /data/pgsql/data
+<span class="nb">chown</span> <span class="nt">-R</span> postgres:postgres /usr/local/pgsql
+
+<span class="c"># 配置环境变量</span>
+<span class="nb">cat</span> <span class="o">&gt;&gt;</span> /etc/profile <span class="o">&lt;&lt;</span> <span class="sh">"</span><span class="no">EOF</span><span class="sh">"
+# postgresql
+export PGHOME=/usr/local/pgsql
+export PGDATA=/data/pgsql/data
+export PATH=</span><span class="nv">$PGHOME</span><span class="sh">/bin:</span><span class="nv">$PATH</span><span class="sh">
+</span><span class="no">EOF
+
+</span><span class="c"># 使环境变量生效</span>
+<span class="nb">source</span> /etc/profile
+
+<span class="c"># 初始化数据库</span>
+su - postgres
+/usr/local/pgsql/bin/initdb <span class="nt">-D</span> /data/pgsql/data
+
+<span class="c"># 修改数据库配置文件</span>
+vim /data/pgsql/data/postgresql.conf
+
+listen_addresses <span class="o">=</span> <span class="s1">'*'</span>
+max_connections <span class="o">=</span> 4000
+
+shared_buffers <span class="o">=</span> 4GB
+work_mem <span class="o">=</span> 64MB
+maintenance_work_mem <span class="o">=</span> 1GB
+effective_cache_size <span class="o">=</span> 12GB
+wal_buffers <span class="o">=</span> 16MB
+checkpoint_completion_target <span class="o">=</span> 0.9
+
+logging_collector <span class="o">=</span> on
+log_directory <span class="o">=</span> <span class="s1">'log'</span>
+log_filename <span class="o">=</span> <span class="s1">'postgresql-%Y-%m-%d_%H%M%S.log'</span>
+log_file_mode <span class="o">=</span> 0644
+log_line_prefix <span class="o">=</span> <span class="s1">'%m %u %d %p %r %e'</span>
+log_statement <span class="o">=</span> <span class="s1">'ddl'</span>
+
+<span class="c"># 启动服务</span>
+/usr/local/pgsql/bin/pg_ctl <span class="nt">-D</span> /data/pgsql/data start
+
+<span class="c"># 复制源码包里的启动脚本至 /etc/init.d 目录下，并加执行权限</span>
+<span class="nb">cp </span>postgresql-17.6/contrib/start-scripts/linux /etc/init.d/postgresql
+<span class="nb">chmod</span> +x /etc/init.d/postgresql
+
+<span class="c"># 修改数据目录</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s|^PGDATA=.*|PGDATA="/data/pgsql/data"|'</span> /etc/init.d/postgresql
+
+<span class="c"># 设置开机启动</span>
+chkconfig <span class="nt">--add</span> postgresql
+
+<span class="c"># 启动服务</span>
+systemctl start postgresql
+
+<span class="c"># 服务状态</span>
+systemctl status postgresql
+
+<span class="c"># 重启数据库</span>
+/usr/local/pgsql/bin/pg_ctl <span class="nt">-D</span> /data/pgsql/data rstart
+
+<span class="c"># 开放防火墙端口</span>
+firewall-cmd <span class="nt">--add-port</span><span class="o">=</span>5432/tcp <span class="nt">--permanent</span>
+firewall-cmd <span class="nt">--reload</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">listen_addresses</code>：* 为允许服务器监听所有可用的网络接口，允许远程连接</p>
+
+  <p><code class="language-plaintext highlighter-rouge">max_connections</code>：决定允许的最大数据库连接数。过多的连接会增加系统开销和资源竞争。通常可以使用连接池工具（如 PgBouncer）来控制并发连接数；</p>
+
+  <p><code class="language-plaintext highlighter-rouge">shared_buffers</code>：这是 PostgreSQL 用于缓存表数据的共享内存区域，通常建议设置为物理内存的 25%-40%。如果设置过低，会导致频繁的磁盘访问；设置过高则会占用操作系统内存，减少可用的文件缓存；</p>
+
+  <p><code class="language-plaintext highlighter-rouge">work_mem</code>：每个查询操作（如排序、哈希表）所使用的内存。这个参数是每个查询连接单独分配的，因此需要根据查询复杂度和并发量合理设置。如果过小，查询需要频繁进行磁盘交换；过大会导致内存不足。典型值在 10MB-100MB 之间；</p>
+
+  <p><code class="language-plaintext highlighter-rouge">maintenance_work_mem</code>：控制 PostgreSQL 在执行维护操作时使用的内存大小，比如创建索引、VACUUM。推荐设置为较大的值，尤其是在大规模数据集上操作时；</p>
+
+  <p><code class="language-plaintext highlighter-rouge">effective_cache_size</code>：PostgreSQL 根据此参数判断系统可用的文件系统缓存大小，从而决定是否使用索引扫描或全表扫描。建议设置为物理内存的 50%-75%；</p>
+
+  <p><code class="language-plaintext highlighter-rouge">wal_buffers</code>：建议设置为 shared_buffers 的 1/32，用于缓冲 WAL 数据，避免频繁写入磁盘；</p>
+
+  <p><code class="language-plaintext highlighter-rouge">checkpoint_completion_target</code>：设置为接近 1 的值可以平滑 WAL 日志写入压力，减少突发I/O 操作。</p>
+
+  <p><code class="language-plaintext highlighter-rouge">logging_collector</code>：开启日志收集器，用于收集数据库服务器的日志信息</p>
+
+  <p><code class="language-plaintext highlighter-rouge">log_directory</code>：日志文件的存储目录为 pg_log</p>
+
+  <p><code class="language-plaintext highlighter-rouge">log_filename</code>：日志文件名包含月份和日期信息</p>
+
+  <p><code class="language-plaintext highlighter-rouge">log_file_mode</code>：日志文件权限</p>
+
+  <p><code class="language-plaintext highlighter-rouge">log_line_prefix</code>：日志行前缀（%m 时间，%u 用户名称，%d 数据库名称，%r 客户端 IP 和端口，%e sql 语句）</p>
+
+  <p><code class="language-plaintext highlighter-rouge">log_statement</code>：none、ddl、mod、all 控制记录哪些 SQL 语句。none 不记录，ddl 记录所有数据定义命令，比如 CREATE、ALTER、DROP 语句。mod 记录所有 ddl 语句,加上数据修改语句INSERT、UPDATE 等，all 记录所有执行的语句，将此配置设置为 all 可跟踪整个数据库执行的 SQL 语句</p>
+</blockquote>
+
+<h4 id="2密码修改">2、密码修改</h4>
+
+<p>安装完成后修改数据库密码并配置密码认证</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 数据库密码修改</span>
+su - postgres
+psql
+alter user postgres with password <span class="s1">'pgsqlabcd!'</span><span class="p">;</span>
+
+<span class="c"># 创建用户</span>
+CREATE USER testuser with password <span class="s1">'pgsqlabcd!'</span><span class="p">;</span>
+
+<span class="c"># 增加允许连接的 ip 地址，0.0.0.0/0 表示任意地址，192.168.1.11/32 表示仅允许 192.168.1.11 连接</span>
+vim <span class="nv">$PGDATA</span>/pg_hba.conf
+
+host    all             all             0.0.0.0/0               scram-sha-256
+host    all             all             192.168.1.11/32         scram-sha-256
+
+<span class="c"># 根据 postgresql.conf 中的 shared-buffers 值计算需要的大页数量</span>
+/usr/local/pgsql/bin/postgres <span class="nt">-D</span> <span class="nv">$PGDATA</span> <span class="nt">--shared-buffers</span><span class="o">=</span>12GB <span class="nt">--huge-pages</span><span class="o">=</span>on <span class="nt">-C</span> shared_buffers
+
+<span class="c"># 修改系统配置</span>
+vim /etc/sysctl.conf
+vm.nr_hugepages <span class="o">=</span> 6146
+
+<span class="c"># 使之生效</span>
+sysctl <span class="nt">-p</span>
+
+<span class="c"># 检查大页是否分配成功</span>
+<span class="nb">cat</span> /proc/meminfo | <span class="nb">grep </span>Huge
+
+<span class="c"># 重启数据库（yum 安装方式）</span>
+systemctl restart postgresql-15
+
+<span class="c"># 重启数据库（源码安装方式）</span>
+systemctl restart postgresql
+</code></pre></div></div>
+
+<blockquote>
+  <p>在传统的操作系统内存管理中，内存被划分为许多小块，通常每块是 <strong>4KB</strong>（这个值取决于架构，x86_64 默认是 4KB），这被称为“基础页”。</p>
+
+  <p><strong>问题：</strong> 当一个像 PostgreSQL 这样需要大量内存的进程（例如，<code class="language-plaintext highlighter-rouge">shared_buffers</code> 设置为几十GB）运行时，它需要管理成千上万甚至数百万个这些 4KB 的小页面。这会导致：</p>
+
+  <ul>
+    <li><strong>更高的 CPU 开销：</strong> 操作系统需要维护更多的页表项（Page Table Entries）。</li>
+    <li><strong>更高的 TLB 压力：</strong> TLB（Translation Lookaside Buffer）是 CPU 中的一个高速缓存，用于快速将虚拟地址转换为物理地址。TLB 容量很小，如果进程需要频繁访问大量分散的 4KB 页面，会导致 TLB 缓存未命中（TLB miss），CPU 就不得不去访问更慢的主内存来查找地址转换关系，这会显著降低性能。</li>
+  </ul>
+
+  <p><strong>解决方案：大页（Huge Pages）</strong></p>
+  <ul>
+    <li>大页是另一种内存页大小，通常是 <strong>2MB</strong> 或 <strong>1GB</strong>（相比之下，基础页是 4KB）。</li>
+    <li>通过使用 2MB 的大页，同样管理 16GB 的内存，操作系统只需要处理 <code class="language-plaintext highlighter-rouge">16GB / 2MB = 8192</code> 个页表项，而不是 <code class="language-plaintext highlighter-rouge">16GB / 4KB = 4,194,304</code> 个。这减少了超过 99% 的页表项数量！</li>
+    <li>TLB 可以缓存更多的地址转换关系，从而极大减少 TLB miss，提高内存访问效率。</li>
+  </ul>
+</blockquote>]]></content><author><name>Nine</name></author><category term="PostgreSQL" /><summary type="html"><![CDATA[PostgreSQL 的安装与使用]]></summary></entry><entry><title type="html">内网下使用 Nginx 转发邮件</title><link href="https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail/" rel="alternate" type="text/html" title="内网下使用 Nginx 转发邮件" /><published>2022-03-25T00:00:00+08:00</published><updated>2022-03-25T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail</id><content type="html" xml:base="https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail/"><![CDATA[<p>内网邮件通过 Nginx 代理进行转发。</p>
 
 <p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/nginx/image-20220325133718280.png" alt="image-20220325133718280" /></p>
 
@@ -117,7 +544,7 @@ make <span class="o">&amp;&amp;</span> make <span class="nb">install</span>
 
 <h5 id="3内网测试邮件发送">3、内网测试邮件发送</h5>
 
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/nginx/image-20220325140602124.png" alt="image-20220325140602124" /></p>]]></content><author><name>Nine</name></author><category term="Nginx" /><summary type="html"><![CDATA[内网邮件转发]]></summary></entry><entry><title type="html">Centos7 下安装配置 Gitlab</title><link href="https://blog.nine.gt.tc/2021/12/30/centos7-install-gitlab/" rel="alternate" type="text/html" title="Centos7 下安装配置 Gitlab" /><published>2021-12-30T00:00:00+08:00</published><updated>2021-12-30T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/12/30/centos7-install-gitlab</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/12/30/centos7-install-gitlab/"><![CDATA[<p>Centos7 下 Gitlab 的安装配置与备份恢复</p>
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/nginx/image-20220325140602124.png" alt="image-20220325140602124" /></p>]]></content><author><name>Nine</name></author><category term="Nginx" /><summary type="html"><![CDATA[内网邮件转发]]></summary></entry><entry><title type="html">Gitlab 的安装与使用</title><link href="https://blog.nine.gt.tc/2021/12/30/linux-install-gitlab/" rel="alternate" type="text/html" title="Gitlab 的安装与使用" /><published>2021-12-30T00:00:00+08:00</published><updated>2021-12-30T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/12/30/linux-install-gitlab</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/12/30/linux-install-gitlab/"><![CDATA[<p>Centos7 下 Gitlab 的安装配置与备份恢复。</p>
 
 <h5 id="1gitlab-介绍">1、Gitlab 介绍</h5>
 
@@ -143,7 +570,7 @@ make <span class="o">&amp;&amp;</span> make <span class="nb">install</span>
 <p><strong>gitlab-ee 和 gitlab-ce 的区别</strong>
 关于 gitlab-ee（企业版）和 gitlab-ce（社区版），二者是基于同样的核心代码进行开发，只是 gitlab-ee 功能更强大，但需要付费使用，有 30 天试用期。但试用期过后如果不付费，它就跟 gitlab-ce 功能是完全一样的，只是需要付费的功能无法再继续使用而已。</p>
 
-<h5 id="2安装-gitlab">2、安装 Gitlab</h5>
+<h5 id="2rpm-包安装">2、rpm 包安装</h5>
 
 <p>安装要求：<a href="https://docs.gitlab.com/ee/install/requirements.html">https://docs.gitlab.com/ee/install/requirements.html</a></p>
 
@@ -154,7 +581,7 @@ yum <span class="nb">install</span> <span class="nt">-y</span> curl policycoreut
 systemctl <span class="nb">enable </span>sshd
 systemctl start sshd
 
-<span class="c"># 将http和https加入防火墙策略，并重启防火墙。</span>
+<span class="c"># 将 http 和 https 加入防火墙策略，并重启防火墙。</span>
 systemctl start firewalld
 firewall-cmd <span class="nt">--permanent</span> <span class="nt">--add-service</span><span class="o">=</span>http
 firewall-cmd <span class="nt">--permanent</span> <span class="nt">--add-service</span><span class="o">=</span>https
@@ -194,7 +621,30 @@ yum <span class="nb">install</span> <span class="nt">-y</span> gitlab-ee-14.6.0
   </li>
 </ul>
 
-<h5 id="3修改配置">3、修改配置</h5>
+<h5 id="3docker-安装">3、docker 安装</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 拉取镜像</span>
+docker pull gitlab/gitlab-ee:14.6.0-ee.0
+
+<span class="c"># 运行容器</span>
+docker run <span class="nt">--detach</span> <span class="se">\</span>
+<span class="nt">--publish</span> 22333:80 <span class="nt">--publish</span> 18443:443 <span class="nt">--publish</span> 18022:22 <span class="se">\</span>
+<span class="nt">--name</span> gitlab <span class="se">\</span>
+<span class="nt">--restart</span> always <span class="se">\</span>
+<span class="nt">--volume</span> /data/gitlab/etc:/etc/gitlab <span class="se">\</span>
+<span class="nt">--volume</span> /data/gitlab/log:/var/log/gitlab <span class="se">\</span>
+<span class="nt">--volume</span> /data/gitlab/data:/var/opt/gitlab <span class="se">\</span>
+<span class="nt">--env</span> <span class="nv">GITLAB_OMNIBUS_CONFIG</span><span class="o">=</span><span class="s2">"external_url 'http://192.168.0.250';"</span> <span class="se">\</span>
+gitlab/gitlab-ee:14.6.0-ee.0
+
+<span class="c"># 查看日志</span>
+docker logs <span class="nt">--tail</span> 300 <span class="nt">-f</span> gitlab
+
+<span class="c"># 默认管理员 root，查看密码，登录后修改密码（默认密码有效期只有24小时），访问服务：http://192.168.0.250:22333</span>
+<span class="nb">cat</span> /data/gitlab/etc/initial_root_password
+</code></pre></div></div>
+
+<h5 id="4修改配置">4、修改配置</h5>
 
 <p>修改 Gitlab 主配置文件：<code class="language-plaintext highlighter-rouge">vim /etc/gitlab/gitlab.rb</code></p>
 
@@ -229,20 +679,20 @@ yum <span class="nb">install</span> <span class="nt">-y</span> gitlab-ee-14.6.0
 <span class="s">gitlab_rails['smtp_enable_starttls_auto'] = </span><span class="no">true</span>
 <span class="s">gitlab_rails['smtp_tls'] = </span><span class="no">false</span>
 
-<span class="c1"># 关闭普罗米修斯监控（内存低时可以关闭节省资源）</span>
+<span class="c1"># 关闭 prometheus 监控（内存低时可以关闭节省资源）</span>
 <span class="s">prometheus['enable'] = </span><span class="no">false</span>
 <span class="s">prometheus['monitor_kubernetes'] = </span><span class="no">false</span>
 </code></pre></div></div>
 
 <blockquote>
-  <ul>
-    <li>/etc/gitlab/gitlab.rb：主配置文件，包含外部URL、仓库目录、备份目录等</li>
-    <li>/etc/gitlab/gitlab-secrets.json：（执行gitlab-ctl reconfigure命令行后生成），包含各类密钥的加密信息</li>
-    <li>smtp 邮件服务商配置：<a href="https://docs.gitlab.com/omnibus/settings/smtp.html">https://docs.gitlab.com/omnibus/settings/smtp.html</a></li>
-  </ul>
+  <p><code class="language-plaintext highlighter-rouge">/etc/gitlab/gitlab.rb</code>：主配置文件，包含外部URL、仓库目录、备份目录等</p>
+
+  <p><code class="language-plaintext highlighter-rouge">/etc/gitlab/gitlab-secrets.json</code>：（执行 gitlab-ctl reconfigure 命令行后生成），包含各类密钥的加密信息</p>
+
+  <p>smtp 邮件服务商配置：<a href="https://docs.gitlab.com/omnibus/settings/smtp.html">https://docs.gitlab.com/omnibus/settings/smtp.html</a></p>
 </blockquote>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 重新应用 gitlab 的配置，每次修改/etc/gitlab/gitlab.rb 文件之后执行</span>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 重新应用 gitlab 的配置，每次修改 /etc/gitlab/gitlab.rb 文件之后执行</span>
 gitlab-ctl reconfigure
 
 <span class="c"># 查看初始密码</span>
@@ -263,18 +713,18 @@ gitlab-ctl status
 
 <p>安装完成后建议关闭注册功能</p>
 
-<h5 id="4gitlab-备份">4、Gitlab 备份</h5>
+<h5 id="5备份恢复">5、备份恢复</h5>
 
 <p>默认备份目录：<code class="language-plaintext highlighter-rouge">/var/opt/gitlab/backups</code></p>
 
 <p>修改 gitlab 配置文件：<code class="language-plaintext highlighter-rouge">vim /etc/gitlab/gitlab.rb</code></p>
 
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 指定备份后数据存放的路径、权限、时间配置</span>
-gitlab_rails[<span class="s1">'manage_backup_path'</span><span class="o">]</span> <span class="o">=</span> <span class="nb">true</span>                  <span class="c">#292行      开启备份功能</span>
-gitlab_rails[<span class="s1">'backup_path'</span><span class="o">]</span> <span class="o">=</span> <span class="s2">"/gitlab_backup"</span>         <span class="c">#293行      指定备份的路径</span>
-gitlab_rails[<span class="s1">'backup_archive_permissions'</span><span class="o">]</span> <span class="o">=</span> 0644          <span class="c">#296行      备份文件的权限</span>
-gitlab_rails[<span class="s1">'backup_keep_time'</span><span class="o">]</span> <span class="o">=</span> 604800                  <span class="c">#301行      备份保留时间（保留7天）</span>
-</code></pre></div></div>
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 指定备份后数据存放的路径、权限、时间配置
+</span><span class="err">gitlab_rails</span><span class="nn">['manage_backup_path']</span> <span class="err">=</span> <span class="err">true</span>                  <span class="c">#292行      开启备份功能
+</span><span class="err">gitlab_rails</span><span class="nn">['backup_path']</span> <span class="err">=</span> <span class="err">"/gitlab_backup"</span>             <span class="c">#293行      指定备份的路径
+</span><span class="err">gitlab_rails</span><span class="nn">['backup_archive_permissions']</span> <span class="err">=</span> <span class="err">0644</span>          <span class="c">#296行      备份文件的权限
+</span><span class="err">gitlab_rails</span><span class="nn">['backup_keep_time']</span> <span class="err">=</span> <span class="err">604800</span>                  <span class="c">#301行      备份保留时间（保留 7 天）
+</span></code></pre></div></div>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 创建备份目录并授权</span>
 <span class="nb">mkdir</span> /gitlab_backup
@@ -290,9 +740,7 @@ gitlab-rake gitlab:backup:create
 0 3 <span class="k">*</span> <span class="k">*</span> <span class="k">*</span> /opt/gitlab/bin/gitlab-rake gitlab:backup:create <span class="o">&gt;&gt;</span> /gitlab_backup/crontab.log 2&gt;&amp;1
 </code></pre></div></div>
 
-<h5 id="5gitlab-恢复">5、Gitlab 恢复</h5>
-
-<p><strong>只能还原到与备份文件相同的 gitlab 版本</strong></p>
+<p>gitlab 数据恢复只能还原到与备份文件相同的 gitlab 版本</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 下载安装与备份相同版本的 gitlab</span>
 wget <span class="nt">--content-disposition</span> https://packages.gitlab.com/gitlab/gitlab-ee/packages/el/7/gitlab-ee-13.10.3-ee.0.el7.x86_64.rpm/download.rpm
@@ -339,6 +787,10 @@ gitlab-ctl service-list
 <span class="c"># 检查配置并启动</span>
 gitlab-ctl check-config
 </code></pre></div></div>
+
+<blockquote>
+  <p>docker 方式安装需进入容器内执行上述相关备份恢复命令：<code class="language-plaintext highlighter-rouge">docker exec -it gitlab bash</code></p>
+</blockquote>
 
 <h5 id="6其他">6、其他</h5>
 
@@ -402,7 +854,7 @@ user.save!
   <li><a href="https://docs.gitlab.com/ee/raketasks/backup_restore.html#reset-runner-registration-tokens">Reset runner registration tokens</a></li>
   <li><a href="https://gitlab.com/gitlab-org/gitlab/-/issues/26171">Issue-26171</a></li>
   <li><a href="https://www.cnblogs.com/hgzero/p/14088215.html">Gitlab的安装及使用</a></li>
-</ul>]]></content><author><name>Nine</name></author><category term="Gitlab" /><summary type="html"><![CDATA[Gitlab 的安装与简单配置]]></summary></entry><entry><title type="html">Centos7 安装 Elasticsearch</title><link href="https://blog.nine.gt.tc/2021/11/17/centos7-install-elasticsearch/" rel="alternate" type="text/html" title="Centos7 安装 Elasticsearch" /><published>2021-11-17T00:00:00+08:00</published><updated>2021-11-17T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/11/17/centos7-install-elasticsearch</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/11/17/centos7-install-elasticsearch/"><![CDATA[<p>Elasticsearch 是一个高度可伸缩的开源全文搜索和分析引擎。它可以快速和接近实时地存储、搜索和分析大量数据</p>
+</ul>]]></content><author><name>Nine</name></author><category term="Gitlab" /><summary type="html"><![CDATA[Gitlab 的安装与简单配置]]></summary></entry><entry><title type="html">Elasticsearch 的安装与使用</title><link href="https://blog.nine.gt.tc/2021/11/17/linux-install-elasticsearch/" rel="alternate" type="text/html" title="Elasticsearch 的安装与使用" /><published>2021-11-17T00:00:00+08:00</published><updated>2021-11-17T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/11/17/linux-install-elasticsearch</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/11/17/linux-install-elasticsearch/"><![CDATA[<p>Elasticsearch 是一个高度可伸缩的开源全文搜索和分析引擎，它可以快速和接近实时地存储、搜索和分析大量数据。</p>
 
 <h5 id="1安装-elasticsearch">1、安装 Elasticsearch</h5>
 
@@ -490,7 +942,7 @@ systemctl restart elasticsearch
 
 <p>本文使用浏览器插件方式：https://chrome.google.com/webstore/detail/elasticsearch-head/ffmkiejjmecolpfloofpjologoblkegm</p>
 
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316170641309.png" alt="image-20220316170641309" /></p>]]></content><author><name>Nine</name></author><category term="Elasticsearch" /><summary type="html"><![CDATA[Elasticsearch 的简单配置和使用]]></summary></entry><entry><title type="html">MySQL 的安装与使用</title><link href="https://blog.nine.gt.tc/2021/10/17/linux-install-mysql/" rel="alternate" type="text/html" title="MySQL 的安装与使用" /><published>2021-10-17T00:00:00+08:00</published><updated>2021-10-17T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/10/17/linux-install-mysql</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/10/17/linux-install-mysql/"><![CDATA[<p>使用离线包方式安装 MySQL</p>
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316170641309.png" alt="image-20220316170641309" /></p>]]></content><author><name>Nine</name></author><category term="Elasticsearch" /><summary type="html"><![CDATA[Elasticsearch 的简单配置和使用]]></summary></entry><entry><title type="html">MySQL 的安装与使用</title><link href="https://blog.nine.gt.tc/2021/10/17/linux-install-mysql/" rel="alternate" type="text/html" title="MySQL 的安装与使用" /><published>2021-10-17T00:00:00+08:00</published><updated>2021-10-17T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/10/17/linux-install-mysql</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/10/17/linux-install-mysql/"><![CDATA[<p>使用离线包方式安装 MySQL。</p>
 
 <h5 id="1下载-mysql">1、下载 MySQL</h5>
 
@@ -646,7 +1098,7 @@ chkconfig <span class="nt">--add</span> mysqld
 
 <span class="c"># 重启 mysql</span>
 systemctl restart mysqld
-</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="DB" /><summary type="html"><![CDATA[MySQL 安装与使用]]></summary></entry><entry><title type="html">Centos7 升级 OpenSSH</title><link href="https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh/" rel="alternate" type="text/html" title="Centos7 升级 OpenSSH" /><published>2021-08-18T00:00:00+08:00</published><updated>2021-08-18T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh/"><![CDATA[<p>Centos7.6 升级后测试 ssh 登录及重启后 ssh 登录均无问题，升级无需卸载原先的 openssl 和 openssh</p>
+</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="MySQL" /><summary type="html"><![CDATA[MySQL 安装与使用]]></summary></entry><entry><title type="html">Centos7 下升级 OpenSSH</title><link href="https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh/" rel="alternate" type="text/html" title="Centos7 下升级 OpenSSH" /><published>2021-08-18T00:00:00+08:00</published><updated>2021-08-18T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh/"><![CDATA[<p>Centos7.6 升级后测试 ssh 登录及重启后 ssh 登录均无问题，升级无需卸载原先的 openssl 和 openssh。</p>
 
 <p>系统环境为服务器安装镜像时自带的 openssh，没有经历过手动编译安装方式</p>
 
@@ -665,9 +1117,9 @@ systemctl restart mysqld
 
   <p>升级前先关闭 selinux</p>
 
-  <p>使用 telnet 登录升级，备份ssh 相关文件，避免失败时无法回退版本</p>
+  <p>使用 telnet 登录升级，备份 ssh 相关文件，避免失败时无法回退版本</p>
 
-  <p>先在相同版本的测试环境进行升级，ssh 服务重启、服务器重启、su 切换用户等无问题后再到生产环境操作</p>
+  <p>建议先在相同版本的测试环境进行升级，ssh 服务重启、服务器重启、su 切换用户等无问题后再到生产环境操作</p>
 </blockquote>
 
 <p>先使用 yum 升级到目前 yum 仓库默认的 openssh7.4p1 版本，再进行编译安装升级到 openssh8.6p1</p>
@@ -683,31 +1135,31 @@ systemctl restart mysqld
 
 <h5 id="2安装配置-telnet">2、安装配置 telnet</h5>
 
-<p>防止SSH远程控制时，升级过程中出现连接中断，可通过telnet备用方式进行远程连接（由于telnet是明文传输，不安全，只作为临时使用，升级完成后，必须停止卸载该服务）</p>
+<p>防止SSH远程控制时，升级过程中出现连接中断，可通过 telnet 备用方式进行远程连接（由于 telnet 是明文传输，不安全，只作为临时使用，升级完成后，必须停止卸载该服务）</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum <span class="nt">-y</span> <span class="nb">install </span>xinetd telnet-server
 </code></pre></div></div>
 
 <p>修改配置文件：<code class="language-plaintext highlighter-rouge">vim /etc/xinetd.d/telnet</code></p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># default: on
-# # description: The telnet server serves telnet sessions; it uses \
-# #   unencrypted username/password pairs for authentication.
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># default: on</span>
+<span class="c"># # description: The telnet server serves telnet sessions; it uses \</span>
+<span class="c"># #   unencrypted username/password pairs for authentication.</span>
 service telnet
-{
-     disable     = yes
-     flags       = REUSE
-     socket_type = stream               
-     wait        = no
-     user        = root
-     server      = /usr/sbin/in.telnetd
-     log_on_failure  += USERID
-}
+<span class="o">{</span>
+     disable     <span class="o">=</span> <span class="nb">yes
+     </span>flags       <span class="o">=</span> REUSE
+     socket_type <span class="o">=</span> stream               
+     <span class="nb">wait</span>        <span class="o">=</span> no
+     user        <span class="o">=</span> root
+     server      <span class="o">=</span> /usr/sbin/in.telnetd
+     log_on_failure  +<span class="o">=</span> USERID
+<span class="o">}</span>
 </code></pre></div></div>
 
 <p>配置 telnet 登录的终端类型：<code class="language-plaintext highlighter-rouge">vim /etc/securetty</code>，再文件末尾增加一些 pts 终端</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pts/0
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pts/0
 pts/1
 pts/2
 pts/3
@@ -851,22 +1303,22 @@ netstat <span class="nt">-lntp</span>
 systemctl restart sshd
 ssh <span class="nt">-V</span>
 </code></pre></div></div>
-<p>回退后注意验证ssh登录是否正常</p>
+<p>回退后注意验证 ssh 登录是否正常</p>
 
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819102454585.png" alt="image-20210819102454585" /></p>]]></content><author><name>Nine</name></author><category term="OpenSSH" /><summary type="html"><![CDATA[Centos7 下的 openssl、openssh 升级]]></summary></entry><entry><title type="html">Docker 本地部署 Jekyll 静态博客</title><link href="https://blog.nine.gt.tc/2021/05/18/blog-with-jekyll/" rel="alternate" type="text/html" title="Docker 本地部署 Jekyll 静态博客" /><published>2021-05-18T00:00:00+08:00</published><updated>2021-05-18T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/05/18/blog-with-jekyll</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/05/18/blog-with-jekyll/"><![CDATA[<p>使用 Docker 本地部署 Jekyll 项目，可供服务器上搭建个人博客、本地实时预览调试代码。</p>
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819102454585.png" alt="image-20210819102454585" /></p>]]></content><author><name>Nine</name></author><category term="Linux" /><summary type="html"><![CDATA[Centos7 下的 openssl、openssh 升级]]></summary></entry><entry><title type="html">Docker 本地部署 Jekyll 静态博客</title><link href="https://blog.nine.gt.tc/2021/05/18/blog-with-jekyll/" rel="alternate" type="text/html" title="Docker 本地部署 Jekyll 静态博客" /><published>2021-05-18T00:00:00+08:00</published><updated>2021-05-18T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/05/18/blog-with-jekyll</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/05/18/blog-with-jekyll/"><![CDATA[<p>使用 Docker 本地部署 Jekyll 项目，可供服务器上搭建个人博客、本地实时预览调试代码。</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 拉取项目</span>
 git clone https://github.com/NineHolic/nineholic.github.io
 <span class="nb">cd </span>nineholic.github.io
 
 <span class="c"># 构建镜像</span>
-docker build <span class="nt">-t</span> nine_blog:20241031 <span class="nb">.</span>
+docker build <span class="nt">-t</span> Blog:v1 <span class="nb">.</span>
 
 <span class="c"># 查看镜像</span>
 docker images
 
 <span class="c"># 使用宿主机端口启动容器，并在修改源文件时自动重新构建</span>
-docker run <span class="nt">--network</span> host <span class="nt">--name</span> blog <span class="nt">-v</span> <span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span>:/blog nine_blog:20241031 bash <span class="nt">-c</span> <span class="s2">"jekyll serve -w --host=192.168.216.128"</span>
+docker run <span class="nt">--network</span> host <span class="nt">--name</span> blog <span class="nt">-v</span> <span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span>:/blog Blog:v1 bash <span class="nt">-c</span> <span class="s2">"jekyll serve -w --host=192.168.216.128"</span>
 
 <span class="c"># 开放端口</span>
 firewall-cmd <span class="nt">--zone</span><span class="o">=</span>public <span class="nt">--permanent</span> <span class="nt">--add-port</span><span class="o">=</span>4000/tcp
@@ -893,258 +1345,4 @@ firewall-cmd <span class="nt">--reload</span>
 
 <p>浏览器访问查看效果：<a href="http://192.168.216.128:4000">http://192.168.216.128:4000</a></p>
 
-<p>镜像使用版本参考：<a href="https://pages.github.com/versions.json">Github Pages 运行环境</a></p>]]></content><author><name>Nine</name></author><category term="Docker" /><summary type="html"><![CDATA[本地运行 Jekyll 博客，方便调试]]></summary></entry><entry><title type="html">PicGo 结合 GitHub 搭建图床</title><link href="https://blog.nine.gt.tc/2021/02/07/picgo-github-cloudimg/" rel="alternate" type="text/html" title="PicGo 结合 GitHub 搭建图床" /><published>2021-02-07T00:00:00+08:00</published><updated>2021-02-07T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/02/07/picgo-github-cloudimg</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/02/07/picgo-github-cloudimg/"><![CDATA[<p>PicGo 结合 GitHub/Gitee 搭建图床，用于存储博客图片</p>
-
-<h5 id="1安装-picgo">1、安装 PicGo</h5>
-
-<p>下载地址：<a href="https://github.com/Molunerfinn/PicGo/releases">https://github.com/Molunerfinn/PicGo/releases</a>，<a href="https://picgo.github.io/PicGo-Doc/zh/guide/getting-started.html">说明文档</a></p>
-
-<blockquote>
-  <p>安装插件需有 Node.js 环境，否则安装时会一直显示安装中</p>
-
-  <p>Gitee 上的图片目前已取消了外部链接访问，网站图片无法显示，仅本地可显示</p>
-</blockquote>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521100351986.png" alt="image-20210521100351986" /></p>
-
-<h5 id="2新建图床仓库">2、新建图床仓库</h5>
-
-<p>在  GitHub 上新建一个公开的非空仓库（空仓库上传图片时会报 500 错误），然后在<code class="language-plaintext highlighter-rouge">Settings / Developer settings</code>下生成一个新 token 用于 PicGo 上传图片，权限勾选 repo 下所有选项</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20220609234116020.png" alt="image-20220609234116020" /></p>
-
-<p>Gitee 则在设置 -&gt; 私人令牌下生成</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521135839665.png" alt="image-20210521135839665" /></p>
-
-<h5 id="3图床设置">3、图床设置</h5>
-
-<p>参数说明见<a href="https://github.com/lizhuangs/picgo-plugin-gitee-uploader">插件文档</a></p>
-
-<p>按 GitHub 仓库信息配置，自定义域名使用 jsdeliver 的 cdn：</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20220609234326112.png" alt="image-20220609234326112" /></p>
-
-<p>按 Gitee 仓库信息配置：</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521104752973.png" alt="image-20210521110641031" /></p>
-
-<blockquote>
-  <ul>
-    <li>customPath 选择 default ，则实际的 path 值为 linux</li>
-    <li>customPath 选择年，则实际的 path 值为 linux/2021</li>
-    <li>customPath 选择年季，则实际的 path 值为 linux/2021/summer</li>
-    <li>customPath 选择年月，则实际的 path 值为 linux/2021/02</li>
-  </ul>
-</blockquote>
-
-<h5 id="4图片上传">4、图片上传</h5>
-
-<p>上传区选择 GitHub 或 Gitee，文件会上传至仓库 linux 文件夹下，上传后可在相册下查看和删除（远程仓库也会同步删除）。</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521110641031.png" alt="image-20210521104752973" /></p>
-
-<h5 id="5结合-typora-使用">5、结合 Typora 使用</h5>
-
-<p>在文件 -&gt; 偏好设置 -&gt; 图像设置下配置上传服务设定：</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521112728115.png" alt="image-20210521112858130" /></p>
-
-<p>点击验证图片上传选项，上传成功。</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521112858130.png" alt="image-20210521103849517" /></p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521103849517.png" alt="image-20210521112728115" /></p>
-
-<p>对于 md 文件内的本地或其它外链图片，也可单独或者上传全部图片到远程仓库中。</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/2021-05-21_11-35-49.png" alt="2021-05-21_11-35-49" /></p>
-
-<p>慎用上传所有本地图片，图片较多时会打乱图片在文章中的位置，应该是 Typora 的 bug</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521140022177.png" alt="image-20210521140022177" /></p>]]></content><author><name>Nine</name></author><category term="GitHub" /><summary type="html"><![CDATA[GitHub/Gitee 作为图床介绍]]></summary></entry><entry><title type="html">Oracle 11g 修改字符集</title><link href="https://blog.nine.gt.tc/2021/02/03/change-oracle-characterset/" rel="alternate" type="text/html" title="Oracle 11g 修改字符集" /><published>2021-02-03T00:00:00+08:00</published><updated>2021-02-03T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/02/03/change-oracle-characterset</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/02/03/change-oracle-characterset/"><![CDATA[<p>选择静默安装的安装字符集为默认的 ZHS16GBK，修改后的字符集为 AL32UTF8</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 登录 Oracle</span>
-sqlplus / as sysdba
-
-<span class="c"># 关闭数据库，修改字符集</span>
-SQL&gt; shutdown immediate<span class="p">;</span>
-SQL&gt; STARTUP MOUNT<span class="p">;</span>
-SQL&gt; ALTER SESSION SET <span class="nv">SQL_TRACE</span><span class="o">=</span>TRUE<span class="p">;</span>
-SQL&gt; ALTER SYSTEM ENABLE RESTRICTED SESSION<span class="p">;</span>
-SQL&gt; ALTER SYSTEM SET <span class="nv">JOB_QUEUE_PROCESSES</span><span class="o">=</span>0<span class="p">;</span>
-SQL&gt; ALTER SYSTEM SET <span class="nv">AQ_TM_PROCESSES</span><span class="o">=</span>0<span class="p">;</span>
-SQL&gt; ALTER DATABASE OPEN<span class="p">;</span>
-SQL&gt; ALTER DATABASE character <span class="nb">set </span>INTERNAL_USE AL32UTF8<span class="p">;</span>
-SQL&gt; ALTER SESSION SET <span class="nv">SQL_TRACE</span><span class="o">=</span>FALSE<span class="p">;</span>
-SQL&gt; shutdown immediate<span class="p">;</span>
-SQL&gt; startup<span class="p">;</span>
-
-<span class="c"># 查看当前字符集</span>
-SQL&gt; <span class="k">select </span>userenv<span class="o">(</span><span class="s1">'language'</span><span class="o">)</span> from dual<span class="p">;</span>
- 
-USERENV<span class="o">(</span><span class="s1">'LANGUAGE'</span><span class="o">)</span>
-<span class="nt">----------------------------------------------------</span>
-AMERICAN_AMERICA.AL32UTF8
- 
-<span class="c"># 查看变更记录</span>
-SQL&gt; SELECT parameter, value FROM v<span class="nv">$nls_parameters</span> WHERE parameter LIKE <span class="s1">'%CHARACTERSET'</span><span class="p">;</span>
- 
-PARAMETER
-<span class="nt">----------------------------------------------------------------</span>
-VALUE
-<span class="nt">----------------------------------------------------------------</span>
-NLS_CHARACTERSET
-AL32UTF8
- 
-NLS_NCHAR_CHARACTERSET
-AL16UTF16
-</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="DB" /><summary type="html"><![CDATA[字符集的修改]]></summary></entry><entry><title type="html">MongoDB 的安装与使用</title><link href="https://blog.nine.gt.tc/2021/01/31/linux-install-mongodb/" rel="alternate" type="text/html" title="MongoDB 的安装与使用" /><published>2021-01-31T00:00:00+08:00</published><updated>2021-01-31T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/01/31/linux-install-mongodb</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/01/31/linux-install-mongodb/"><![CDATA[<p>MongoDB 是免费开源的跨平台 NoSQL 数据库，命名源于英文单词 humongous，意思是「巨大无比」。与关系型数据库不同，MongoDB 的数据以类似于 JSON 格式的二进制文档存储</p>
-
-<h5 id="1官方源安装">1、官方源安装</h5>
-
-<p>官方文档：<a href="https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-red-hat/">https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-red-hat/</a></p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 设置官方安装源</span>
-vim /etc/yum.repos.d/mongodb-org-4.4.repo
-
-<span class="c"># 写入以下内容</span>
-<span class="o">[</span>mongodb-org-4.4]
-<span class="nv">name</span><span class="o">=</span>MongoDB Repository
-<span class="nv">baseurl</span><span class="o">=</span>https://repo.mongodb.org/yum/redhat/<span class="nv">$releasever</span>/mongodb-org/4.4/x86_64/
-<span class="nv">gpgcheck</span><span class="o">=</span>1
-<span class="nv">enabled</span><span class="o">=</span>1
-<span class="nv">gpgkey</span><span class="o">=</span>https://www.mongodb.org/static/pgp/server-4.4.asc
-
-<span class="c"># 安装 4.4 最新稳定版</span>
-yum <span class="nb">install</span> <span class="nt">-y</span> mongodb-org
-
-<span class="c"># 安装指定版本</span>
-yum <span class="nb">install</span> <span class="nt">-y</span> mongodb-org-4.4.13
-
-<span class="c"># 启动MongoDB</span>
-systemctl start mongod
-
-<span class="c"># 设置开机自启</span>
-systemctl <span class="nb">enable </span>mongod
-</code></pre></div></div>
-
-<table>
-  <thead>
-    <tr>
-      <th>包名</th>
-      <th style="text-align: left">描述</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>mongodb-org</td>
-      <td style="text-align: left">一个将自动安装以下四个组件包的组合包</td>
-    </tr>
-    <tr>
-      <td>mongodb-org-server</td>
-      <td style="text-align: left">包含mongod守护程序，关联的init脚本和配置文件（/etc/mongod.conf）。您可以使用初始化脚本从mongod配置文件开始</td>
-    </tr>
-    <tr>
-      <td>mongodb-org-mongos</td>
-      <td style="text-align: left">包含mongos守护进程</td>
-    </tr>
-    <tr>
-      <td>mongodb-org-shell</td>
-      <td style="text-align: left">包含mongoshell</td>
-    </tr>
-    <tr>
-      <td>mongodb-org-tools</td>
-      <td style="text-align: left">包含以下的MongoDB工具：mongoimport bsondump, mongodump, mongoexport, mongofiles, mongorestore, mongostat, 和 mongotop</td>
-    </tr>
-  </tbody>
-</table>
-
-<h5 id="2修改配置">2、修改配置</h5>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 连接</span>
-mongo localhost:27017
-
-<span class="c"># 进入 admin 数据库</span>
-use admin
-
-<span class="c"># 创建root用户</span>
-db.createUser<span class="o">({</span> user: <span class="s2">"root"</span>, <span class="nb">pwd</span>: <span class="s2">"db123456"</span>, roles: <span class="o">[{</span> role: <span class="s2">"userAdminAnyDatabase"</span>, db: <span class="s2">"admin"</span> <span class="o">}]</span> <span class="o">})</span>
-
-<span class="c"># 测试密码</span>
-db.auth<span class="o">(</span><span class="s1">'root'</span>,<span class="s1">'db123456'</span><span class="o">)</span>
-</code></pre></div></div>
-
-<p>修改配置文件：<code class="language-plaintext highlighter-rouge">vim /etc/mongod.conf</code></p>
-
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 开启密码验证</span>
-<span class="na">security</span><span class="pi">:</span>
-  <span class="na">authorization</span><span class="pi">:</span> <span class="s">enabled</span>
-
-<span class="c1"># 修改默认端口，仅允许本机IP进行连接</span>
-<span class="na">net</span><span class="pi">:</span>
-  <span class="na">port</span><span class="pi">:</span> <span class="m">27027</span>
-  <span class="na">bindIp</span><span class="pi">:</span> <span class="s">127.0.0.1,192.168.159.138</span>
-</code></pre></div></div>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 重启服务</span>
-systemctl restart mongod
-
-<span class="c"># 登录测试</span>
-mongo <span class="nt">-uroot</span> 192.168.159.138:27027/admin <span class="nt">-p</span>
-
-<span class="c"># 用户查询</span>
-db.system.users.find<span class="o">()</span>
-
-<span class="c"># 创建数据库</span>
-use <span class="nb">test</span>
-
-<span class="c">## 创建 sr_db 数据库的用户</span>
-db.createUser<span class="o">({</span> user: <span class="s2">"db_user"</span>, <span class="nb">pwd</span>: <span class="s2">"db123456"</span>, roles: <span class="o">[{</span> role: <span class="s2">"readWrite"</span>, db: <span class="s2">"test_db"</span> <span class="o">}]</span> <span class="o">})</span>
-
-<span class="c"># 删除用户</span>
-use <span class="nb">test
-</span>db.dropUser<span class="o">(</span><span class="s1">'test_db'</span><span class="o">)</span>
-</code></pre></div></div>
-
-<h5 id="3导入导出">3、导入导出</h5>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 备份</span>
-mongodump <span class="nt">-h</span> 192.168.159.138:27027 <span class="nt">-u</span> db_user <span class="nt">-p</span><span class="o">=</span>db123456 <span class="nt">-d</span> test_db <span class="nt">-o</span> /root/mongodb_bak/<span class="si">$(</span><span class="nb">date</span> +%Y%m%d<span class="si">)</span> <span class="nt">--authenticationDatabase</span> <span class="nb">test</span>
-
-<span class="c"># 恢复</span>
-mongorestore <span class="nt">-h</span> 192.168.159.138:27027 <span class="nt">-u</span> db_user <span class="nt">-p</span><span class="o">=</span>db123456 <span class="nt">-d</span> test_db <span class="nt">--drop</span> <span class="nt">--authenticationDatabase</span> <span class="nb">test</span> /root/sr_db/
-</code></pre></div></div>
-
-<blockquote>
-  <p>–drop 用于指定，恢复是如果对应数据库或者 colleciton 存在，则先删除然后在恢复</p>
-</blockquote>
-
-<p>定时备份脚本：<code class="language-plaintext highlighter-rouge">00 03 * * * /bin/bash /root/mongodb_bak/export_mongodb.sh &gt;&gt; /root/mongodb_bak/crontab.log 2&gt;&amp;1</code></p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
-
-<span class="nb">echo </span>start <span class="nb">export </span><span class="k">in</span> <span class="si">$(</span><span class="nb">date</span> +<span class="s1">'%F %T'</span><span class="si">)</span>
-
-<span class="c"># 导出数据库</span>
-mongodump <span class="nt">-h</span> 192.168.159.138:27027 <span class="nt">-u</span> db_user <span class="nt">-p</span><span class="o">=</span>db123456 <span class="nt">-d</span> test_db <span class="nt">-o</span> /root/mongodb_bak/<span class="si">$(</span><span class="nb">date</span> +%Y%m%d<span class="si">)</span> <span class="nt">--authenticationDatabase</span> <span class="nb">test</span>
-
-<span class="c"># 删除 30 天前的目录</span>
-find /root/mongodb_bak <span class="nt">-mindepth</span> 1 <span class="nt">-maxdepth</span> 1 <span class="nt">-type</span> d <span class="nt">-mtime</span> +30 <span class="nt">-exec</span> <span class="nb">rm</span> <span class="nt">-rfv</span> <span class="o">{}</span> <span class="se">\;</span>
-
-<span class="nb">echo </span>end <span class="nb">export </span><span class="k">in</span> <span class="si">$(</span><span class="nb">date</span> +<span class="s1">'%F %T'</span><span class="si">)</span>
-</code></pre></div></div>
-
-<h5 id="4登录报错">4、登录报错</h5>
-
-<p>输入正确的密码后无法登录，报错如下</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220607235645573.png" alt="image-20220607235645573" /></p>
-
-<p>这是因为 SELinux 当前为<code class="language-plaintext highlighter-rouge">enforcing</code>模式，可改为<code class="language-plaintext highlighter-rouge">disabled</code>后重启服务器即可：<code class="language-plaintext highlighter-rouge">vim /etc/selinux/config</code></p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220608000038638.png" alt="image-20220608000038638" /></p>
-
-<p>或者采用官网文档进行配置</p>
-
-<p><a href="https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-red-hat/#configure-selinux">https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-red-hat/#configure-selinux</a></p>]]></content><author><name>Nine</name></author><category term="DB" /><summary type="html"><![CDATA[MongoDB 的安装与简单配置]]></summary></entry></feed>
+<p>镜像使用版本参考：<a href="https://pages.github.com/versions.json">Github Pages 运行环境</a></p>]]></content><author><name>Nine</name></author><category term="Jekyll" /><summary type="html"><![CDATA[本地运行 Jekyll 博客，方便调试]]></summary></entry></feed>

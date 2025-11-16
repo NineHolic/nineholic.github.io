@@ -107,15 +107,15 @@
     } ,
   
     {
-      "title"    : "Windows 下安装配置 Node.js",
+      "title"    : "Node.js 的安装与使用",
       "category" : "Node.js",
       
-      "url"      : "https://blog.nine.gt.tc/2020/02/22/windows-configure-nodejs/",
-      "keywords" : "Windows, Node.js"
+      "url"      : "https://blog.nine.gt.tc/2020/02/22/linux-install-nodejs/",
+      "keywords" : "Node.js, Linux, Windows"
     } ,
   
     {
-      "title"    : "Linux 下安装 Java",
+      "title"    : "Java 的安装与使用",
       "category" : "Java",
       
       "url"      : "https://blog.nine.gt.tc/2020/03/09/linux-install-java/",
@@ -124,10 +124,10 @@
   
     {
       "title"    : "Oracle 的安装与使用",
-      "category" : "DB",
+      "category" : "Oracle",
       
       "url"      : "https://blog.nine.gt.tc/2020/03/18/linux-install-oracle11/",
-      "keywords" : "Oracle, Linux, Centos"
+      "keywords" : "Oracle, Linux, Centos, DB"
     } ,
   
     {
@@ -140,34 +140,34 @@
   
     {
       "title"    : "Redis 的安装与使用",
-      "category" : "DB",
+      "category" : "Redis",
       
-      "url"      : "https://blog.nine.gt.tc/2020/07/08/centos-install-redis/",
-      "keywords" : "Redis, Linux, Centos"
+      "url"      : "https://blog.nine.gt.tc/2020/07/08/linux-install-redis/",
+      "keywords" : "Redis, Linux, Centos, DB"
     } ,
   
     {
-      "title"    : "Windows 上使用 OpenSSH 服务",
-      "category" : "OpenSSH",
+      "title"    : "OpenSSH 在 Windows 上的使用",
+      "category" : "Windows",
       
       "url"      : "https://blog.nine.gt.tc/2020/11/21/windows-install-openssh/",
-      "keywords" : "Windows, OpenSSH"
+      "keywords" : "OpenSSH, Windows"
     } ,
   
     {
       "title"    : "MongoDB 的安装与使用",
-      "category" : "DB",
+      "category" : "MongoDB",
       
       "url"      : "https://blog.nine.gt.tc/2021/01/31/linux-install-mongodb/",
-      "keywords" : "MongoDB, Linux, Centos"
+      "keywords" : "MongoDB, Linux, Centos, DB"
     } ,
   
     {
       "title"    : "Oracle 11g 修改字符集",
-      "category" : "DB",
+      "category" : "Oracle",
       
       "url"      : "https://blog.nine.gt.tc/2021/02/03/change-oracle-characterset/",
-      "keywords" : "Oracle, Linux, Centos"
+      "keywords" : "Oracle, Linux, Centos, DB"
     } ,
   
     {
@@ -180,42 +180,42 @@
   
     {
       "title"    : "Docker 本地部署 Jekyll 静态博客",
-      "category" : "Docker",
+      "category" : "Jekyll",
       
       "url"      : "https://blog.nine.gt.tc/2021/05/18/blog-with-jekyll/",
-      "keywords" : "Jekyll, Docker, Blog"
+      "keywords" : "Jekyll, Docker, Linux, Centos, Blog"
     } ,
   
     {
-      "title"    : "Centos7 升级 OpenSSH",
-      "category" : "OpenSSH",
+      "title"    : "Centos7 下升级 OpenSSH",
+      "category" : "Linux",
       
       "url"      : "https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh/",
-      "keywords" : "Linux, Centos, OpenSSH"
+      "keywords" : "OpenSSH, Linux, Centos"
     } ,
   
     {
       "title"    : "MySQL 的安装与使用",
-      "category" : "DB",
+      "category" : "MySQL",
       
       "url"      : "https://blog.nine.gt.tc/2021/10/17/linux-install-mysql/",
-      "keywords" : "MySQL, Linux, Centos"
+      "keywords" : "MySQL, Linux, Centos, DB"
     } ,
   
     {
-      "title"    : "Centos7 安装 Elasticsearch",
+      "title"    : "Elasticsearch 的安装与使用",
       "category" : "Elasticsearch",
       
-      "url"      : "https://blog.nine.gt.tc/2021/11/17/centos7-install-elasticsearch/",
+      "url"      : "https://blog.nine.gt.tc/2021/11/17/linux-install-elasticsearch/",
       "keywords" : "Elasticsearch, Linux, Centos"
     } ,
   
     {
-      "title"    : "Centos7 下安装配置 Gitlab",
+      "title"    : "Gitlab 的安装与使用",
       "category" : "Gitlab",
       
-      "url"      : "https://blog.nine.gt.tc/2021/12/30/centos7-install-gitlab/",
-      "keywords" : "Linux, Centos, Gitlab"
+      "url"      : "https://blog.nine.gt.tc/2021/12/30/linux-install-gitlab/",
+      "keywords" : "Gitlab, Linux, Centos"
     } ,
   
     {
@@ -223,7 +223,23 @@
       "category" : "Nginx",
       
       "url"      : "https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail/",
-      "keywords" : "Linux, Centos, Nginx"
+      "keywords" : "Nginx"
+    } ,
+  
+    {
+      "title"    : "PostgreSQL 的安装与使用",
+      "category" : "PostgreSQL",
+      
+      "url"      : "https://blog.nine.gt.tc/2022/12/13/linux-install-postgresql/",
+      "keywords" : "PostgreSQL, Linux, Centos, DB"
+    } ,
+  
+    {
+      "title"    : "Docker 的安装与使用",
+      "category" : "Docker",
+      
+      "url"      : "https://blog.nine.gt.tc/2023/07/09/linux-install-docker/",
+      "keywords" : "Docker, Linux, Centos, Ubuntu"
     } ,
   
     {
@@ -232,6 +248,14 @@
       
       "url"      : "https://blog.nine.gt.tc/2024/03/12/termux-with-android/",
       "keywords" : "Android, Termux"
+    } ,
+  
+    {
+      "title"    : "Confluence 的安装与使用",
+      "category" : "Confluence",
+      
+      "url"      : "https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/",
+      "keywords" : "Confluence, Linux"
     } ,
   
     {
