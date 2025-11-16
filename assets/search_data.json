@@ -99,7 +99,7 @@
 
   
     {
-      "title"    : "Linux 下安装 Git",
+      "title"    : "Git 的安装与使用",
       "category" : "Git",
       
       "url"      : "https://blog.nine.gt.tc/2020/02/22/linux-git-install/",
@@ -123,10 +123,10 @@
     } ,
   
     {
-      "title"    : "Centos7 下静默安装 Oracle 11g",
-      "category" : "Oracle",
+      "title"    : "Oracle 的安装与使用",
+      "category" : "DB",
       
-      "url"      : "https://blog.nine.gt.tc/2020/03/18/oracle11g-silent-install/",
+      "url"      : "https://blog.nine.gt.tc/2020/03/18/linux-install-oracle11/",
       "keywords" : "Oracle, Linux, Centos"
     } ,
   
@@ -139,11 +139,11 @@
     } ,
   
     {
-      "title"    : "Linux 下安装 Redis",
-      "category" : "Redis",
+      "title"    : "Redis 的安装与使用",
+      "category" : "DB",
       
       "url"      : "https://blog.nine.gt.tc/2020/07/08/centos-install-redis/",
-      "keywords" : "Linux, Redis"
+      "keywords" : "Redis, Linux, Centos"
     } ,
   
     {
@@ -155,11 +155,19 @@
     } ,
   
     {
-      "title"    : "Centos7 下安装配置 MongoDB",
-      "category" : "MongoDB",
+      "title"    : "MongoDB 的安装与使用",
+      "category" : "DB",
       
-      "url"      : "https://blog.nine.gt.tc/2021/01/31/centos7-install-mongodb/",
-      "keywords" : "Linux, Centos, MongoDB"
+      "url"      : "https://blog.nine.gt.tc/2021/01/31/linux-install-mongodb/",
+      "keywords" : "MongoDB, Linux, Centos"
+    } ,
+  
+    {
+      "title"    : "Oracle 11g 修改字符集",
+      "category" : "DB",
+      
+      "url"      : "https://blog.nine.gt.tc/2021/02/03/change-oracle-characterset/",
+      "keywords" : "Oracle, Linux, Centos"
     } ,
   
     {

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://blog.nine.gt.tc/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.nine.gt.tc/" rel="alternate" type="text/html" /><updated>2025-11-10T22:48:06+08:00</updated><id>https://blog.nine.gt.tc/feed.xml</id><title type="html">Nine</title><subtitle>blog</subtitle><author><name>Nine</name></author><entry><title type="html">Termux 的简单使用</title><link href="https://blog.nine.gt.tc/2024/03/12/termux-with-android/" rel="alternate" type="text/html" title="Termux 的简单使用" /><published>2024-03-12T00:00:00+08:00</published><updated>2024-03-12T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2024/03/12/termux-with-android</id><content type="html" xml:base="https://blog.nine.gt.tc/2024/03/12/termux-with-android/"><![CDATA[<p>Termux 是一个 Android 下一个高级的终端模拟器，开源且不需要 root，支持 apt 管理软件包，十分方便安装软件包，完美支持 Python、 PHP、 Ruby、 Nodejs、 MySQL 等。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://blog.nine.gt.tc/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.nine.gt.tc/" rel="alternate" type="text/html" /><updated>2025-11-16T14:07:16+08:00</updated><id>https://blog.nine.gt.tc/feed.xml</id><title type="html">Nine</title><subtitle>blog</subtitle><author><name>Nine</name></author><entry><title type="html">Termux 的简单使用</title><link href="https://blog.nine.gt.tc/2024/03/12/termux-with-android/" rel="alternate" type="text/html" title="Termux 的简单使用" /><published>2024-03-12T00:00:00+08:00</published><updated>2024-03-12T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2024/03/12/termux-with-android</id><content type="html" xml:base="https://blog.nine.gt.tc/2024/03/12/termux-with-android/"><![CDATA[<p>Termux 是一个 Android 下一个高级的终端模拟器，开源且不需要 root，支持 apt 管理软件包，十分方便安装软件包，完美支持 Python、 PHP、 Ruby、 Nodejs、 MySQL 等。</p>
 
 <p>首次启动 Termux 时需要从<a href="http://termux.net/bootstrap/">远程服务器</a>加载数据，可能会遇到以下报错，可尝试使用代理或流量再重试：</p>
 
@@ -962,7 +962,44 @@ firewall-cmd <span class="nt">--reload</span>
 
 <p>慎用上传所有本地图片，图片较多时会打乱图片在文章中的位置，应该是 Typora 的 bug</p>
 
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521140022177.png" alt="image-20210521140022177" /></p>]]></content><author><name>Nine</name></author><category term="GitHub" /><summary type="html"><![CDATA[GitHub/Gitee 作为图床介绍]]></summary></entry><entry><title type="html">Centos7 下安装配置 MongoDB</title><link href="https://blog.nine.gt.tc/2021/01/31/centos7-install-mongodb/" rel="alternate" type="text/html" title="Centos7 下安装配置 MongoDB" /><published>2021-01-31T00:00:00+08:00</published><updated>2021-01-31T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/01/31/centos7-install-mongodb</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/01/31/centos7-install-mongodb/"><![CDATA[<p>MongoDB 是免费开源的跨平台 NoSQL 数据库，命名源于英文单词 humongous，意思是「巨大无比」。与关系型数据库不同，MongoDB 的数据以类似于 JSON 格式的二进制文档存储</p>
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20210521140022177.png" alt="image-20210521140022177" /></p>]]></content><author><name>Nine</name></author><category term="GitHub" /><summary type="html"><![CDATA[GitHub/Gitee 作为图床介绍]]></summary></entry><entry><title type="html">Oracle 11g 修改字符集</title><link href="https://blog.nine.gt.tc/2021/02/03/change-oracle-characterset/" rel="alternate" type="text/html" title="Oracle 11g 修改字符集" /><published>2021-02-03T00:00:00+08:00</published><updated>2021-02-03T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/02/03/change-oracle-characterset</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/02/03/change-oracle-characterset/"><![CDATA[<p>选择静默安装的安装字符集为默认的 ZHS16GBK，修改后的字符集为 AL32UTF8</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 登录 Oracle</span>
+sqlplus / as sysdba
+
+<span class="c"># 关闭数据库，修改字符集</span>
+SQL&gt; shutdown immediate<span class="p">;</span>
+SQL&gt; STARTUP MOUNT<span class="p">;</span>
+SQL&gt; ALTER SESSION SET <span class="nv">SQL_TRACE</span><span class="o">=</span>TRUE<span class="p">;</span>
+SQL&gt; ALTER SYSTEM ENABLE RESTRICTED SESSION<span class="p">;</span>
+SQL&gt; ALTER SYSTEM SET <span class="nv">JOB_QUEUE_PROCESSES</span><span class="o">=</span>0<span class="p">;</span>
+SQL&gt; ALTER SYSTEM SET <span class="nv">AQ_TM_PROCESSES</span><span class="o">=</span>0<span class="p">;</span>
+SQL&gt; ALTER DATABASE OPEN<span class="p">;</span>
+SQL&gt; ALTER DATABASE character <span class="nb">set </span>INTERNAL_USE AL32UTF8<span class="p">;</span>
+SQL&gt; ALTER SESSION SET <span class="nv">SQL_TRACE</span><span class="o">=</span>FALSE<span class="p">;</span>
+SQL&gt; shutdown immediate<span class="p">;</span>
+SQL&gt; startup<span class="p">;</span>
+
+<span class="c"># 查看当前字符集</span>
+SQL&gt; <span class="k">select </span>userenv<span class="o">(</span><span class="s1">'language'</span><span class="o">)</span> from dual<span class="p">;</span>
+ 
+USERENV<span class="o">(</span><span class="s1">'LANGUAGE'</span><span class="o">)</span>
+<span class="nt">----------------------------------------------------</span>
+AMERICAN_AMERICA.AL32UTF8
+ 
+<span class="c"># 查看变更记录</span>
+SQL&gt; SELECT parameter, value FROM v<span class="nv">$nls_parameters</span> WHERE parameter LIKE <span class="s1">'%CHARACTERSET'</span><span class="p">;</span>
+ 
+PARAMETER
+<span class="nt">----------------------------------------------------------------</span>
+VALUE
+<span class="nt">----------------------------------------------------------------</span>
+NLS_CHARACTERSET
+AL32UTF8
+ 
+NLS_NCHAR_CHARACTERSET
+AL16UTF16
+</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="DB" /><summary type="html"><![CDATA[字符集的修改]]></summary></entry><entry><title type="html">MongoDB 的安装与使用</title><link href="https://blog.nine.gt.tc/2021/01/31/linux-install-mongodb/" rel="alternate" type="text/html" title="MongoDB 的安装与使用" /><published>2021-01-31T00:00:00+08:00</published><updated>2021-01-31T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/01/31/linux-install-mongodb</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/01/31/linux-install-mongodb/"><![CDATA[<p>MongoDB 是免费开源的跨平台 NoSQL 数据库，命名源于英文单词 humongous，意思是「巨大无比」。与关系型数据库不同，MongoDB 的数据以类似于 JSON 格式的二进制文档存储</p>
 
 <h5 id="1官方源安装">1、官方源安装</h5>
 
@@ -1110,103 +1147,4 @@ find /root/mongodb_bak <span class="nt">-mindepth</span> 1 <span class="nt">-max
 
 <p>或者采用官网文档进行配置</p>
 
-<p><a href="https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-red-hat/#configure-selinux">https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-red-hat/#configure-selinux</a></p>]]></content><author><name>Nine</name></author><category term="MongoDB" /><summary type="html"><![CDATA[MongoDB 的安装与简单配置]]></summary></entry><entry><title type="html">Windows 上使用 OpenSSH 服务</title><link href="https://blog.nine.gt.tc/2020/11/21/windows-install-openssh/" rel="alternate" type="text/html" title="Windows 上使用 OpenSSH 服务" /><published>2020-11-21T00:00:00+08:00</published><updated>2020-11-21T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2020/11/21/windows-install-openssh</id><content type="html" xml:base="https://blog.nine.gt.tc/2020/11/21/windows-install-openssh/"><![CDATA[<p>在 Windows 上配置使用 OpenSSH 服务</p>
-
-<h5 id="1openssh-简介">1、OpenSSH 简介</h5>
-
-<p>OpenSSH 是安全 Shell (SSH) 工具的开放源代码版本，Linux 及其他非 Windows 系统的管理员使用此类工具跨平台管理远程系统。SSH 基于客户端-服务器体系结构，用户在其中工作的系统是客户端，所管理的远程系统是服务器。 OpenSSH 包含一系列组件和工具，用于提供一种安全且简单的远程系统管理方法，其中包括：</p>
-
-<ul>
-  <li>sshd.exe，它是远程所管理的系统上必须运行的 SSH 服务器组件</li>
-  <li>ssh.exe，它是在用户的本地系统上运行的 SSH 客户端组件</li>
-  <li>ssh-keygen.exe，为 SSH 生成、管理和转换身份验证密钥</li>
-  <li>ssh-agent.exe，存储用于公钥身份验证的私钥</li>
-  <li>ssh-add.exe，将私钥添加到服务器允许的列表中</li>
-  <li>ssh-keyscan.exe，帮助从许多主机收集公用 SSH 主机密钥</li>
-  <li>sftp.exe，这是提供安全文件传输协议的服务，通过 SSH 运行</li>
-  <li>scp.exe 是在 SSH 上运行的文件复制实用工具</li>
-</ul>
-
-<p>从 Windows 10 1809 和 Windows Server 2019 开始 Windows 开始支持 OpenSSH Server，其它版本需要额外安装</p>
-
-<h5 id="2下载-openssh">2、下载 OpenSSH</h5>
-
-<p>本机为 windows 2016，根据不同的系统下载不同的压缩包，如果是 64 位系统，选择 32 位也可以：<a href="https://github.com/PowerShell/Win32-OpenSSH/releases">https://github.com/PowerShell/Win32-OpenSSH/releases</a>，解压到 C:\Program Files 目录下，重命名为 OpenSSH，将 OpenSSH 目录加入 PATH 系统环境变量中：</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201112161638698.png" alt="image-20201112161638698" /></p>
-
-<h5 id="3安装-openssh">3、安装 OpenSSH</h5>
-
-<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 使用管理员运行命令提示符在本 OpenSSH 目录下安装服务</span><span class="w">
-</span><span class="n">powershell.exe</span><span class="w"> </span><span class="nt">-ExecutionPolicy</span><span class="w"> </span><span class="nx">Bypass</span><span class="w"> </span><span class="nt">-File</span><span class="w"> </span><span class="nx">install-sshd.ps1</span><span class="w">
-
-</span><span class="c"># 在防火墙入站规则中开放 22333 端口或执行以下命令，服务器安全组开放 22333 端口</span><span class="w">
-</span><span class="n">netsh</span><span class="w"> </span><span class="nx">advfirewall</span><span class="w"> </span><span class="nx">firewall</span><span class="w"> </span><span class="nx">add</span><span class="w"> </span><span class="nx">rule</span><span class="w"> </span><span class="nx">name</span><span class="o">=</span><span class="n">sshd</span><span class="w"> </span><span class="nx">dir</span><span class="o">=</span><span class="kr">in</span><span class="w"> </span><span class="n">action</span><span class="o">=</span><span class="n">allow</span><span class="w"> </span><span class="nx">protocol</span><span class="o">=</span><span class="n">TCP</span><span class="w"> </span><span class="nx">localport</span><span class="o">=</span><span class="mi">22333</span><span class="w">
-
-</span><span class="c"># 启动 ssh 服务，会在 C:\ProgramData\ 下生成 ssh 目录</span><span class="w">
-</span><span class="n">net</span><span class="w"> </span><span class="nx">start</span><span class="w"> </span><span class="nx">sshd</span><span class="w">
-
-</span><span class="c"># 修改 C:\ProgramData\ssh\sshd_config 文件默认端口号为 22333 后重启 ssh 服务</span><span class="w">
-</span><span class="n">net</span><span class="w"> </span><span class="nx">stop</span><span class="w"> </span><span class="nx">sshd</span><span class="w">
-</span><span class="n">net</span><span class="w"> </span><span class="nx">start</span><span class="w"> </span><span class="nx">sshd</span><span class="w">
-
-</span><span class="c"># 配置开机自启 sshd 服务</span><span class="w">
-</span><span class="n">sc</span><span class="w"> </span><span class="nx">config</span><span class="w"> </span><span class="nx">sshd</span><span class="w"> </span><span class="nx">start</span><span class="o">=</span><span class="w"> </span><span class="n">auto</span><span class="w">
-</span></code></pre></div></div>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201112175015594.png" alt="image-20201112174718680" /></p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201112174718680.png" alt="image-20201116152208341" /></p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116152208341.png" alt="image-20201112174851796" /></p>
-
-<h5 id="4测试连接">4、测试连接</h5>
-
-<p>ssh 连接成功，默认会进入 windows 的命令行下（cmd）</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116153601121.png" alt="image-20201112175015594" /></p>
-
-<p>可以把默认的 shell 设置为 PowerShell，以管理员运行 PowerShell 执行：</p>
-
-<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">New-ItemProperty</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="s2">"HKLM:\SOFTWARE\OpenSSH"</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">DefaultShell</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="s2">"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe"</span><span class="w"> </span><span class="nt">-PropertyType</span><span class="w"> </span><span class="nx">String</span><span class="w"> </span><span class="nt">-Force</span><span class="w">
-</span></code></pre></div></div>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116154738862.png" alt="image-20201116153601121" /></p>
-
-<p>执行后会在注册表<code class="language-plaintext highlighter-rouge">HKEY_LOCAL_MACHINE\SOFTWARE\OpenSSH</code>下添加一条 DefaultShell 字符串值，删除后恢复为原来默认 shell，下次登陆时会进入 PowerShell 下</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116155055181.png" alt="image-20201116155055181" /></p>
-
-<p>也可使用 Xshell、FlashFXP 等工具进行连接，传输文件时比远程桌面直接复制更方便</p>
-
-<h5 id="5配置ssh免密登录">5、配置ssh免密登录</h5>
-
-<p>1)、生成SSH密钥</p>
-
-<p>默认加密方式为dsa，使用参数 -t 指定 rsa 加密方式先在本地生成秘钥</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201113154858419.png" alt="image-20201113154858419" /></p>
-
-<p>2)、将公钥上传到服务器.ssh目录下</p>
-
-<p>PowerShell 中没有 ssh-copy-id 命令，手动将本地的 .ssh 目录上传到 windows 服务器用户目录下（避免文件权限问题），删除id_rsa 和 known_hosts 并将 id_rsa.pub 重命名为 authorized_keys</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116155609812.png" alt="image-20201116155609812" /></p>
-
-<p>3)、修改 ssh 服务的配置文件</p>
-
-<p>修改服务器 C:\ProgramData\ssh 目录下的 sshd_config 文件，注释最后两行内容</p>
-
-<p>若有安全级别较高可以将 PasswordAuthentication 改成 no（不允许密码登录，只能通过秘钥登录）：</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Match Group administrators
-#       AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys
-</code></pre></div></div>
-
-<p>重启 sshd、sshd-agent 服务，并将启动类型改为自动</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116161117405.png" alt="image-20201116161117405" /></p>
-
-<p>使用 Xshell 测试</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/win/image-20201116161237093.png" alt="image-20201116161237093" /></p>]]></content><author><name>Nine</name></author><category term="OpenSSH" /><summary type="html"><![CDATA[OpenSSH 在 Windows 上的使用]]></summary></entry></feed>
+<p><a href="https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-red-hat/#configure-selinux">https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-red-hat/#configure-selinux</a></p>]]></content><author><name>Nine</name></author><category term="DB" /><summary type="html"><![CDATA[MongoDB 的安装与简单配置]]></summary></entry></feed>
