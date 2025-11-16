@@ -1,9 +1,15 @@
 ---
 layout: post
-title: Linux 下安装 Redis
-categories: Redis
-description: Linux 下 Redis 的安装以及配置开机自启
-keywords: Linux, Redis
+title: Redis 的安装与使用
+categories: [DB]
+description: Redis 的安装与使用
+keywords: Redis, Linux, Centos
+mermaid: false
+sequence: false
+flow: false
+mathjax: false
+mindmap: false
+mindmap2: false
 ---
 
 Linux 下编译安装 Redis 以及使用脚本安装

@@ -1,23 +1,27 @@
 ---
 layout: post
-title: Linux 下安装 Git 
-categories: Git
-description: Linux 下 git 的安装
+title: Git 的安装与使用
+categories: [Git]
+description: Git 的安装与使用
 keywords: Git, Linux
+mermaid: false
+sequence: false
+flow: false
+mathjax: false
+mindmap: false
+mindmap2: false
 ---
 
-Linux 下编译安装 git 以及使用脚本安装
+以 yum 安装的 git 版本较旧，这里使用源码编译的方式安装 git
 
-#### 一、脚本安装
+##### 1、脚本安装
 
 ```bash
 # 脚本安装 2.45.0 版本
 curl -sSL https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/_posts/files/shell/install_git.sh | bash
 ```
 
-#### 二、手动安装
-
-##### 1、安装依赖
+##### 2、手动安装
 
 ```shell
 # Centos/RedHat
@@ -28,14 +32,11 @@ yum -y remove git
 
 # Debian/Ubuntu
 apt-get -y install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev make wget
-```
 
-##### 2、编译安装
-
-源码地址：[https://mirrors.edge.kernel.org/pub/software/scm/git/](https://mirrors.edge.kernel.org/pub/software/scm/git/)
-
-```shell
 # 下载源码
+wget https://github.com/git/git/archive/refs/tags/v2.45.0.tar.gz
+
+# 镜像地址
 wget https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.45.0.tar.gz
 
 # 解压
@@ -45,11 +46,7 @@ tar -zxvf git-2.45.0.tar.gz && cd git-2.45.0
 make configure
 ./configure --prefix=/usr/local/git
 make -j2 all && make -j2 install
-```
 
-##### 3、配置环境
-
-```shell
 # 添加软连接
 ln -s /usr/local/git/bin/git /usr/bin/git
 

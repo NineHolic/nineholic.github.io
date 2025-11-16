@@ -1,9 +1,15 @@
 ---
 layout: post
-title: Centos7 下安装配置 MongoDB
-categories: MongoDB
+title: MongoDB 的安装与使用
+categories: [DB]
 description: MongoDB 的安装与简单配置
-keywords: Linux, Centos, MongoDB
+keywords: MongoDB, Linux, Centos
+mermaid: false
+sequence: false
+flow: false
+mathjax: false
+mindmap: false
+mindmap2: false
 ---
 
 MongoDB 是免费开源的跨平台 NoSQL 数据库，命名源于英文单词 humongous，意思是「巨大无比」。与关系型数据库不同，MongoDB 的数据以类似于 JSON 格式的二进制文档存储
