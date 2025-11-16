@@ -1,10 +1,16 @@
 ---
 layout: post
 title: Docker 本地部署 Jekyll 静态博客
-categories: Docker
+categories: [Jekyll]
 description: 本地运行 Jekyll 博客，方便调试
-keywords: Jekyll, Docker, Blog
+keywords: Jekyll, Docker, Linux, Centos, Blog
 topmost: true
+mermaid: false
+sequence: false
+flow: false
+mathjax: false
+mindmap: false
+mindmap2: false
 ---
 
 使用 Docker 本地部署 Jekyll 项目，可供服务器上搭建个人博客、本地实时预览调试代码。
@@ -15,13 +21,13 @@ git clone https://github.com/NineHolic/nineholic.github.io
 cd nineholic.github.io
 
 # 构建镜像
-docker build -t nine_blog:20241031 .
+docker build -t Blog:v1 .
 
 # 查看镜像
 docker images
 
 # 使用宿主机端口启动容器，并在修改源文件时自动重新构建
-docker run --network host --name blog -v $(pwd):/blog nine_blog:20241031 bash -c "jekyll serve -w --host=192.168.216.128"
+docker run --network host --name blog -v $(pwd):/blog Blog:v1 bash -c "jekyll serve -w --host=192.168.216.128"
 
 # 开放端口
 firewall-cmd --zone=public --permanent --add-port=4000/tcp

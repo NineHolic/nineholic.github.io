@@ -12,7 +12,7 @@ mindmap: false
 mindmap2: false
 ---
 
-以 yum 安装的 git 版本较旧，这里使用源码编译的方式安装 git
+以 yum 安装的 git 版本较旧，这里使用源码编译的方式安装 git。
 
 ##### 1、脚本安装
 

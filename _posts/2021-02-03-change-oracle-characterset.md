@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Oracle 11g 修改字符集
-categories: [DB]
+categories: [Oracle]
 description: 字符集的修改
-keywords: Oracle, Linux, Centos
+keywords: Oracle, Linux, Centos, DB
 mermaid: false
 sequence: false
 flow: false
@@ -12,7 +12,7 @@ mindmap: false
 mindmap2: false
 ---
 
-选择静默安装的安装字符集为默认的 ZHS16GBK，修改后的字符集为 AL32UTF8
+选择静默安装的安装字符集为默认的 ZHS16GBK，修改后的字符集为 AL32UTF8。
 
 ```bash
 # 登录 Oracle

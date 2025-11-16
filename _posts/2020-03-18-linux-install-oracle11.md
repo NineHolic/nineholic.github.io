@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Oracle 的安装与使用
-categories: [DB]
+categories: [Oracle]
 description: 初次在 linux 上安装 Oracle 11g，记录安装过程和之后补充的一些知识
-keywords: Oracle, Linux, Centos
+keywords: Oracle, Linux, Centos, DB
 mermaid: false
 sequence: false
 flow: false
@@ -12,7 +12,7 @@ mindmap: false
 mindmap2: false
 ---
 
-Centos 7 下静默安装 Oracle 11g，安装环境：Centos 7.8、JDK 1.8、Oracle 11.2.0.1
+Centos 7 下静默安装 Oracle 11g，安装环境：Centos 7.8、JDK 1.8、Oracle 11.2.0.1。
 
 #### 一、安装 Oracle
 

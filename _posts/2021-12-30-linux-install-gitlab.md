@@ -1,12 +1,18 @@
 ---
 layout: post
-title: Centos7 下安装配置 Gitlab
-categories: Gitlab
+title: Gitlab 的安装与使用
+categories: [Gitlab]
 description: Gitlab 的安装与简单配置
-keywords: Linux, Centos, Gitlab
+keywords: Gitlab, Linux, Centos
+mermaid: false
+sequence: false
+flow: false
+mathjax: false
+mindmap: false
+mindmap2: false
 ---
 
-Centos7 下 Gitlab 的安装配置与备份恢复
+Centos7 下 Gitlab 的安装配置与备份恢复。
 
 ##### 1、Gitlab 介绍
 
@@ -30,7 +36,7 @@ GitLab 能够浏览源代码，管理缺陷和注释。可以管理团队对仓�
 **gitlab-ee 和 gitlab-ce 的区别**
 关于 gitlab-ee（企业版）和 gitlab-ce（社区版），二者是基于同样的核心代码进行开发，只是 gitlab-ee 功能更强大，但需要付费使用，有 30 天试用期。但试用期过后如果不付费，它就跟 gitlab-ce 功能是完全一样的，只是需要付费的功能无法再继续使用而已。
 
-##### 2、安装 Gitlab
+##### 2、rpm 包安装
 
 安装要求：[https://docs.gitlab.com/ee/install/requirements.html](https://docs.gitlab.com/ee/install/requirements.html)
 
@@ -42,7 +48,7 @@ yum install -y curl policycoreutils-python openssh-server perl
 systemctl enable sshd
 systemctl start sshd
 
-# 将http和https加入防火墙策略，并重启防火墙。
+# 将 http 和 https 加入防火墙策略，并重启防火墙。
 systemctl start firewalld
 firewall-cmd --permanent --add-service=http
 firewall-cmd --permanent --add-service=https
@@ -79,7 +85,31 @@ systemctl start postfix
   yum install -y gitlab-ee-14.6.0
   ```
 
-##### 3、修改配置
+##### 3、docker 安装
+
+```bash
+# 拉取镜像
+docker pull gitlab/gitlab-ee:14.6.0-ee.0
+
+# 运行容器
+docker run --detach \
+--publish 22333:80 --publish 18443:443 --publish 18022:22 \
+--name gitlab \
+--restart always \
+--volume /data/gitlab/etc:/etc/gitlab \
+--volume /data/gitlab/log:/var/log/gitlab \
+--volume /data/gitlab/data:/var/opt/gitlab \
+--env GITLAB_OMNIBUS_CONFIG="external_url 'http://192.168.0.250';" \
+gitlab/gitlab-ee:14.6.0-ee.0
+
+# 查看日志
+docker logs --tail 300 -f gitlab
+
+# 默认管理员 root，查看密码，登录后修改密码（默认密码有效期只有24小时），访问服务：http://192.168.0.250:22333
+cat /data/gitlab/etc/initial_root_password
+```
+
+##### 4、修改配置
 
 修改 Gitlab 主配置文件：`vim /etc/gitlab/gitlab.rb`
 
@@ -116,17 +146,19 @@ gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = false
 
-# 关闭普罗米修斯监控（内存低时可以关闭节省资源）
+# 关闭 prometheus 监控（内存低时可以关闭节省资源）
 prometheus['enable'] = false
 prometheus['monitor_kubernetes'] = false
 ```
 
->- /etc/gitlab/gitlab.rb：主配置文件，包含外部URL、仓库目录、备份目录等
->- /etc/gitlab/gitlab-secrets.json：（执行gitlab-ctl reconfigure命令行后生成），包含各类密钥的加密信息
->- smtp 邮件服务商配置：[https://docs.gitlab.com/omnibus/settings/smtp.html](https://docs.gitlab.com/omnibus/settings/smtp.html)
+>`/etc/gitlab/gitlab.rb`：主配置文件，包含外部URL、仓库目录、备份目录等
+>
+>`/etc/gitlab/gitlab-secrets.json`：（执行 gitlab-ctl reconfigure 命令行后生成），包含各类密钥的加密信息
+>
+>smtp 邮件服务商配置：[https://docs.gitlab.com/omnibus/settings/smtp.html](https://docs.gitlab.com/omnibus/settings/smtp.html)
 
 ```shell
-# 重新应用 gitlab 的配置，每次修改/etc/gitlab/gitlab.rb 文件之后执行
+# 重新应用 gitlab 的配置，每次修改 /etc/gitlab/gitlab.rb 文件之后执行
 gitlab-ctl reconfigure
 
 # 查看初始密码
@@ -147,18 +179,18 @@ gitlab-ctl status
 
 安装完成后建议关闭注册功能
 
-##### 4、Gitlab 备份
+##### 5、备份恢复
 
 默认备份目录：`/var/opt/gitlab/backups`
 
 修改 gitlab 配置文件：`vim /etc/gitlab/gitlab.rb`
 
-```shell
+```ini
 # 指定备份后数据存放的路径、权限、时间配置
 gitlab_rails['manage_backup_path'] = true                  #292行      开启备份功能
-gitlab_rails['backup_path'] = "/gitlab_backup"         #293行      指定备份的路径
+gitlab_rails['backup_path'] = "/gitlab_backup"             #293行      指定备份的路径
 gitlab_rails['backup_archive_permissions'] = 0644          #296行      备份文件的权限
-gitlab_rails['backup_keep_time'] = 604800                  #301行      备份保留时间（保留7天）
+gitlab_rails['backup_keep_time'] = 604800                  #301行      备份保留时间（保留 7 天）
 ```
 
 ```shell
@@ -176,9 +208,7 @@ gitlab-rake gitlab:backup:create
 0 3 * * * /opt/gitlab/bin/gitlab-rake gitlab:backup:create >> /gitlab_backup/crontab.log 2>&1
 ```
 
-##### 5、Gitlab 恢复
-
-**只能还原到与备份文件相同的 gitlab 版本**
+gitlab 数据恢复只能还原到与备份文件相同的 gitlab 版本
 
 ```shell
 # 下载安装与备份相同版本的 gitlab
@@ -228,6 +258,8 @@ gitlab-ctl service-list
 # 检查配置并启动
 gitlab-ctl check-config
 ```
+
+> docker 方式安装需进入容器内执行上述相关备份恢复命令：`docker exec -it gitlab bash`
 
 ##### 6、其他
 

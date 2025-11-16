@@ -1,12 +1,18 @@
 ---
 layout: post
 title: 内网下使用 Nginx 转发邮件
-categories: Nginx
+categories: [Nginx]
 description: 内网邮件转发
-keywords: Linux, Centos, Nginx
+keywords: Nginx
+mermaid: false
+sequence: false
+flow: false
+mathjax: false
+mindmap: false
+mindmap2: false
 ---
 
-内网邮件通过 Nginx 代理进行转发
+内网邮件通过 Nginx 代理进行转发。
 
 ![image-20220325133718280](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/nginx/image-20220325133718280.png)
 

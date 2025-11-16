@@ -1,9 +1,9 @@
 ---
 layout: post
 title: MySQL 的安装与使用
-categories: [DB]
+categories: [MySQL]
 description: MySQL 安装与使用
-keywords: MySQL, Linux, Centos
+keywords: MySQL, Linux, Centos, DB
 mermaid: false
 sequence: false
 flow: false
@@ -12,7 +12,7 @@ mindmap: false
 mindmap2: false
 ---
 
-使用离线包方式安装 MySQL
+使用离线包方式安装 MySQL。
 
 ##### 1、下载 MySQL
 

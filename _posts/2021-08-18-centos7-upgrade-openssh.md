@@ -1,12 +1,18 @@
 ---
 layout: post
-title: Centos7 升级 OpenSSH
-categories: OpenSSH
+title: Centos7 下升级 OpenSSH
+categories: [Linux]
 description: Centos7 下的 openssl、openssh 升级
-keywords: Linux, Centos, OpenSSH
+keywords: OpenSSH, Linux, Centos
+mermaid: false
+sequence: false
+flow: false
+mathjax: false
+mindmap: false
+mindmap2: false
 ---
 
-Centos7.6 升级后测试 ssh 登录及重启后 ssh 登录均无问题，升级无需卸载原先的 openssl 和 openssh
+Centos7.6 升级后测试 ssh 登录及重启后 ssh 登录均无问题，升级无需卸载原先的 openssl 和 openssh。
 
 系统环境为服务器安装镜像时自带的 openssh，没有经历过手动编译安装方式
 
@@ -24,9 +30,9 @@ Centos7.6 升级后测试 ssh 登录及重启后 ssh 登录均无问题，升级
 >
 > 升级前先关闭 selinux
 >
-> 使用 telnet 登录升级，备份ssh 相关文件，避免失败时无法回退版本
+> 使用 telnet 登录升级，备份 ssh 相关文件，避免失败时无法回退版本
 >
-> 先在相同版本的测试环境进行升级，ssh 服务重启、服务器重启、su 切换用户等无问题后再到生产环境操作
+> 建议先在相同版本的测试环境进行升级，ssh 服务重启、服务器重启、su 切换用户等无问题后再到生产环境操作
 
 先使用 yum 升级到目前 yum 仓库默认的 openssh7.4p1 版本，再进行编译安装升级到 openssh8.6p1
 
@@ -42,7 +48,7 @@ yum -y update openssh
 
 ##### 2、安装配置 telnet
 
-防止SSH远程控制时，升级过程中出现连接中断，可通过telnet备用方式进行远程连接（由于telnet是明文传输，不安全，只作为临时使用，升级完成后，必须停止卸载该服务）
+防止SSH远程控制时，升级过程中出现连接中断，可通过 telnet 备用方式进行远程连接（由于 telnet 是明文传输，不安全，只作为临时使用，升级完成后，必须停止卸载该服务）
 
 ```shell
 yum -y install xinetd telnet-server
@@ -50,7 +56,7 @@ yum -y install xinetd telnet-server
 
 修改配置文件：`vim /etc/xinetd.d/telnet`
 
-```
+```bash
 # default: on
 # # description: The telnet server serves telnet sessions; it uses \
 # #   unencrypted username/password pairs for authentication.
@@ -68,7 +74,7 @@ service telnet
 
 配置 telnet 登录的终端类型：`vim /etc/securetty`，再文件末尾增加一些 pts 终端
 
-```
+```bash
 pts/0
 pts/1
 pts/2
@@ -219,6 +225,6 @@ mv /usr/sbin/sshd.bak /usr/sbin/sshd
 systemctl restart sshd
 ssh -V
 ```
-回退后注意验证ssh登录是否正常
+回退后注意验证 ssh 登录是否正常
 
 ![image-20210819102454585](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819102454585.png)

@@ -1,12 +1,18 @@
 ---
 layout: post
 title: PicGo 结合 GitHub 搭建图床
-categories: GitHub
+categories: [GitHub]
 description: GitHub/Gitee 作为图床介绍
 keywords: Picgo, GitHub, Gitee, 图床
+mermaid: false
+sequence: false
+flow: false
+mathjax: false
+mindmap: false
+mindmap2: false
 ---
 
-PicGo 结合 GitHub/Gitee 搭建图床，用于存储博客图片
+PicGo 结合 GitHub/Gitee 搭建图床，用于存储博客图片。
 
 ##### 1、安装 PicGo 
 
