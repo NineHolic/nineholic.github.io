@@ -17,7 +17,8 @@ Confluence 是由 Atlassian 公司推出的一款企业级团队协作与知识�
 ##### 1、安装部署
 
 ```bash
-# 禁用 selinux 后重启服务器
+# 临时修改为 permissive，同时 selinux 配置改为 disabled，下次重启服务器后会生效
+setenforce 0
 sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
 
 # 新建安装目录
@@ -35,7 +36,7 @@ docker logs --tail 300 -f confluence
 
 `docker-compose.yml`内容如下：
 
-```ini
+```dockerfile
 services:
   mysql8-confluence:
     image: mysql:8.0
