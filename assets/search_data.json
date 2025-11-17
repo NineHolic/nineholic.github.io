@@ -96,6 +96,8 @@
   
   
   
+  
+  
 
   
     {
@@ -240,6 +242,14 @@
       
       "url"      : "https://blog.nine.gt.tc/2023/07/09/linux-install-docker/",
       "keywords" : "Docker, Linux, Centos, Ubuntu"
+    } ,
+  
+    {
+      "title"    : "pgAdmin4 的安装与使用",
+      "category" : "PostgreSQL",
+      
+      "url"      : "https://blog.nine.gt.tc/2024/03/11/linux-install-pgadmin4/",
+      "keywords" : "pgAdmin4, Linux, Centos, PostgreSQL"
     } ,
   
     {

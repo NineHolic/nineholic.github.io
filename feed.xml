@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://blog.nine.gt.tc/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.nine.gt.tc/" rel="alternate" type="text/html" /><updated>2025-11-16T20:19:07+08:00</updated><id>https://blog.nine.gt.tc/feed.xml</id><title type="html">Nine</title><subtitle>blog</subtitle><author><name>Nine</name></author><entry><title type="html">Confluence 的安装与使用</title><link href="https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/" rel="alternate" type="text/html" title="Confluence 的安装与使用" /><published>2024-04-19T00:00:00+08:00</published><updated>2024-04-19T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2024/04/19/linux-install-confluence</id><content type="html" xml:base="https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/"><![CDATA[<p>Confluence 是由 Atlassian 公司推出的一款企业级团队协作与知识管理工具。它是一个团队协作空间，将知识与协作无缝融合，让团队能够在一个平台上创建、协作和组织所有工作。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://blog.nine.gt.tc/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.nine.gt.tc/" rel="alternate" type="text/html" /><updated>2025-11-17T10:56:37+08:00</updated><id>https://blog.nine.gt.tc/feed.xml</id><title type="html">Nine</title><subtitle>blog</subtitle><author><name>Nine</name></author><entry><title type="html">Confluence 的安装与使用</title><link href="https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/" rel="alternate" type="text/html" title="Confluence 的安装与使用" /><published>2024-04-19T00:00:00+08:00</published><updated>2024-04-19T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2024/04/19/linux-install-confluence</id><content type="html" xml:base="https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/"><![CDATA[<p>Confluence 是由 Atlassian 公司推出的一款企业级团队协作与知识管理工具。它是一个团队协作空间，将知识与协作无缝融合，让团队能够在一个平台上创建、协作和组织所有工作。</p>
 
 <h5 id="1安装部署">1、安装部署</h5>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 禁用 selinux 后重启服务器</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 临时修改为 permissive，同时 selinux 配置改为 disabled，下次重启服务器后会生效</span>
+setenforce 0
 <span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/^SELINUX=.*/SELINUX=disabled/'</span> /etc/selinux/config
 
 <span class="c"># 新建安装目录</span>
@@ -20,31 +21,31 @@ docker logs <span class="nt">--tail</span> 300 <span class="nt">-f</span> conflu
 
 <p><code class="language-plaintext highlighter-rouge">docker-compose.yml</code>内容如下：</p>
 
-<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">services:</span>
-  <span class="err">mysql8-confluence:</span>
-    <span class="err">image:</span> <span class="err">mysql:8.0</span>
-    <span class="err">container_name:</span> <span class="err">mysql8-confluence</span>
-    <span class="err">ports:</span>
-      <span class="err">-</span> <span class="err">3308:3306</span>
-    <span class="err">volumes:</span>
-      <span class="err">-</span> <span class="err">/data/confluence/wiki/mysql/conf.d:/etc/mysql/conf.d</span>
-      <span class="err">-</span> <span class="err">/data/confluence/wiki/mysql/data:/var/lib/mysql</span>
-    <span class="err">security_opt:</span> 
-      <span class="err">-</span> <span class="err">seccomp:unconfined</span>
-    <span class="err">environment:</span>
-      <span class="err">TZ:</span> <span class="err">Asia/Shanghai</span>
-      <span class="err">MYSQL_ROOT_PASSWORD:</span> <span class="err">'root1234!'</span>
-    <span class="err">command:</span> <span class="py">--default-authentication-plugin</span><span class="p">=</span><span class="s">mysql_native_password --lower-case-table-names=1</span>
+<div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code>services:
+  mysql8-confluence:
+    image: mysql:8.0
+    container_name: mysql8-confluence
+    ports:
+      - 3308:3306
+    volumes:
+      - /data/confluence/wiki/mysql/conf.d:/etc/mysql/conf.d
+      - /data/confluence/wiki/mysql/data:/var/lib/mysql
+    security_opt: 
+      - seccomp:unconfined
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: 'root1234!'
+    command: --default-authentication-plugin=mysql_native_password --lower-case-table-names=1
 
-  <span class="err">confluence:</span>
-    <span class="err">image:</span> <span class="err">atlassian/confluence:7.9.0</span>
-    <span class="err">container_name:</span> <span class="err">confluence</span>
-    <span class="err">environment:</span>
-      <span class="err">TZ:</span> <span class="err">Asia/Shanghai</span>
-    <span class="err">ports:</span>
-      <span class="err">-</span> <span class="err">18090:8090</span>
-    <span class="err">volumes:</span>
-      <span class="err">-</span> <span class="err">/data/confluence/wiki/data:/var/atlassian/confluence</span>
+  confluence:
+    image: atlassian/confluence:7.9.0
+    container_name: confluence
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      - 18090:8090
+    volumes:
+      - /data/confluence/wiki/data:/var/atlassian/confluence
 </code></pre></div></div>
 
 <h5 id="2环境配置">2、环境配置</h5>
@@ -193,7 +194,49 @@ proot-distro <span class="nb">install </span>ubuntu
 
 <span class="c"># 进入 ubuntu shell 环境</span>
 proot-distro login ubuntu
-</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="Android" /><summary type="html"><![CDATA[Android 上终端模拟器简单使用]]></summary></entry><entry><title type="html">Docker 的安装与使用</title><link href="https://blog.nine.gt.tc/2023/07/09/linux-install-docker/" rel="alternate" type="text/html" title="Docker 的安装与使用" /><published>2023-07-09T00:00:00+08:00</published><updated>2023-07-09T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2023/07/09/linux-install-docker</id><content type="html" xml:base="https://blog.nine.gt.tc/2023/07/09/linux-install-docker/"><![CDATA[<p>Docker 是一个开源的应用容器引擎，可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。 容器是完全使用沙箱机制，相互之间不会有任何接口（类似 iPhone 的 app），更重要的是容器性能开销极低。</p>
+</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="Android" /><summary type="html"><![CDATA[Android 上终端模拟器简单使用]]></summary></entry><entry><title type="html">pgAdmin4 的安装与使用</title><link href="https://blog.nine.gt.tc/2024/03/11/linux-install-pgadmin4/" rel="alternate" type="text/html" title="pgAdmin4 的安装与使用" /><published>2024-03-11T00:00:00+08:00</published><updated>2024-03-11T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2024/03/11/linux-install-pgadmin4</id><content type="html" xml:base="https://blog.nine.gt.tc/2024/03/11/linux-install-pgadmin4/"><![CDATA[<p>pgAdmin4 是一个用于管理和维护 PostgreSQL 数据库的强大工具。它提供了一个图形化界面，使用户能够轻松地连接到数据库、创建表、运行 SQL 语句以及执行其他数据库管理任务。</p>
+
+<h5 id="1yum-安装">1、yum 安装</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 临时修改为 permissive，同时 selinux 配置改为 disabled，下次重启服务器后会生效</span>
+setenforce 0
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/^SELINUX=.*/SELINUX=disabled/'</span> /etc/selinux/config
+
+<span class="c"># 添加 pgAdmin 存储库</span>
+wget <span class="nt">--no-check-certificate</span> https://ftp.postgresql.org/pub/pgadmin/pgadmin4/yum/pgadmin4-redhat-repo-2-1.noarch.rpm
+
+rpm <span class="nt">-ivh</span> pgadmin4-redhat-repo-2-1.noarch.rpm
+
+<span class="c"># centos7 及以下系统版本需要修改存储库地址</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s|ftp.postgresql.org/pub/pgadmin|pgadmin-archive.postgresql.org|'</span> /etc/yum.repos.d/pgadmin4.repo
+
+<span class="c"># 查询可以安装的软件</span>
+yum <span class="nt">-y</span> search pgadmin
+
+<span class="c"># 安装 web 端软件</span>
+yum <span class="nt">-y</span> <span class="nb">install </span>pgadmin4-web
+
+<span class="c"># 修改默认端口 80 为 18080</span>
+vim /etc/httpd/conf/httpd.conf
+
+<span class="c"># 执行配置脚本，根据提示配置账号密码</span>
+/usr/pgadmin4/bin/setup-web.sh
+
+<span class="c"># 访问服务</span>
+http://192.168.216.131:18080/pgadmin4/login
+</code></pre></div></div>
+
+<h5 id="2配置代理">2、配置代理</h5>
+
+<p>使用 nginx 代理访问</p>
+
+<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="k">location</span> <span class="n">/pgadmin4</span> <span class="p">{</span>
+            <span class="kn">proxy_pass</span> <span class="s">http://192.168.216.131:18080</span><span class="p">;</span>
+            <span class="kn">proxy_set_header</span> <span class="s">Host</span> <span class="nv">$host</span><span class="p">:</span><span class="nv">$server_port</span><span class="p">;</span>
+            <span class="kn">proxy_set_header</span> <span class="s">X-Real-IP</span> <span class="nv">$remote_addr</span><span class="p">;</span>
+            <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span> <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+        <span class="p">}</span>
+</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="PostgreSQL" /><summary type="html"><![CDATA[pgAdmin4 的安装与使用]]></summary></entry><entry><title type="html">Docker 的安装与使用</title><link href="https://blog.nine.gt.tc/2023/07/09/linux-install-docker/" rel="alternate" type="text/html" title="Docker 的安装与使用" /><published>2023-07-09T00:00:00+08:00</published><updated>2023-07-09T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2023/07/09/linux-install-docker</id><content type="html" xml:base="https://blog.nine.gt.tc/2023/07/09/linux-install-docker/"><![CDATA[<p>Docker 是一个开源的应用容器引擎，可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。 容器是完全使用沙箱机制，相互之间不会有任何接口（类似 iPhone 的 app），更重要的是容器性能开销极低。</p>
 
 <h5 id="1centos-安装-docker">1、centos 安装 docker</h5>
 
@@ -1305,44 +1348,4 @@ ssh <span class="nt">-V</span>
 </code></pre></div></div>
 <p>回退后注意验证 ssh 登录是否正常</p>
 
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819102454585.png" alt="image-20210819102454585" /></p>]]></content><author><name>Nine</name></author><category term="Linux" /><summary type="html"><![CDATA[Centos7 下的 openssl、openssh 升级]]></summary></entry><entry><title type="html">Docker 本地部署 Jekyll 静态博客</title><link href="https://blog.nine.gt.tc/2021/05/18/blog-with-jekyll/" rel="alternate" type="text/html" title="Docker 本地部署 Jekyll 静态博客" /><published>2021-05-18T00:00:00+08:00</published><updated>2021-05-18T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/05/18/blog-with-jekyll</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/05/18/blog-with-jekyll/"><![CDATA[<p>使用 Docker 本地部署 Jekyll 项目，可供服务器上搭建个人博客、本地实时预览调试代码。</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 拉取项目</span>
-git clone https://github.com/NineHolic/nineholic.github.io
-<span class="nb">cd </span>nineholic.github.io
-
-<span class="c"># 构建镜像</span>
-docker build <span class="nt">-t</span> Blog:v1 <span class="nb">.</span>
-
-<span class="c"># 查看镜像</span>
-docker images
-
-<span class="c"># 使用宿主机端口启动容器，并在修改源文件时自动重新构建</span>
-docker run <span class="nt">--network</span> host <span class="nt">--name</span> blog <span class="nt">-v</span> <span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span>:/blog Blog:v1 bash <span class="nt">-c</span> <span class="s2">"jekyll serve -w --host=192.168.216.128"</span>
-
-<span class="c"># 开放端口</span>
-firewall-cmd <span class="nt">--zone</span><span class="o">=</span>public <span class="nt">--permanent</span> <span class="nt">--add-port</span><span class="o">=</span>4000/tcp
-firewall-cmd <span class="nt">--reload</span>
-</code></pre></div></div>
-
-<p>Dockerfile 文件内容：</p>
-
-<div class="language-Dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 使用 Ruby 官方镜像作为基础镜像</span>
-<span class="k">FROM</span><span class="s"> ruby:3.3.4</span>
- 
-<span class="c"># 创建一个新的目录用于存放 Jekyll 网站</span>
-<span class="k">RUN </span><span class="nb">mkdir</span> /blog
-<span class="k">WORKDIR</span><span class="s"> /blog</span>
- 
-<span class="c"># 安装依赖</span>
-<span class="k">COPY</span><span class="s"> Gemfile /blog</span>
-<span class="k">RUN </span>bundle config mirror.https://rubygems.org https://mirrors.tuna.tsinghua.edu.cn/rubygems
-<span class="k">RUN </span>bundle <span class="nb">install</span> <span class="nt">--verbose</span>
-
-<span class="c"># 容器启动时执行的命令</span>
-<span class="k">CMD</span><span class="s"> jekyll --version</span>
-</code></pre></div></div>
-
-<p>浏览器访问查看效果：<a href="http://192.168.216.128:4000">http://192.168.216.128:4000</a></p>
-
-<p>镜像使用版本参考：<a href="https://pages.github.com/versions.json">Github Pages 运行环境</a></p>]]></content><author><name>Nine</name></author><category term="Jekyll" /><summary type="html"><![CDATA[本地运行 Jekyll 博客，方便调试]]></summary></entry></feed>
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819102454585.png" alt="image-20210819102454585" /></p>]]></content><author><name>Nine</name></author><category term="Linux" /><summary type="html"><![CDATA[Centos7 下的 openssl、openssh 升级]]></summary></entry></feed>
