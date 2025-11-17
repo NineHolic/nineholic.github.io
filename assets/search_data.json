@@ -269,35 +269,35 @@
     } ,
   
     {
-      "title"    : "Git 总结",
-      "category" : "Git",
+      "title"    : "MySQL",
+      "category" : "",
       
-      "url"      : "https://blog.nine.gt.tc/wiki/git/",
-      "keywords" : "Git, 版本控制"
+      "url"      : "https://blog.nine.gt.tc/wiki/skill-db-mysql/",
+      "keywords" : "MySQL, Linux, Skill, DB"
+    } ,
+  
+    {
+      "title"    : "Docker",
+      "category" : "",
+      
+      "url"      : "https://blog.nine.gt.tc/wiki/skill-virtual-docker/",
+      "keywords" : "Docker, Linux, Skill, Virtual"
     } ,
   
     {
       "title"    : "Jenkins",
-      "category" : "Jenkins",
-      
-      "url"      : "https://blog.nine.gt.tc/wiki/jenkins/",
-      "keywords" : "Jenkins, Linux, Skill"
-    } ,
-  
-    {
-      "title"    : "Linux",
-      "category" : "Linux",
-      
-      "url"      : "https://blog.nine.gt.tc/wiki/linux/",
-      "keywords" : "Centos, Ubuntu, Linux, Skill"
-    } ,
-  
-    {
-      "title"    : "Windows Terminal",
       "category" : "",
       
-      "url"      : "https://blog.nine.gt.tc/wiki/windows-terminal/",
-      "keywords" : "Windows Terminal"
+      "url"      : "https://blog.nine.gt.tc/wiki/tools-cicd-jenkins/",
+      "keywords" : "Jenkins, Linux, Skill, CI/CD"
+    } ,
+  
+    {
+      "title"    : "Pipeline",
+      "category" : "",
+      
+      "url"      : "https://blog.nine.gt.tc/wiki/tools-cicd-pipeline/",
+      "keywords" : "Pipeline, Jenkins, Linux, Skill, CI/CD"
     } 
   
 ]
