@@ -28,7 +28,7 @@ components:
         start_date: 2021-05-01
     # My Popular Repositories
     side_bar_repo:
-        enabled: true
+        enabled: false
         limit: 1
     # 文章字数统计
     word_count:
