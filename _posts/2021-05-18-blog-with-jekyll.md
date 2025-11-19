@@ -4,7 +4,6 @@ title: Docker 本地部署 Jekyll 静态博客
 categories: [Jekyll]
 description: 本地运行 Jekyll 博客，方便调试
 keywords: Jekyll, Docker, Linux, Centos, Blog
-topmost: true
 mermaid: false
 sequence: false
 flow: false
