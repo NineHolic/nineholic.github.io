@@ -381,9 +381,10 @@
 }
 
 .markdown-body blockquote {
-    padding: 0 15px;
+    padding: 10px 15px;
     color: #777;
-    border-left: 4px solid #ddd
+    background-color: #42b9831a;
+    border-left: 4px solid #42b983
 }
 
 .markdown-body blockquote>:first-child {
@@ -524,7 +525,16 @@
     color: #393a34;
     -webkit-border-radius: 3px;
     border-radius: 3px;
-    border: solid 1px #dddddd;
+    border: solid 0px #dddddd;
+}
+
+.markdown-body p code,.markdown-body p tt {
+    font-family: monospace, Consolas, "Liberation Mono", Menlo, Courier;
+    padding: 2px 4px;
+    border-radius: 2px;
+    font-size: 0.92rem;
+    color: #e96900;
+    background-color: #f8f8f8;
 }
 
 .markdown-body code br,.markdown-body tt br {
@@ -683,7 +693,7 @@
 }
 
 pre {
-    border: 1px solid #ccc;
+    border: 0px solid #ccc;
 }
 
 .tools-wrapper {
