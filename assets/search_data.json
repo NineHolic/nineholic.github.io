@@ -266,38 +266,6 @@
       
       "url"      : "https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/",
       "keywords" : "Confluence, Linux"
-    } ,
-  
-    {
-      "title"    : "MySQL",
-      "category" : "",
-      
-      "url"      : "https://blog.nine.gt.tc/wiki/skill-db-mysql/",
-      "keywords" : "MySQL, Linux, Skill, DB"
-    } ,
-  
-    {
-      "title"    : "Docker",
-      "category" : "",
-      
-      "url"      : "https://blog.nine.gt.tc/wiki/skill-virtual-docker/",
-      "keywords" : "Docker, Linux, Skill, Virtual"
-    } ,
-  
-    {
-      "title"    : "Jenkins",
-      "category" : "",
-      
-      "url"      : "https://blog.nine.gt.tc/wiki/tools-cicd-jenkins/",
-      "keywords" : "Jenkins, Linux, Skill, CI/CD"
-    } ,
-  
-    {
-      "title"    : "Pipeline",
-      "category" : "",
-      
-      "url"      : "https://blog.nine.gt.tc/wiki/tools-cicd-pipeline/",
-      "keywords" : "Pipeline, Jenkins, Linux, Skill, CI/CD"
     } 
   
 ]
