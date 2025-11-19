@@ -90,6 +90,18 @@
       gtag('config', '{{ site.google.analytics_id }}');
     </script>
     {% endif %}
+    
+    {% if site.baidu.analytics_id %}
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?{{ site.baidu.analytics_id }}";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+    {% endif %}
 </head>
 <body class="{{ page.class }}" data-mz="{{ page.class }}">
     <header class="site-header">
