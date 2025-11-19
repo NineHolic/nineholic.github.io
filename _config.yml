@@ -204,11 +204,11 @@ simple_jekyll_search:
 #      Google      #
 # ---------------- #
 google:
-    analytics_id: UA-196771212-1
+    analytics_id: G-5QHWNF9C4N
     adsense:
-        enabled: true
-        footer: true
-        sidebar: true
+        enabled: false
+        footer: false
+        sidebar: false
         sidebar-detail: false
         content_header: false
         content_footer: false
