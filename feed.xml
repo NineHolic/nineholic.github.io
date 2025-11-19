@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://blog.nine.gt.tc/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.nine.gt.tc/" rel="alternate" type="text/html" /><updated>2025-11-19T18:05:18+08:00</updated><id>https://blog.nine.gt.tc/feed.xml</id><title type="html">Nine</title><subtitle>blog</subtitle><author><name>Nine</name></author><entry><title type="html">Confluence 的安装与使用</title><link href="https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/" rel="alternate" type="text/html" title="Confluence 的安装与使用" /><published>2024-04-19T00:00:00+08:00</published><updated>2024-04-19T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2024/04/19/linux-install-confluence</id><content type="html" xml:base="https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/"><![CDATA[<p>Confluence 是由 Atlassian 公司推出的一款企业级团队协作与知识管理工具。它是一个团队协作空间，将知识与协作无缝融合，让团队能够在一个平台上创建、协作和组织所有工作。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://blog.nine.gt.tc/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.nine.gt.tc/" rel="alternate" type="text/html" /><updated>2025-11-19T18:22:00+08:00</updated><id>https://blog.nine.gt.tc/feed.xml</id><title type="html">Nine</title><subtitle>blog</subtitle><author><name>Nine</name></author><entry><title type="html">Confluence 的安装与使用</title><link href="https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/" rel="alternate" type="text/html" title="Confluence 的安装与使用" /><published>2024-04-19T00:00:00+08:00</published><updated>2024-04-19T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2024/04/19/linux-install-confluence</id><content type="html" xml:base="https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/"><![CDATA[<p>Confluence 是由 Atlassian 公司推出的一款企业级团队协作与知识管理工具。它是一个团队协作空间，将知识与协作无缝融合，让团队能够在一个平台上创建、协作和组织所有工作。</p>
 
 <h5 id="1安装部署">1、安装部署</h5>
 
@@ -236,7 +236,70 @@ http://192.168.216.131:18080/pgadmin4/login
             <span class="kn">proxy_set_header</span> <span class="s">X-Real-IP</span> <span class="nv">$remote_addr</span><span class="p">;</span>
             <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span> <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
         <span class="p">}</span>
-</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="PostgreSQL" /><summary type="html"><![CDATA[pgAdmin4 的安装与使用]]></summary></entry><entry><title type="html">Docker 的安装与使用</title><link href="https://blog.nine.gt.tc/2023/07/09/linux-install-docker/" rel="alternate" type="text/html" title="Docker 的安装与使用" /><published>2023-07-09T00:00:00+08:00</published><updated>2023-07-09T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2023/07/09/linux-install-docker</id><content type="html" xml:base="https://blog.nine.gt.tc/2023/07/09/linux-install-docker/"><![CDATA[<p>Docker 是一个开源的应用容器引擎，可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。 容器是完全使用沙箱机制，相互之间不会有任何接口（类似 iPhone 的 app），更重要的是容器性能开销极低。</p>
+</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="PostgreSQL" /><summary type="html"><![CDATA[pgAdmin4 的安装与使用]]></summary></entry><entry><title type="html">Docker 使用技巧</title><link href="https://blog.nine.gt.tc/2023/07/09/docker-skill/" rel="alternate" type="text/html" title="Docker 使用技巧" /><published>2023-07-09T00:00:00+08:00</published><updated>2023-07-09T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2023/07/09/docker-skill</id><content type="html" xml:base="https://blog.nine.gt.tc/2023/07/09/docker-skill/"><![CDATA[<p>学习和使用 Docker 过程中遇到的问题和解决办法。</p>
+
+<h5 id="配置镜像源">配置镜像源</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">tee</span> /etc/docker/daemon.json <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh">
+{
+    "registry-mirrors": [
+        "https://docker.m.daocloud.io",
+        "https://docker.1panel.live",
+        "https://hub.rat.dev"
+    ]
+}
+</span><span class="no">EOF
+
+</span>systemctl daemon-reload <span class="o">&amp;&amp;</span> systemctl restart docker
+</code></pre></div></div>
+
+<h5 id="镜像导入导出">镜像导入导出</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 查看已安装的镜像</span>
+docker images
+
+<span class="c"># 将镜像导出成 tar 文件，其中 docker.io/a76yyyy/qiandao:latest 可以用 image id 代替，但是恢复时 repository 和 tar 都会是 none</span>
+docker save <span class="nt">-o</span> qiandao.tar docker.io/a76yyyy/qiandao:latest
+
+<span class="c"># 镜像文件导入</span>
+docker load <span class="nt">-i</span> qiandao.tar
+
+<span class="c"># 压缩导出</span>
+docker save docker.io/a76yyyy/qiandao:latest | <span class="nb">gzip</span> <span class="o">&gt;</span> qiandao.tar.gz
+
+<span class="c"># 压缩导入</span>
+<span class="nb">gunzip</span> <span class="nt">-c</span> qiandao.tar.gz | docker load
+</code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/docker/image-20230618001414234.png" alt="image-20230618001414234" /></p>
+
+<h5 id="修改容器启动策略">修改容器启动策略</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker update <span class="nt">--restart</span><span class="o">=</span>always name
+</code></pre></div></div>
+
+<blockquote>
+  <ul>
+    <li>no -  容器退出时，不重启容器；</li>
+    <li>on-failure - 只有在非 0 状态退出时才从新启动容器；</li>
+    <li>always - docker 启动的时候自动启动容器，始终自动重启</li>
+  </ul>
+</blockquote>
+
+<h5 id="容器内执行-shell-脚本">容器内执行 shell 脚本</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 宿主机上执行，脚本在容器内存在</span>
+docker <span class="nb">exec </span>test-1 /bin/bash /data/test.sh
+
+<span class="c"># 获取容器内 guest 用户的 UID</span>
+docker <span class="nb">exec </span>test-1 <span class="nb">id</span> <span class="nt">-u</span> guest
+
+<span class="c"># 以容器内 guest 用户身份执行命令</span>
+docker <span class="nb">exec</span> <span class="nt">-u</span> guest test-1 /bin/bash /data/test.sh
+
+<span class="c"># 以容器内 UID 为 1000 的用户身份执行命令</span>
+docker <span class="nb">exec</span> <span class="nt">-u</span> 1000 test-1 /bin/bash /data/test.sh
+</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="Docker" /><summary type="html"><![CDATA[记录学习 Docker 中一些方便使用的技巧]]></summary></entry><entry><title type="html">Docker 的安装与使用</title><link href="https://blog.nine.gt.tc/2023/07/09/linux-install-docker/" rel="alternate" type="text/html" title="Docker 的安装与使用" /><published>2023-07-09T00:00:00+08:00</published><updated>2023-07-09T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2023/07/09/linux-install-docker</id><content type="html" xml:base="https://blog.nine.gt.tc/2023/07/09/linux-install-docker/"><![CDATA[<p>Docker 是一个开源的应用容器引擎，可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。 容器是完全使用沙箱机制，相互之间不会有任何接口（类似 iPhone 的 app），更重要的是容器性能开销极低。</p>
 
 <h5 id="1centos-安装-docker">1、centos 安装 docker</h5>
 
@@ -556,7 +619,345 @@ systemctl restart postgresql
     <li>通过使用 2MB 的大页，同样管理 16GB 的内存，操作系统只需要处理 <code class="language-plaintext highlighter-rouge">16GB / 2MB = 8192</code> 个页表项，而不是 <code class="language-plaintext highlighter-rouge">16GB / 4KB = 4,194,304</code> 个。这减少了超过 99% 的页表项数量！</li>
     <li>TLB 可以缓存更多的地址转换关系，从而极大减少 TLB miss，提高内存访问效率。</li>
   </ul>
-</blockquote>]]></content><author><name>Nine</name></author><category term="PostgreSQL" /><summary type="html"><![CDATA[PostgreSQL 的安装与使用]]></summary></entry><entry><title type="html">内网下使用 Nginx 转发邮件</title><link href="https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail/" rel="alternate" type="text/html" title="内网下使用 Nginx 转发邮件" /><published>2022-03-25T00:00:00+08:00</published><updated>2022-03-25T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail</id><content type="html" xml:base="https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail/"><![CDATA[<p>内网邮件通过 Nginx 代理进行转发。</p>
+</blockquote>]]></content><author><name>Nine</name></author><category term="PostgreSQL" /><summary type="html"><![CDATA[PostgreSQL 的安装与使用]]></summary></entry><entry><title type="html">JMeter 常用函数</title><link href="https://blog.nine.gt.tc/2022/11/22/jmeter-functions/" rel="alternate" type="text/html" title="JMeter 常用函数" /><published>2022-11-22T00:00:00+08:00</published><updated>2022-11-22T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2022/11/22/jmeter-functions</id><content type="html" xml:base="https://blog.nine.gt.tc/2022/11/22/jmeter-functions/"><![CDATA[<p>JMeter 官网说明：<a href="https://jmeter.apache.org/usermanual/functions.html">https://jmeter.apache.org/usermanual/functions.html</a></p>
+
+<h4 id="1内置函数方法">1、内置函数方法</h4>
+
+<h5 id="时间格式化">时间格式化</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 北京时间 utc+8</span>
+<span class="k">${</span><span class="nv">__time</span><span class="p">(YMD,)</span><span class="k">}</span>                            <span class="c"># 20180121</span>
+<span class="k">${</span><span class="nv">__time</span><span class="p">(yyyyMMddHHmmss)</span><span class="k">}</span>                  <span class="c"># 20221012174329</span>
+<span class="k">${</span><span class="nv">__time</span><span class="p">(YYYY-MM-dd HH</span>:mm:ss,time<span class="p">)</span><span class="k">}</span>        <span class="c"># 2022-10-12 17:43:29</span>
+<span class="k">${</span><span class="nv">__time</span><span class="p">(YYYY-MM-dd HH</span>:mm:ss.SSS,time<span class="p">)</span><span class="k">}</span>    <span class="c"># 2022-10-12 17:43:29.999</span>
+
+<span class="c"># 日期格式化：20180121 -&gt; 2018-01-21</span>
+<span class="k">${</span><span class="nv">__dateTimeConvert</span><span class="p">(20180121,yyyyMMdd,yyyy-MM-dd,)</span><span class="k">}</span>
+
+<span class="c"># 当前时间 +20s，PT10m：+10 分钟，PT1H：+1 小时，P1d：+1 天，P1dT1H10m20s：+1 天 1 小时 10 分钟 20 秒</span>
+<span class="k">${</span><span class="nv">__timeShift</span><span class="p">(yyyy-MM-dd HH</span>:mm:ss,,PT20S,,<span class="p">)</span><span class="k">}</span>
+</code></pre></div></div>
+
+<h5 id="时间戳">时间戳</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 13 位时间戳：1665566580027</span>
+<span class="k">${</span><span class="nv">__time</span><span class="p">(,)</span><span class="k">}</span>
+
+<span class="c"># 10 位时间戳：1665566580</span>
+<span class="k">${</span><span class="nv">__time</span><span class="p">(/1000,)</span><span class="k">}</span>
+</code></pre></div></div>
+
+<h5 id="uuid">uuid</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// uuid：fea9aafd-e03e-4682-9f35-878c4381fb91
+<span class="k">${</span><span class="nv">__UUID</span><span class="k">}</span>
+</code></pre></div></div>
+
+<h5 id="随机手机号码">随机手机号码</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 11 位随机号码</span>
+139<span class="k">${</span><span class="nv">__RandomString</span><span class="p">(8,0123456789,)</span><span class="k">}</span>
+
+<span class="c"># num1、num2 等分别为号码前缀变量</span>
+<span class="k">${</span><span class="nv">__RandomFromMultipleVars</span><span class="p">(num1|num2|num3|num4|num5,)</span><span class="k">}${</span><span class="nv">__RandomString</span><span class="p">(8,0123456789,)</span><span class="k">}</span>
+
+<span class="c"># 手机号截取最后两位</span>
+<span class="k">${</span><span class="nv">__groovy</span><span class="p">(vars.get(</span><span class="s1">'mobile'</span><span class="p">)[-2..-1],)</span><span class="k">}</span>
+</code></pre></div></div>
+
+<h5 id="计数器">计数器</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 计数器</span>
+<span class="k">${</span><span class="nv">__counter</span><span class="p">(,)</span><span class="k">}</span>
+</code></pre></div></div>
+
+<h5 id="加减法">加减法</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 整数相加得到变量 var，值为 3，相减用负号实现</span>
+<span class="k">${</span><span class="nv">__intSum</span><span class="p">(2,1,var)</span><span class="k">}</span>
+</code></pre></div></div>
+
+<h5 id="参数拼接">参数拼接</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 普通拼接：businessNumber_1、businessNumber_2 等</span>
+businessNumber_<span class="k">${</span><span class="nv">num</span><span class="k">}</span>
+
+<span class="c"># 变量拼接：${businessNumber_1}、${businessNumber_2} 等</span>
+<span class="k">${</span><span class="nv">__V</span><span class="p">(businessNumber_</span><span class="k">${</span><span class="nv">num</span><span class="k">}</span><span class="p">)</span><span class="k">}</span>
+</code></pre></div></div>
+
+<h4 id="2groovy-方法">2、Groovy 方法</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 乘法，不支持小数</span>
+<span class="k">${</span><span class="nv">__groovy</span><span class="p">(2*1000)</span><span class="k">}</span>
+</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="JMeter" /><summary type="html"><![CDATA[JMeter 常用函数]]></summary></entry><entry><title type="html">JMeter 常用 BeanShell 脚本</title><link href="https://blog.nine.gt.tc/2022/10/17/jmeter-beanshell/" rel="alternate" type="text/html" title="JMeter 常用 BeanShell 脚本" /><published>2022-10-17T00:00:00+08:00</published><updated>2022-10-17T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2022/10/17/jmeter-beanshell</id><content type="html" xml:base="https://blog.nine.gt.tc/2022/10/17/jmeter-beanshell/"><![CDATA[<p>工作期间陆续记录的 JMeter 常用 beanshell 脚本。</p>
+
+<h5 id="控制台打印日志">控制台打印日志</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+</code></pre></div></div>
+
+<h5 id="生成-uuid">生成 UUID</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.UUID</span><span class="o">;</span>
+<span class="no">UUID</span> <span class="n">uuid1</span> <span class="o">=</span> <span class="no">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span class="o">();</span>
+<span class="n">vars</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"ID"</span><span class="o">,(</span><span class="n">uuid1</span><span class="o">.</span><span class="na">toString</span><span class="o">()).</span><span class="na">toUpperCase</span><span class="o">().</span><span class="na">replaceAll</span><span class="o">(</span><span class="s">"-"</span><span class="o">,</span><span class="s">""</span><span class="o">));</span>
+</code></pre></div></div>
+
+<h5 id="数据写入文件">数据写入文件</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 生成文件的路径</span>
+<span class="nc">FileWriter</span> <span class="n">fs</span><span class="o">=</span><span class="k">new</span> <span class="nc">FileWriter</span><span class="o">(</span><span class="s">"C://Users//Desktop//info.csv"</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span> 
+<span class="nc">BufferedWriter</span> <span class="n">out</span> <span class="o">=</span><span class="k">new</span> <span class="nc">BufferedWriter</span><span class="o">(</span><span class="n">fs</span><span class="o">);</span>
+
+<span class="c1">// 写入文件的参数</span>
+<span class="n">out</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="s">"${telA}"</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="s">"${telX}"</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">vars</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"seqId"</span><span class="o">));</span>
+<span class="n">out</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">"line.separator"</span><span class="o">));</span>
+
+<span class="n">out</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+<span class="n">fs</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</code></pre></div></div>
+
+<h5 id="计算文件行数">计算文件行数</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.io.BufferedReader</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.FileReader</span><span class="o">;</span>
+
+<span class="c1">// 文件路径</span>
+<span class="nc">String</span> <span class="n">filepath</span> <span class="o">=</span> <span class="n">vars</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"filepath"</span><span class="o">);</span>
+<span class="nc">BufferedReader</span> <span class="n">br</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BufferedReader</span><span class="o">(</span><span class="k">new</span> <span class="nc">FileReader</span><span class="o">(</span><span class="n">filepath</span><span class="o">));</span>
+<span class="nc">String</span> <span class="n">tmpStr</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+<span class="kt">int</span> <span class="n">rowCount</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+<span class="k">while</span> <span class="o">(</span><span class="n">tmeStr</span> <span class="o">=</span> <span class="n">br</span><span class="o">.</span><span class="na">readLine</span><span class="o">()</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">rowCount</span><span class="o">++;</span>
+<span class="o">}</span>
+<span class="n">vars</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"rowCount"</span><span class="o">,</span> <span class="nc">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">rowCount</span><span class="o">));</span>
+</code></pre></div></div>
+
+<h5 id="根据日期计算天数">根据日期计算天数</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.text.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
+
+<span class="c1">// 获取变量的值</span>
+<span class="nc">String</span> <span class="n">start</span> <span class="o">=</span> <span class="n">vars</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"start"</span><span class="o">);</span>
+<span class="nc">String</span> <span class="n">end</span> <span class="o">=</span>  <span class="n">vars</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"end"</span><span class="o">);</span>
+<span class="nc">Date</span> <span class="n">startDate</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SimpleDateFormat</span><span class="o">(</span><span class="s">"yyyy-MM-dd"</span><span class="o">).</span><span class="na">parse</span><span class="o">(</span><span class="n">start</span><span class="o">);</span>
+<span class="nc">Date</span> <span class="n">endDate</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SimpleDateFormat</span><span class="o">(</span><span class="s">"yyyy-MM-dd"</span><span class="o">).</span><span class="na">parse</span><span class="o">(</span><span class="n">end</span><span class="o">);</span>
+
+<span class="c1">// 日期转成毫秒位时间戳</span>
+<span class="kt">long</span> <span class="n">startTimeMillis</span> <span class="o">=</span> <span class="n">startDate</span><span class="o">.</span><span class="na">getTime</span><span class="o">();</span>
+<span class="kt">long</span> <span class="n">endTimeMillis</span> <span class="o">=</span> <span class="n">endDate</span><span class="o">.</span><span class="na">getTime</span><span class="o">();</span>
+
+<span class="c1">// 计算天数</span>
+<span class="kt">long</span> <span class="n">timeDiffMillis</span> <span class="o">=</span> <span class="o">(</span><span class="n">endTimeMillis</span> <span class="o">-</span> <span class="n">startTimeMillis</span><span class="o">)</span> <span class="o">/</span> <span class="o">(</span><span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">1000</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+<span class="nc">String</span> <span class="n">daysBetween</span> <span class="o">=</span> <span class="nc">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">timeDiffMillis</span><span class="o">);</span>
+
+<span class="n">vars</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"daysBetween"</span><span class="o">,</span> <span class="n">daysBetween</span><span class="o">);</span>
+</code></pre></div></div>
+
+<h5 id="更新下次请求的值">更新下次请求的值</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.time.LocalDate</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.time.format.DateTimeFormatter</span><span class="o">;</span>
+
+<span class="c1">// 日期格式</span>
+<span class="nc">DateTimeFormatter</span> <span class="n">formatter</span> <span class="o">=</span> <span class="nc">DateTimeFormatter</span><span class="o">.</span><span class="na">ofPattern</span><span class="o">(</span><span class="s">"yyyy-MM-dd"</span><span class="o">);</span>
+<span class="c1">// 获取变量的值</span>
+<span class="nc">LocalDate</span> <span class="n">startDate</span> <span class="o">=</span> <span class="nc">LocalDate</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="n">vars</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"start"</span><span class="o">),</span> <span class="n">formatter</span><span class="o">);</span>
+<span class="nc">LocalDate</span> <span class="n">currentDate</span> <span class="o">=</span> <span class="n">startDate</span><span class="o">.</span><span class="na">plusDays</span><span class="o">(</span><span class="n">ctx</span><span class="o">.</span><span class="na">getThreadNum</span><span class="o">()</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+
+<span class="c1">// 更新变量值</span>
+<span class="n">vars</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"start"</span><span class="o">,</span> <span class="n">currentDate</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">formatter</span><span class="o">));</span>
+</code></pre></div></div>
+
+<h5 id="文件下载">文件下载</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.io.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.text.SimpleDateFormat</span><span class="o">;</span>
+
+<span class="c1">// 下载目录</span>
+<span class="nc">File</span> <span class="n">dir_name</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">File</span><span class="o">(</span><span class="s">"recordfile"</span><span class="o">);</span>
+<span class="n">dir_name</span><span class="o">.</span><span class="na">mkdir</span><span class="o">();</span>
+<span class="c1">// 设置日期格式</span>
+<span class="nc">SimpleDateFormat</span> <span class="n">nowtime</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SimpleDateFormat</span><span class="o">(</span><span class="s">"yyyyMMddHHmmssSSS"</span><span class="o">);</span>
+<span class="c1">// 获取到上个请求返回的数据</span>
+<span class="kt">byte</span><span class="o">[]</span> <span class="n">result</span> <span class="o">=</span> <span class="n">prev</span><span class="o">.</span><span class="na">getResponseData</span><span class="o">();</span>
+<span class="c1">// 以时间戳 + uuid 命名</span>
+<span class="nc">String</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">dir_name</span> <span class="o">+</span> <span class="nc">File</span><span class="o">.</span><span class="na">separator</span> <span class="o">+</span> <span class="n">nowtime</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">())</span> <span class="o">+</span> <span class="s">"-"</span> <span class="o">+</span> <span class="no">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span class="o">()</span> <span class="o">+</span> <span class="s">"."</span> <span class="o">+</span> <span class="n">vars</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Format"</span><span class="o">);</span>
+<span class="nc">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">File</span><span class="o">(</span><span class="n">file_name</span><span class="o">);</span>
+<span class="nc">FileOutputStream</span> <span class="n">out</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileOutputStream</span><span class="o">(</span><span class="n">file</span><span class="o">);</span>
+<span class="n">out</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">result</span><span class="o">);</span>
+<span class="n">out</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</code></pre></div></div>
+
+<h5 id="url-参数提取">URL 参数提取</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.io.BufferedReader</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.FileReader</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Random</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.net.URL</span><span class="o">;</span>
+
+<span class="c1">// 读取文件路径</span>
+<span class="nc">String</span> <span class="n">filePath</span> <span class="o">=</span> <span class="n">vars</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"filepath"</span><span class="o">);</span>
+<span class="c1">// 打开文件</span>
+<span class="nc">BufferedReader</span> <span class="n">reader</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BufferedReader</span><span class="o">(</span><span class="k">new</span> <span class="nc">FileReader</span><span class="o">(</span><span class="n">filePath</span><span class="o">));</span>
+<span class="nc">String</span> <span class="n">line</span><span class="o">;</span>
+<span class="kt">int</span> <span class="n">currentLine</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+<span class="c1">// 生成随机行号</span>
+<span class="nc">Random</span> <span class="n">rand</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Random</span><span class="o">();</span>
+<span class="kt">int</span> <span class="n">lineNumber</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">200</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+
+<span class="c1">// 逐行读取文件内容</span>
+<span class="k">while</span> <span class="o">((</span><span class="n">line</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="na">readLine</span><span class="o">())</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">currentLine</span> <span class="o">==</span> <span class="n">lineNumber</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 处理URL</span>
+        <span class="no">URL</span> <span class="n">url</span> <span class="o">=</span> <span class="k">new</span> <span class="no">URL</span><span class="o">(</span><span class="n">line</span><span class="o">);</span>
+        <span class="c1">// 设为变量</span>
+        <span class="n">vars</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"recordUrl"</span><span class="o">,</span> <span class="n">url</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+        <span class="nc">String</span> <span class="n">http</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="na">getProtocol</span><span class="o">();</span> <span class="c1">// 获取协议部分</span>
+        <span class="nc">String</span> <span class="n">ip</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="na">getHost</span><span class="o">();</span> <span class="c1">// 获取主机 ip 部分</span>
+        <span class="kt">int</span> <span class="n">port</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="na">getPort</span><span class="o">();</span>
+        <span class="nc">String</span> <span class="n">voiceUrl</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="na">getFile</span><span class="o">();</span> <span class="c1">// 获取除了 HTTP、IP 和端口之外的剩余部分</span>
+        <span class="n">vars</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"http"</span><span class="o">,</span> <span class="n">http</span><span class="o">);</span>
+        <span class="n">vars</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"ip"</span><span class="o">,</span> <span class="n">ip</span><span class="o">);</span>
+        <span class="n">vars</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"port"</span><span class="o">,</span> <span class="nc">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">port</span><span class="o">));</span>
+        <span class="n">vars</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"voiceUrl"</span><span class="o">,</span> <span class="n">voiceUrl</span><span class="o">);</span>
+        <span class="nc">String</span> <span class="n">queryString</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="na">getQuery</span><span class="o">();</span> <span class="c1">// 获取查询字符串</span>
+        <span class="nc">String</span><span class="o">[]</span><span class="n">params</span> <span class="o">=</span> <span class="n">queryString</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">"&amp;"</span><span class="o">);</span> <span class="c1">// 根据 &amp; 符号拆分参数</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="nl">param:</span> <span class="n">params</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">String</span><span class="o">[]</span><span class="n">keyValue</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">"="</span><span class="o">);</span> <span class="c1">// 根据"="符号拆分参数名和值</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">keyValue</span><span class="o">.</span><span class="na">length</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="n">keyValue</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">equals</span><span class="o">(</span><span class="s">"id"</span><span class="o">))</span> <span class="o">{</span> <span class="c1">// 提取 id 的值</span>
+                <span class="nc">String</span> <span class="n">value</span> <span class="o">=</span> <span class="n">keyValue</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+                <span class="n">vars</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">break</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="n">currentLine</span><span class="o">++;</span>
+<span class="o">}</span>
+<span class="c1">// 关闭文件</span>
+<span class="n">reader</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</code></pre></div></div>
+
+<h5 id="请求体-md5-自动加密">请求体 md5 自动加密</h5>
+
+<p>需手动添加 json 包到<code class="language-plaintext highlighter-rouge">lib\ext</code>目录下：<a href="https://repo1.maven.org/maven2/org/json/json/20240303/">https://repo1.maven.org/maven2/org/json/json/20240303/</a></p>
+
+<p>请求 body 带有 sign 签名参数，sign 签名是根据请求 body 除去 sign 本身参数后，拼接请求参数最后 md5 加密生成的。</p>
+
+<p>此处示例在 BeanShell 预处理程序先获取请求的 body，签名后给 sign 参数重新赋值，然后发送新的请求 body，因此 http 请求 body 参数中不需要写明 sign 参数，查看结果树可以看到请求 body 会带上 sign 值。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.apache.jmeter.config.Arguments</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.jmeter.config.Argument</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.json.JSONObject</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.commons.codec.digest.DigestUtils</span><span class="o">;</span>
+
+<span class="nc">Arguments</span> <span class="n">arguments</span> <span class="o">=</span>  <span class="n">sampler</span><span class="o">.</span><span class="na">getArguments</span><span class="o">();</span>
+<span class="nc">Argument</span> <span class="n">arg</span> <span class="o">=</span> <span class="n">arguments</span><span class="o">.</span><span class="na">getArgument</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="c1">// 获取请求 body 值</span>
+<span class="nc">String</span> <span class="n">requestBody</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+<span class="c1">// json 格式化</span>
+<span class="nc">JSONObject</span> <span class="n">jsonObject</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JSONObject</span><span class="o">(</span><span class="n">requestBody</span><span class="o">);</span>
+
+<span class="c1">// 获取所有键并排除 sign（不使用泛型）</span>
+<span class="nc">List</span> <span class="n">keys</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">();</span>
+<span class="nc">Iterator</span> <span class="n">keyIterator</span> <span class="o">=</span> <span class="n">jsonObject</span><span class="o">.</span><span class="na">keys</span><span class="o">();</span>
+<span class="k">while</span> <span class="o">(</span><span class="n">keyIterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+   <span class="nc">String</span> <span class="n">key</span> <span class="o">=</span> <span class="n">keyIterator</span><span class="o">.</span><span class="na">next</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
+    <span class="c1">// 忽略大小写排除 sign</span>
+   <span class="k">if</span> <span class="o">(!</span><span class="s">"sign"</span><span class="o">.</span><span class="na">equalsIgnoreCase</span><span class="o">(</span><span class="n">key</span><span class="o">))</span> <span class="o">{</span>
+       <span class="n">keys</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+   <span class="o">}</span>
+<span class="o">}</span>
+<span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">keys</span><span class="o">);</span>
+
+<span class="c1">// 拼接参数</span>
+<span class="nc">StringBuilder</span> <span class="n">paramBuilder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+<span class="k">for</span> <span class="o">(</span><span class="nc">Object</span> <span class="n">key</span> <span class="o">:</span> <span class="n">keys</span><span class="o">)</span> <span class="o">{</span>
+   <span class="k">if</span> <span class="o">(</span><span class="n">paramBuilder</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+       <span class="n">paramBuilder</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"&amp;"</span><span class="o">);</span>
+   <span class="o">}</span>
+   <span class="c1">// 显式转为 String</span>
+   <span class="n">paramBuilder</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">toString</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">"="</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">jsonObject</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">toString</span><span class="o">()));</span>
+<span class="o">}</span>
+<span class="nc">String</span> <span class="n">paramString</span> <span class="o">=</span> <span class="n">paramBuilder</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span> <span class="s">"&amp;Key="</span> <span class="o">+</span> <span class="n">vars</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Key"</span><span class="o">);</span>
+<span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"签名串："</span> <span class="o">+</span> <span class="n">paramString</span><span class="o">);</span>
+<span class="nc">String</span> <span class="n">md5Result</span> <span class="o">=</span> <span class="nc">DigestUtils</span><span class="o">.</span><span class="na">md5Hex</span><span class="o">(</span><span class="n">paramString</span><span class="o">).</span><span class="na">toUpperCase</span><span class="o">();</span>
+<span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"加密后："</span> <span class="o">+</span> <span class="n">md5Result</span><span class="o">);</span>
+<span class="c1">// body 添加 sign 参数</span>
+<span class="n">jsonObject</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"sign"</span><span class="o">,</span> <span class="n">md5Result</span><span class="o">);</span>
+<span class="c1">// JSONObject 转字符串</span>
+<span class="nc">String</span> <span class="n">postData</span> <span class="o">=</span> <span class="n">jsonObject</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+<span class="c1">// 重新赋值请求的 body 参数</span>
+<span class="n">arg</span><span class="o">.</span><span class="na">setValue</span><span class="o">(</span><span class="n">postData</span><span class="o">);</span>
+</code></pre></div></div>
+
+<h5 id="请求体-md5-手动加密">请求体 md5 手动加密</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.apache.jmeter.config.Arguments</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.jmeter.protocol.http.control.HeaderManager</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.jmeter.protocol.http.control.Header</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.jmeter.testelement.property.CollectionProperty</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.commons.codec.digest.DigestUtils</span><span class="o">;</span>
+
+<span class="c1">// 获取请求头</span>
+<span class="nc">HeaderManager</span> <span class="n">headers</span> <span class="o">=</span><span class="n">sampler</span><span class="o">.</span><span class="na">getHeaderManager</span><span class="o">();</span>
+
+<span class="c1">// 打印全部的头部内容</span>
+<span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="n">headers</span><span class="o">.</span><span class="na">getHeaders</span><span class="o">().</span><span class="na">getStringValue</span><span class="o">());</span>
+
+<span class="c1">// 手动排序拼接请求参数</span>
+<span class="nc">String</span> <span class="n">str</span> <span class="o">=</span> <span class="s">"param="</span> <span class="o">+</span> <span class="n">param</span> <span class="o">+</span> <span class="s">"&amp;timestamp="</span> <span class="o">+</span> <span class="n">timestamp</span> <span class="o">+</span> <span class="s">"&amp;Key="</span> <span class="o">+</span> <span class="n">key</span><span class="o">;</span>
+
+<span class="c1">// md5 加密</span>
+<span class="nc">String</span> <span class="n">md5_after</span> <span class="o">=</span> <span class="nc">DigestUtils</span><span class="o">.</span><span class="na">md5Hex</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
+<span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"\n加密前："</span> <span class="o">+</span> <span class="n">str</span> <span class="o">+</span> <span class="s">"\n加密后："</span> <span class="o">+</span> <span class="n">md5_after</span><span class="o">);</span>
+
+<span class="c1">// new 一个 Header 对象</span>
+<span class="n">signHeader</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Header</span><span class="o">(</span><span class="s">"X-sign"</span><span class="o">,</span><span class="s">"aaaaaaaaaaaaaaaaaa"</span><span class="o">);</span>
+
+<span class="c1">// 添加 Header 到请求头管理器</span>
+<span class="n">headers</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">signHeader</span><span class="o">);</span>
+
+<span class="c1">// 打印全部的头部内容</span>
+<span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="n">headers</span><span class="o">.</span><span class="na">getHeaders</span><span class="o">().</span><span class="na">getStringValue</span><span class="o">());</span>
+</code></pre></div></div>
+
+<h5 id="随机手机号码">随机手机号码</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.Random</span><span class="o">;</span>
+
+<span class="nc">Random</span> <span class="n">random</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Random</span><span class="o">();</span>
+<span class="kt">int</span> <span class="n">suffix</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">100000000</span><span class="o">);</span>
+<span class="nc">String</span> <span class="n">suffixStr</span> <span class="o">=</span> <span class="nc">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">suffix</span><span class="o">);</span>
+<span class="c1">// 手动补零，确保后缀是 8 位</span>
+<span class="k">while</span> <span class="o">(</span><span class="n">suffixStr</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">suffixStr</span> <span class="o">=</span> <span class="s">"0"</span> <span class="o">+</span> <span class="n">suffixStr</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="nc">String</span> <span class="n">phone</span> <span class="o">=</span> <span class="s">"185"</span> <span class="o">+</span> <span class="n">suffixStr</span><span class="o">;</span>
+<span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="n">phone</span><span class="o">);</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 生成随机手机号码（13/14/15/16/17/18/19 开头）</span>
+<span class="kn">import</span> <span class="nn">java.util.Random</span><span class="o">;</span>
+
+<span class="nc">Random</span> <span class="n">random</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Random</span><span class="o">();</span>
+<span class="nc">String</span><span class="o">[]</span> <span class="n">prefixes</span> <span class="o">=</span> <span class="o">{</span><span class="s">"13"</span><span class="o">,</span> <span class="s">"14"</span><span class="o">,</span> <span class="s">"15"</span><span class="o">,</span> <span class="s">"16"</span><span class="o">,</span> <span class="s">"17"</span><span class="o">,</span> <span class="s">"18"</span><span class="o">,</span> <span class="s">"19"</span><span class="o">};</span>
+<span class="nc">String</span> <span class="n">prefix</span> <span class="o">=</span> <span class="n">prefixes</span><span class="o">[</span><span class="n">random</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="n">prefixes</span><span class="o">.</span><span class="na">length</span><span class="o">)];</span>
+<span class="nc">StringBuilder</span> <span class="n">phoneNumber</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">(</span><span class="n">prefix</span><span class="o">);</span>
+
+<span class="c1">// 生成剩余 9 位数字</span>
+<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+    <span class="n">phoneNumber</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">random</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">10</span><span class="o">));</span>
+<span class="o">}</span>
+
+<span class="n">vars</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"mobilePhone"</span><span class="o">,</span> <span class="n">phoneNumber</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="JMeter" /><summary type="html"><![CDATA[JMeter 常用 BeanShell 脚本]]></summary></entry><entry><title type="html">内网下使用 Nginx 转发邮件</title><link href="https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail/" rel="alternate" type="text/html" title="内网下使用 Nginx 转发邮件" /><published>2022-03-25T00:00:00+08:00</published><updated>2022-03-25T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail</id><content type="html" xml:base="https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail/"><![CDATA[<p>内网邮件通过 Nginx 代理进行转发。</p>
 
 <p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/nginx/image-20220325133718280.png" alt="image-20220325133718280" /></p>
 
@@ -897,455 +1298,4 @@ user.save!
   <li><a href="https://docs.gitlab.com/ee/raketasks/backup_restore.html#reset-runner-registration-tokens">Reset runner registration tokens</a></li>
   <li><a href="https://gitlab.com/gitlab-org/gitlab/-/issues/26171">Issue-26171</a></li>
   <li><a href="https://www.cnblogs.com/hgzero/p/14088215.html">Gitlab的安装及使用</a></li>
-</ul>]]></content><author><name>Nine</name></author><category term="Gitlab" /><summary type="html"><![CDATA[Gitlab 的安装与简单配置]]></summary></entry><entry><title type="html">Elasticsearch 的安装与使用</title><link href="https://blog.nine.gt.tc/2021/11/17/linux-install-elasticsearch/" rel="alternate" type="text/html" title="Elasticsearch 的安装与使用" /><published>2021-11-17T00:00:00+08:00</published><updated>2021-11-17T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/11/17/linux-install-elasticsearch</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/11/17/linux-install-elasticsearch/"><![CDATA[<p>Elasticsearch 是一个高度可伸缩的开源全文搜索和分析引擎，它可以快速和接近实时地存储、搜索和分析大量数据。</p>
-
-<h5 id="1安装-elasticsearch">1、安装 Elasticsearch</h5>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 下载安装</span>
-wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.12.0-x86_64.rpm
-rpm <span class="nt">-ivh</span> elasticsearch-7.12.0-x86_64.rpm
-</code></pre></div></div>
-
-<p>修改 ES 配置文件 elasticsearch.yml：<code class="language-plaintext highlighter-rouge">vim /etc/elasticsearch/elasticsearch.yml</code></p>
-
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">cluster.name</span><span class="pi">:</span> <span class="s">scientific-research</span>
-<span class="na">node.name</span><span class="pi">:</span> <span class="s">node-1</span>
-<span class="na">network.host</span><span class="pi">:</span> <span class="s">192.168.0.250</span>
-<span class="na">http.port</span><span class="pi">:</span> <span class="m">9200</span>
-<span class="na">cluster.initial_master_nodes</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">node-1"</span><span class="pi">]</span>
-</code></pre></div></div>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 设置开机自启</span>
-systemctl <span class="nb">enable </span>elasticsearch.service
-
-<span class="c"># 启动elasticsearch</span>
-systemctl start elasticsearch
-
-<span class="c"># 查看状态</span>
-systemctl status elasticsearch
-
-<span class="c"># 开放端口</span>
-firewall-cmd <span class="nt">--zone</span><span class="o">=</span>public <span class="nt">--permanent</span> <span class="nt">--add-port</span><span class="o">=</span>9200/tcp
-firewall-cmd <span class="nt">--reload</span>
-</code></pre></div></div>
-
-<p>浏览器打开：http://192.168.0.250:9200，出现以下信息表示启动成功</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316170035522.png" alt="image-20220316170035522" /></p>
-
-<h5 id="2安装ik分词器">2、安装ik分词器</h5>
-
-<p>下载与 ES 相同版本的 ik 分词器</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 安装 ik 分词器</span>
-<span class="nb">cd</span> /usr/share/elasticsearch/plugins
-<span class="nb">mkdir </span>ik
-<span class="nb">cd </span>ik
-wget https://github.com/medcl/elasticsearch-analysis-
-ik/releases/download/v7.12.0/elasticsearch-analysis-ik-7.12.0.zip
-unzip elasticsearch-analysis-ik-7.12.0.zip
-<span class="nb">rm </span>elasticsearch-analysis-ik-7.12.0.zip
-
-<span class="c"># 重启服务</span>
-systemctl restart elasticsearch
-</code></pre></div></div>
-
-<h5 id="3分词器的使用">3、分词器的使用</h5>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 使用 ES 内置分词器，只会将文字按个拆分</span>
-curl <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="nt">-XGET</span> <span class="s1">'192.168.0.250:9200/_analyze?pretty'</span> <span class="nt">-d</span> <span class="s1">'{"text":"飞流直下三千尺"}'</span>
-
-<span class="c"># 使用 analyzer-ik 分词器</span>
-curl <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="nt">-XGET</span> <span class="s1">'192.168.0.250:9200/_analyze?pretty'</span> <span class="nt">-d</span> <span class="s1">'{"analyzer":"ik_max_word","text":"飞流直下三千尺"}'</span>
-</code></pre></div></div>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316163049837.png" alt="image-20220316163049837" /></p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 配置自定义词库</span>
-vim /usr/share/elasticsearch/plugins/ik/config/IKAnalyzer.cfg.xml
-
-<span class="c"># 增加自定义词库</span>
-<span class="nb">echo</span> <span class="s1">'三千尺'</span> <span class="o">&gt;</span> /usr/share/elasticsearch/plugins/ik/config/my.dic
-
-<span class="c"># 重启 es 服务</span>
-systemctl restart elasticsearch
-</code></pre></div></div>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316163012921.png" alt="image-20220316163012921" /></p>
-
-<p>使用自定义词库后的分词效果</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316162747400.png" alt="image-20220316162747400" /></p>
-
-<h5 id="4head-插件安装">4、head 插件安装</h5>
-
-<p>head 插件是 ES 的一个可视化管理插件，用来监视 ES 的状态，并通过 head 客户端和 ES 服务进行交互，比如创建映射、创建索引等。</p>
-
-<p>安装方式见：https://github.com/mobz/elasticsearch-head</p>
-
-<p>本文使用浏览器插件方式：https://chrome.google.com/webstore/detail/elasticsearch-head/ffmkiejjmecolpfloofpjologoblkegm</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20220316170641309.png" alt="image-20220316170641309" /></p>]]></content><author><name>Nine</name></author><category term="Elasticsearch" /><summary type="html"><![CDATA[Elasticsearch 的简单配置和使用]]></summary></entry><entry><title type="html">MySQL 的安装与使用</title><link href="https://blog.nine.gt.tc/2021/10/17/linux-install-mysql/" rel="alternate" type="text/html" title="MySQL 的安装与使用" /><published>2021-10-17T00:00:00+08:00</published><updated>2021-10-17T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/10/17/linux-install-mysql</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/10/17/linux-install-mysql/"><![CDATA[<p>使用离线包方式安装 MySQL。</p>
-
-<h5 id="1下载-mysql">1、下载 MySQL</h5>
-
-<p>官网：<a href="https://downloads.mysql.com/archives/community/">https://downloads.mysql.com/archives/community/</a>，本机为 Centos 7.7</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/mysql/image-20211017190131138.png" alt="image-20211017190131138" /></p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 下载安装包</span>
-wget https://cdn.mysql.com/archives/mysql-8.0/mysql-8.0.34-linux-glibc2.12-x86_64.tar.xz
-
-<span class="c"># 查看系统自带的 Mariadb</span>
-rpm <span class="nt">-qa</span> | <span class="nb">grep </span>mariadb
-
-<span class="c"># 卸载系统自带的 Mariadb</span>
-rpm <span class="nt">-e</span> <span class="nt">--nodeps</span> mariadb-libs-5.5.64-1.el7.x86_64
-
-<span class="c"># 查看是否安装过 MySQL，删除相关目录和配置文件</span>
-rpm <span class="nt">-qa</span> | <span class="nb">grep </span>mysql
-
-<span class="c"># 安装依赖</span>
-yum <span class="nb">install </span>libaio
-</code></pre></div></div>
-
-<h5 id="2环境配置">2、环境配置</h5>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 解压</span>
-<span class="nb">tar</span> <span class="nt">-xvf</span> mysql-8.0.34-linux-glibc2.12-x86_64.tar.xz <span class="nt">-C</span> /data
-<span class="nb">mv</span> /data/mysql-8.0.34-linux-glibc2.12-x86_64 /data/mysql
-
-<span class="c"># 创建数据目录，修改目录权限</span>
-<span class="nb">mkdir</span> <span class="nt">-p</span> /data/mysql/<span class="o">{</span>data,conf,run,log<span class="o">}</span>
-<span class="nb">chmod </span>750 /data/mysql/data
-
-<span class="c"># 创建 mysql 组</span>
-groupadd mysql
-
-<span class="c"># 创建 mysql 用户，使用 -g 参数指定组，-r 参数表示 mysql 用户是系统用户，不可用于登录系统</span>
-useradd <span class="nt">-r</span> <span class="nt">-g</span> mysql mysql
-
-<span class="c"># 修改 mysql 的用户和组</span>
-<span class="nb">chown</span> <span class="nt">-R</span> mysql:mysql /data/mysql
-
-<span class="c"># 配置环境变量</span>
-<span class="nb">echo</span> <span class="s1">'export PATH=$PATH:/data/mysql/bin'</span> <span class="o">&gt;&gt;</span> /etc/profile
-<span class="nb">source</span> /etc/profile
-</code></pre></div></div>
-
-<p>创建配置文件：<code class="language-plaintext highlighter-rouge">vim /etc/my.cnf</code></p>
-
-<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[mysql]</span>
-<span class="c"># 设置 MySQL 客户端默认字符集
-</span><span class="py">default-character-set</span><span class="p">=</span><span class="s">utf8</span>
-<span class="py">socket</span><span class="p">=</span><span class="s">/data/mysql/run/mysql.sock</span>
-
-<span class="nn">[mysqld]</span>
-<span class="py">port</span><span class="p">=</span><span class="s">3306</span>
-<span class="py">socket</span><span class="p">=</span><span class="s">/data/mysql/run/mysql.sock</span>
-<span class="py">pid-file</span><span class="p">=</span><span class="s">/data/mysql/run/mysql.pid</span>
-
-<span class="py">mysqlx_port</span> <span class="p">=</span> <span class="s">33060</span>
-<span class="py">mysqlx_socket</span><span class="p">=</span><span class="s">/data/mysql/run/mysqlx.sock</span>
-
-<span class="c"># 设置时区
-</span><span class="py">default-time-zone</span><span class="p">=</span><span class="s">'+8:00'</span>
-<span class="py">log_timestamps</span> <span class="p">=</span> <span class="s">SYSTEM</span>
-
-<span class="c"># 设置 MySQL 的安装目录、数据目录
-</span><span class="py">basedir</span><span class="p">=</span><span class="s">/data/mysql</span>
-<span class="py">datadir</span><span class="p">=</span><span class="s">/data/mysql/data</span>
-
-<span class="c"># 允许最大连接数
-</span><span class="py">max_connections</span><span class="p">=</span><span class="s">2000</span>
-
-<span class="c"># 默认数据库字符集
-</span><span class="py">character-set-server</span><span class="p">=</span><span class="s">utf8mb4</span>
-<span class="py">collation-server</span> <span class="p">=</span> <span class="s">utf8mb4_unicode_ci</span>
-<span class="py">init_connect</span> <span class="p">=</span> <span class="s">'SET NAMES utf8mb4'</span>
-
-<span class="c"># 创建新表时将使用的默认存储引擎
-</span><span class="py">default-storage-engine</span><span class="p">=</span><span class="s">INNODB</span>
-
-<span class="c"># MYSQL 大小写不敏感
-</span><span class="py">lower_case_table_names</span><span class="p">=</span><span class="s">1</span>
-<span class="py">max_allowed_packet</span><span class="p">=</span><span class="s">16M</span>
-<span class="py">default-authentication-plugin</span><span class="p">=</span><span class="s">caching_sha2_password</span>
-<span class="py">innodb_file_per_table</span><span class="p">=</span><span class="s">1</span>
-
-<span class="c"># InnoDB 核心参数
-</span><span class="py">innodb_buffer_pool_size</span><span class="p">=</span><span class="s">1G</span>
-<span class="py">innodb_buffer_pool_instances</span><span class="p">=</span><span class="s">8</span>
-<span class="py">innodb_redo_log_capacity</span><span class="p">=</span><span class="s">2G</span>
-<span class="py">innodb_log_buffer_size</span><span class="p">=</span><span class="s">32M</span>
-
-<span class="c"># 日志
-</span><span class="py">log_error</span><span class="p">=</span><span class="s">/data/mysql/log/mysql-error.log</span>
-<span class="py">slow_query_log</span><span class="p">=</span><span class="s">1</span>
-<span class="py">slow_query_log_file</span><span class="p">=</span><span class="s">/data/mysql/log/slow-query.log</span>
-<span class="py">long_query_time</span><span class="p">=</span><span class="s">2</span>
-<span class="py">log_queries_not_using_indexes</span><span class="p">=</span><span class="s">1</span>
-<span class="py">log_throttle_queries_not_using_indexes</span><span class="p">=</span><span class="s">60</span>
-
-<span class="c"># 跳过 DNS 反向解析
-</span><span class="py">skip-name-resolve</span><span class="p">=</span><span class="s">1</span>
-</code></pre></div></div>
-
-<h5 id="3安装-mysql">3、安装 MySQL</h5>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 初始化 mysqld</span>
-/data/mysql/bin/mysqld <span class="nt">--initialize</span> <span class="nt">--user</span><span class="o">=</span>mysql
-
-<span class="c"># 查看临时密码和日志是否有报错</span>
-<span class="nb">cat</span> /data/mysql/log/mysql-error.log
-
-<span class="c"># 启动 MySQL</span>
-/data/mysql/support-files/mysql.server start
-
-<span class="c"># 登录 MySQL</span>
-mysql <span class="nt">-u</span> root <span class="nt">-p</span>
-</code></pre></div></div>
-
-<blockquote>
-  <p>此处登录 MySQL 可能会报错：mysql: error while loading shared libraries: libtinfo.so.5: cannot open shared object file: No such file or directory</p>
-
-  <p>执行此命令修复：<code class="language-plaintext highlighter-rouge">ln -s /usr/lib64/libtinfo.so.6.1 /usr/lib64/libtinfo.so.5</code></p>
-</blockquote>
-
-<pre><code class="language-mysql"># 修改 root 用户密码
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'mysql1234!';
-
-# 对指定 ip 段开放 root 用户远程连接权限
-use mysql;
-UPDATE user SET user.Host='192.168.216.%' WHERE user.User='root';
-FLUSH PRIVILEGES;
-
-# 查询已有用户
-SELECT Host, User FROM mysql.user;
-
-# 删除远程登录用户
-DELETE FROM USER WHERE User='root' and Host='%';
-</code></pre>
-
-<h5 id="4配置开机自启">4、配置开机自启</h5>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 开放端口</span>
-firewall-cmd <span class="nt">--zone</span><span class="o">=</span>public <span class="nt">--permanent</span> <span class="nt">--add-port</span><span class="o">=</span>3306/tcp
-firewall-cmd <span class="nt">--reload</span>
-
-<span class="c"># 将 mysql.server 复制到 /etc/init.d 下面</span>
-<span class="nb">cp</span> /data/mysql/support-files/mysql.server /etc/init.d/mysqld
-
-<span class="c"># 通过 chkconfig 将 mysql 服务添加到开机启动的列表</span>
-chkconfig <span class="nt">--add</span> mysqld
-
-<span class="c"># 重启 mysql</span>
-systemctl restart mysqld
-</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="MySQL" /><summary type="html"><![CDATA[MySQL 安装与使用]]></summary></entry><entry><title type="html">Centos7 下升级 OpenSSH</title><link href="https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh/" rel="alternate" type="text/html" title="Centos7 下升级 OpenSSH" /><published>2021-08-18T00:00:00+08:00</published><updated>2021-08-18T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/08/18/centos7-upgrade-openssh/"><![CDATA[<p>Centos7.6 升级后测试 ssh 登录及重启后 ssh 登录均无问题，升级无需卸载原先的 openssl 和 openssh。</p>
-
-<p>系统环境为服务器安装镜像时自带的 openssh，没有经历过手动编译安装方式</p>
-
-<h5 id="1升级准备">1、升级准备</h5>
-
-<p>升级前版本</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818183950745.png" alt="image-20210818183950745" /></p>
-
-<p>升级后版本</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818210016091.png" alt="image-20210818210016091" /></p>
-
-<blockquote>
-  <p><strong>注意事项：</strong></p>
-
-  <p>升级前先关闭 selinux</p>
-
-  <p>使用 telnet 登录升级，备份 ssh 相关文件，避免失败时无法回退版本</p>
-
-  <p>建议先在相同版本的测试环境进行升级，ssh 服务重启、服务器重启、su 切换用户等无问题后再到生产环境操作</p>
-</blockquote>
-
-<p>先使用 yum 升级到目前 yum 仓库默认的 openssh7.4p1 版本，再进行编译安装升级到 openssh8.6p1</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum <span class="nt">-y</span> update openssh
-</code></pre></div></div>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818191234569.png" alt="image-20210818191234569" /></p>
-
-<p>关闭 selinux：<code class="language-plaintext highlighter-rouge">vim /etc/selinux/config</code>，将<code class="language-plaintext highlighter-rouge">SELINUX=enforcing</code>改为<code class="language-plaintext highlighter-rouge">SELINUX=disabled</code></p>
-
-<p>重启服务器：<code class="language-plaintext highlighter-rouge">shutdown -r now</code></p>
-
-<h5 id="2安装配置-telnet">2、安装配置 telnet</h5>
-
-<p>防止SSH远程控制时，升级过程中出现连接中断，可通过 telnet 备用方式进行远程连接（由于 telnet 是明文传输，不安全，只作为临时使用，升级完成后，必须停止卸载该服务）</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum <span class="nt">-y</span> <span class="nb">install </span>xinetd telnet-server
-</code></pre></div></div>
-
-<p>修改配置文件：<code class="language-plaintext highlighter-rouge">vim /etc/xinetd.d/telnet</code></p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># default: on</span>
-<span class="c"># # description: The telnet server serves telnet sessions; it uses \</span>
-<span class="c"># #   unencrypted username/password pairs for authentication.</span>
-service telnet
-<span class="o">{</span>
-     disable     <span class="o">=</span> <span class="nb">yes
-     </span>flags       <span class="o">=</span> REUSE
-     socket_type <span class="o">=</span> stream               
-     <span class="nb">wait</span>        <span class="o">=</span> no
-     user        <span class="o">=</span> root
-     server      <span class="o">=</span> /usr/sbin/in.telnetd
-     log_on_failure  +<span class="o">=</span> USERID
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>配置 telnet 登录的终端类型：<code class="language-plaintext highlighter-rouge">vim /etc/securetty</code>，再文件末尾增加一些 pts 终端</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pts/0
-pts/1
-pts/2
-pts/3
-</code></pre></div></div>
-
-<p>设为开机自动启动</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl <span class="nb">enable </span>xinetd
-systemctl <span class="nb">enable </span>telnet.socket
-systemctl start telnet.socket
-systemctl start xinetd
-
-<span class="c"># 查看服务是否启动</span>
-netstat <span class="nt">-lntp</span>|grep 23
-</code></pre></div></div>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819104413583.png" alt="image-20210819104413583" /></p>
-
-<p>测试 telnet 登录</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819104602717.png" alt="image-20210819104602717" /></p>
-
-<p>以下升级操作均在 telnet 终端下操作，防止 ssh 连接意外中断造成升级失败</p>
-
-<h5 id="3升级-openssl">3、升级 openssl</h5>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 安装依赖包</span>
-yum <span class="nt">-y</span> <span class="nb">install </span>gcc gcc-c++ glibc make autoconf openssl openssl-devel pcre-devel  pam-devel
-yum <span class="nt">-y</span> <span class="nb">install </span>pam<span class="k">*</span> zlib<span class="k">*</span>
-
-<span class="c"># 下载解压 openssl 包</span>
-wget https://www.openssl.org/source/openssl-1.1.1g.tar.gz
-<span class="nb">tar</span> <span class="nt">-zxvf</span> openssl-1.1.1g.tar.gz
-
-<span class="c"># 备份 openssl (存在就备份)</span>
-<span class="nb">mv</span> /usr/bin/openssl /usr/bin/openssl_bak
-<span class="nb">mv</span> /usr/include/openssl /usr/include/openssl_bak
-
-<span class="c"># 编译安装 openssl</span>
-<span class="nb">cd </span>openssl-1.1.1g
-./config <span class="nt">--prefix</span><span class="o">=</span>/usr/ <span class="nt">--openssldir</span><span class="o">=</span>/usr/ shared
-make <span class="nt">-j2</span> <span class="o">&amp;&amp;</span> make <span class="nt">-j2</span> <span class="nb">install</span>
-
-<span class="c"># 查看最后的命令 make install 是否有报错，0 表示无问题</span>
-<span class="nb">echo</span> <span class="nv">$?</span>
-
-<span class="c"># 查看升级后的 openssl 版本</span>
-openssl version
-</code></pre></div></div>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818192248033.png" alt="image-20210818192248033" /></p>
-
-<h5 id="4升级-openssh">4、升级 openssh</h5>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 下载解压 openssh 包</span>
-wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.6p1.tar.gz
-<span class="nb">tar</span> <span class="nt">-zxvf</span> openssh-8.6p1.tar.gz
-<span class="nb">chown</span> <span class="nt">-R</span> root:root openssh-8.6p1
-
-<span class="c"># 备份ssh</span>
-<span class="nb">mv</span> /etc/ssh /etc/ssh.bak
-<span class="nb">mv</span> /usr/bin/ssh /usr/bin/ssh.bak
-<span class="nb">mv</span> /usr/sbin/sshd /usr/sbin/sshd.bak
-
-<span class="c"># 编译安装 openssh</span>
-<span class="nb">cd </span>openssh-8.6p1
-./configure <span class="nt">--prefix</span><span class="o">=</span>/usr <span class="nt">--sysconfdir</span><span class="o">=</span>/etc/ssh <span class="nt">--with-ssl-dir</span><span class="o">=</span>/usr/local/ssl <span class="nt">--with-md5-passwords</span> <span class="nt">--with-pam</span> <span class="nt">--with-zlib</span> <span class="nt">--with-tcp-wrappers</span> <span class="nt">--without-hardening</span>
-make <span class="nt">-j2</span> <span class="o">&amp;&amp;</span> make <span class="nt">-j2</span> <span class="nb">install</span>
-
-<span class="c"># 查看最后的命令 make install 是否有报错</span>
-<span class="nb">echo</span> <span class="nv">$?</span>
-
-<span class="c"># 授权</span>
-<span class="nb">chmod </span>600 /etc/ssh/ssh_host_rsa_key /etc/ssh/ssh_host_ecdsa_key /etc/ssh/ssh_host_ed25519_key
-
-<span class="c"># 从原先的解压的包中拷贝一些文件到目标位置</span>
-<span class="nb">cp</span> <span class="nt">-a</span> contrib/redhat/sshd.init  /etc/init.d/sshd
-<span class="nb">cp</span> <span class="nt">-a</span> contrib/redhat/sshd.pam /etc/pam.d/sshd.pam
-<span class="nb">chmod </span>u+x /etc/init.d/sshd
-
-<span class="c"># 将原先 systemd 管理的 sshd 文件删除或者移走，否则会影响重启 sshd 服务</span>
-<span class="nb">mv</span> /usr/lib/systemd/system/sshd.service /usr/lib/systemd/system/sshd.service.bak
-
-<span class="c"># 修改 ssh 配置</span>
-vim /etc/ssh/sshd_config
-
-UseDNS no
-UsePAM <span class="nb">yes
-</span>PermitRootLogin <span class="nb">yes
-</span>PasswordAuthentication <span class="nb">yes</span>
-
-<span class="c"># 设置开机自启</span>
-chkconfig <span class="nt">--add</span> sshd
-chkconfig sshd on
-
-<span class="c"># 重启 ssh 服务</span>
-systemctl daemon-reload
-systemctl restart sshd
-
-<span class="c"># 查看 ssh 状态</span>
-systemctl status sshd.service
-
-<span class="c"># 查看升级后的 openssh 版本</span>
-ssh <span class="nt">-V</span>
-</code></pre></div></div>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818210216061.png" alt="image-20210818210216061" /></p>
-
-<p>使用 systemd 方式测试</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>netstat <span class="nt">-lntp</span>
-systemctl stop sshd
-netstat <span class="nt">-lntp</span>
-systemctl start sshd
-netstat <span class="nt">-lntp</span>
-systemctl restart sshd
-netstat <span class="nt">-lntp</span>
-</code></pre></div></div>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210818195309024.png" alt="image-20210818195309024" /></p>
-
-<p>telnet 测试</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819091246218.png" alt="image-20210819091246218" /></p>
-
-<p>重启后再次测试均无问题，关闭 telnet</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl disable xinetd.service
-systemctl stop xinetd.service
-systemctl disable telnet.socket
-systemctl stop telnet.socket
-netstat <span class="nt">-lntp</span>
-</code></pre></div></div>
-
-<h5 id="5版本回退">5、版本回退</h5>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">rm</span> <span class="nt">-rf</span> /etc/ssh
-<span class="nb">mv</span> /etc/ssh.bak /etc/ssh
-<span class="nb">mv</span> /usr/bin/ssh.bak /usr/bin/ssh
-<span class="nb">mv</span> /usr/sbin/sshd.bak /usr/sbin/sshd
-systemctl restart sshd
-ssh <span class="nt">-V</span>
-</code></pre></div></div>
-<p>回退后注意验证 ssh 登录是否正常</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20210819102454585.png" alt="image-20210819102454585" /></p>]]></content><author><name>Nine</name></author><category term="Linux" /><summary type="html"><![CDATA[Centos7 下的 openssl、openssh 升级]]></summary></entry></feed>
+</ul>]]></content><author><name>Nine</name></author><category term="Gitlab" /><summary type="html"><![CDATA[Gitlab 的安装与简单配置]]></summary></entry></feed>

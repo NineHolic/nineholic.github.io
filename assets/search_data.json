@@ -117,6 +117,14 @@
     } ,
   
     {
+      "title"    : "Linux 使用技巧",
+      "category" : "Linux",
+      
+      "url"      : "https://blog.nine.gt.tc/2020/03/08/linux-skill/",
+      "keywords" : "Linux, Centos, Ubuntu"
+    } ,
+  
+    {
       "title"    : "Java 的安装与使用",
       "category" : "Java",
       
@@ -141,11 +149,35 @@
     } ,
   
     {
+      "title"    : "Jenkins 使用技巧",
+      "category" : "Jenkins",
+      
+      "url"      : "https://blog.nine.gt.tc/2020/06/19/jenkins-skill/",
+      "keywords" : "Jenkins, Linux, CI/CD"
+    } ,
+  
+    {
+      "title"    : "Jenkins pipeline 的使用",
+      "category" : "Jenkins",
+      
+      "url"      : "https://blog.nine.gt.tc/2020/07/03/jenkins-pipeline/",
+      "keywords" : "Jenkins, Pipeline, Groovy"
+    } ,
+  
+    {
       "title"    : "Redis 的安装与使用",
       "category" : "Redis",
       
       "url"      : "https://blog.nine.gt.tc/2020/07/08/linux-install-redis/",
       "keywords" : "Redis, Linux, Centos, DB"
+    } ,
+  
+    {
+      "title"    : "JMeter 使用技巧",
+      "category" : "JMeter",
+      
+      "url"      : "https://blog.nine.gt.tc/2020/10/23/jmeter-skill/",
+      "keywords" : "JMeter, Windows, Linux"
     } ,
   
     {
@@ -229,11 +261,35 @@
     } ,
   
     {
+      "title"    : "JMeter 常用 BeanShell 脚本",
+      "category" : "JMeter",
+      
+      "url"      : "https://blog.nine.gt.tc/2022/10/17/jmeter-beanshell/",
+      "keywords" : "JMeter, BeanShell, Java"
+    } ,
+  
+    {
+      "title"    : "JMeter 常用函数",
+      "category" : "JMeter",
+      
+      "url"      : "https://blog.nine.gt.tc/2022/11/22/jmeter-functions/",
+      "keywords" : "JMeter, functions"
+    } ,
+  
+    {
       "title"    : "PostgreSQL 的安装与使用",
       "category" : "PostgreSQL",
       
       "url"      : "https://blog.nine.gt.tc/2022/12/13/linux-install-postgresql/",
       "keywords" : "PostgreSQL, Linux, Centos, DB"
+    } ,
+  
+    {
+      "title"    : "Docker 使用技巧",
+      "category" : "Docker",
+      
+      "url"      : "https://blog.nine.gt.tc/2023/07/09/docker-skill/",
+      "keywords" : "Docker, Linux, Virtual"
     } ,
   
     {

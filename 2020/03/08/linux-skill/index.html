@@ -1,0 +1,267 @@
+<!DOCTYPE html><html lang="zh-cmn-Hans" prefix="og: http://ogp.me/ns#" class="han-init"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /><title>Linux 使用技巧 &mdash; Nine</title><link rel="stylesheet" href="https://blog.nine.gt.tc/assets/vendor/primer-css/css/primer.css"><link rel="stylesheet" href="https://blog.nine.gt.tc/assets/css/components/collection.css"><link rel="stylesheet" href="https://blog.nine.gt.tc/assets/css/components/repo-card.css"><link rel="stylesheet" href="https://blog.nine.gt.tc/assets/css/sections/repo-list.css"><link rel="stylesheet" href="https://blog.nine.gt.tc/assets/css/components/boxed-group.css"><link rel="stylesheet" href="https://blog.nine.gt.tc/assets/css/globals/common.css"><link rel="stylesheet" href="https://blog.nine.gt.tc/assets/css/globals/responsive.css"><link rel="stylesheet" href="https://blog.nine.gt.tc/assets/css/posts/index.css"><link rel="stylesheet" href="https://blog.nine.gt.tc/assets/vendor/octicons/octicons/octicons.css"><link rel="stylesheet" href="/assets/css/posts/base16.solarized.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css"/><link rel="canonical" href="https://blog.nine.gt.tc/2020/03/08/linux-skill/"><link rel="alternate" type="application/atom+xml" title="Nine" href="https://blog.nine.gt.tc/feed.xml"><link rel="shortcut icon" href="https://blog.nine.gt.tc/favicon.ico"><meta property="og:title" content="Linux 使用技巧"><meta name="keywords" content="Linux, Centos, Ubuntu"><meta name="og:keywords" content="Linux, Centos, Ubuntu"><meta name="description" content="工作、学习期间陆续记录的 Linux 使用技巧。"><meta name="og:description" content="工作、学习期间陆续记录的 Linux 使用技巧。"><meta property="og:url" content="https://blog.nine.gt.tc/2020/03/08/linux-skill/"><meta property="og:site_name" content="Nine"><meta property="og:type" content="article"><meta property="og:locale" content="zh_CN" /><meta property="article:published_time" content="2020-03-08"> <script src="https://blog.nine.gt.tc/assets/vendor/jquery/dist/jquery.min.js"></script> <script src="https://blog.nine.gt.tc/assets/js/main.js"></script> <script async src="https://www.googletagmanager.com/gtag/js?id=G-5QHWNF9C4N"></script> <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-5QHWNF9C4N'); </script> <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?291b6bd8af9846f6fab5b11aa98b7415"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script></head><body class="" data-mz=""><header class="site-header"><div class="container"><h1> <a href="https://blog.nine.gt.tc/" title="Nine" class="title-info"> <img src="https://blog.nine.gt.tc/assets/images/avatar.jpeg" class="avatar-top avatar-user avatar avatar-small">Nine </a></h1><button class="collapsed mobile-visible" type="button" onclick="toggleMenu();"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button><nav class="site-header-nav" role="navigation"> <a href="https://blog.nine.gt.tc/" class="site-header-nav-item" target="" title="首页">首页</a> <a href="https://blog.nine.gt.tc/categories/" class="site-header-nav-item" target="" title="分类">分类</a> <a href="https://blog.nine.gt.tc/archives/" class="mobile-hidden site-header-nav-item" target="" title="归档">归档</a> <a href="https://blog.nine.gt.tc/links/" class="mobile-hidden site-header-nav-item" target="" title="链接">链接</a> <a href="https://blog.nine.gt.tc/about/" class="site-header-nav-item" target="" title="关于">关于</a> <a class="mobile-hidden" href="https://blog.nine.gt.tc/feed.xml"><span class="octicon octicon-rss" style="color:orange;"></span></a></nav></div></header><section class="collection-head small geopattern" data-pattern-id="Linux 使用技巧"><div class="container"><div class="columns"><div class="column three-fourths"><div class="collection-title"><h1 class="collection-header">Linux 使用技巧</h1><div class="collection-info"> <span class="meta-info"> <span class="octicon octicon-calendar"></span> 2020/03/08 </span> <span class="meta-info"> <span class="octicon octicon-file-directory"></span> <a href="https://blog.nine.gt.tc/categories/#Linux" title="Linux">Linux</a> </span> <span class="meta-info"> <span class="octicon octicon-clock"></span> 共 7950 字，约 23 分钟 </span></div></div></div><div class="column one-fourth mobile-hidden"><div class="collection-title"></div></div></div></div></section><section class="container content"><div class="columns"><div class="column three-fourths" ><article class="article-content markdown-body"><p>工作、学习期间陆续记录的 Linux 使用技巧。</p><h5 id="更换-yum-源">更换 yum 源</h5><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 备份现有源</span>
+<span class="nb">cp</span> <span class="nt">-r</span> /etc/yum.repos.d /etc/yum.repos.d.bak
+
+<span class="c"># Centos 7 阿里云</span>
+curl <span class="nt">-o</span> /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo <span class="o">&amp;&amp;</span> curl <span class="nt">-o</span> /etc/yum.repos.d/epel.repo https://mirrors.aliyun.com/repo/epel-7.repo
+
+<span class="c"># Centos 7 华为云</span>
+curl <span class="nt">-o</span> /etc/yum.repos.d/CentOS-Base.repo https://repo.huaweicloud.com/repository/conf/CentOS-7-anon.repo
+
+<span class="c"># Centos 8</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/mirrorlist/#mirrorlist/g'</span> /etc/yum.repos.d/CentOS-<span class="k">*</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g'</span> /etc/yum.repos.d/CentOS-<span class="k">*</span>
+
+<span class="c"># 清理缓存</span>
+yum clean all <span class="o">&amp;&amp;</span> yum makecache
+</code></pre></div></div><h5 id="更换-apt-源">更换 apt 源</h5><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 备份现有源</span>
+<span class="nb">cp</span> <span class="nt">-r</span> /etc/apt/sources.list.d/ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources.bak
+
+<span class="c"># Ubuntu 24.04 版本更换源的方式有所变化，不再使用 sources.list 文件，而是改为使用 /etc/apt/sources.list.d/ubuntu.sources 配置文件</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s@//.*archive.ubuntu.com@//mirrors.aliyun.com@g'</span> /etc/apt/sources.list.d/ubuntu.sources <span class="o">&amp;&amp;</span> <span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s@//.*security.ubuntu.com@//mirrors.aliyun.com@g'</span> /etc/apt/sources.list.d/ubuntu.sources <span class="o">&amp;&amp;</span> apt update
+
+<span class="c"># 系统低于 Ubuntu 24.04 版本</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s@//.*archive.ubuntu.com@//mirrors.aliyun.com@g'</span> /etc/apt/sources.list <span class="o">&amp;&amp;</span> <span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s@//.*security.ubuntu.com@//mirrors.aliyun.com@g'</span> /etc/apt/sources.list <span class="o">&amp;&amp;</span> apt update
+</code></pre></div></div><h5 id="查看系统版本">查看系统版本</h5><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 查看版本</span>
+<span class="nb">cat</span> /etc/<span class="k">*</span><span class="nt">-release</span>
+
+<span class="c"># 综合信息查看</span>
+hostnamectl
+
+<span class="c"># 查看内核详细信息</span>
+<span class="nb">cat</span> /proc/version
+
+<span class="c"># 查看完整系统信息</span>
+<span class="nb">uname</span> <span class="nt">-a</span>
+
+<span class="c"># 查看系统位数</span>
+getconf LONG_BIT
+</code></pre></div></div><h5 id="常用软件安装">常用软件安装</h5><p>rpm 包下载：<a href="https://rpmfind.net/linux/rpm2html/">https://rpmfind.net/linux/rpm2html/</a></p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum <span class="nt">-y</span> <span class="nb">install </span>gcc gcc-c++ make lsof tcpdump vim lrzsz wget net-tools telnet unzip screen
+
+apt <span class="nt">-y</span> <span class="nb">install </span>lrzsz screenfetch
+</code></pre></div></div><h5 id="用户名高亮显示">用户名高亮显示</h5><p>配置完成后重新登录生效（终端需支持彩色输出）</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 执行配置脚本</span>
+curl <span class="nt">-s</span> https://raw.githubusercontent.com/NineHolic/script/master/linux/setcolor.sh | bash
+
+<span class="c"># 或者执行以下命令</span>
+<span class="nb">cat</span> <span class="o">&gt;&gt;</span> ~/.bashrc <span class="o">&lt;&lt;</span> <span class="sh">"</span><span class="no">EOF</span><span class="sh">"
+
+force_color_prompt=yes
+if [ -n "</span><span class="nv">$force_color_prompt</span><span class="sh">" ]; then
+    if [ -x /usr/bin/tput ] &amp;&amp; tput setaf 1 &gt;&amp;/dev/null; then
+        color_prompt=yes
+    else
+        color_prompt=
+    fi
+fi
+
+if [ "</span><span class="nv">$color_prompt</span><span class="sh">" = yes ]; then
+    PS1='</span><span class="k">${</span><span class="nv">debian_chroot</span>:+<span class="p">(</span><span class="nv">$debian_chroot</span><span class="p">)</span><span class="k">}</span><span class="se">\[\0</span><span class="sh">33[01;32m</span><span class="se">\]\u</span><span class="sh">@</span><span class="se">\h\[\0</span><span class="sh">33[00m</span><span class="se">\]</span><span class="sh">:</span><span class="se">\[\0</span><span class="sh">33[01;34m</span><span class="se">\]\w\[\0</span><span class="sh">33[00m</span><span class="se">\]\$</span><span class="sh"> '
+else
+    PS1='</span><span class="k">${</span><span class="nv">debian_chroot</span>:+<span class="p">(</span><span class="nv">$debian_chroot</span><span class="p">)</span><span class="k">}</span><span class="se">\u</span><span class="sh">@</span><span class="se">\h</span><span class="sh">:</span><span class="se">\w\$</span><span class="sh"> '
+fi
+unset color_prompt force_color_prompt
+</span><span class="no">EOF
+</span></code></pre></div></div><p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20251119171050930.png" alt="image-20251119171050930" /></p><h5 id="网速测试">网速测试</h5><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-s</span> https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.rpm.sh | <span class="nb">sudo </span>bash
+yum <span class="nt">-y</span> <span class="nb">install </span>speedtest
+speedtest
+</code></pre></div></div><h5 id="域名无法-ping-通">域名无法 ping 通</h5><p>添加 DNS 服务器 IP 地址：<code class="language-plaintext highlighter-rouge">cat /etc/resolv.conf</code></p><p>默认 resolv.conf 内容是按照网卡设置的 DNS 内容自动生成，若要使直接修改的 DNS 内容不会在服务器重启之后丢失，需要设置网卡中 NM_CONTROLLED 的值为 no</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 修改网卡设置：是否允许 Network Manager 管理，设置为 no，</span>
+<span class="nb">echo</span> <span class="s1">'NM_CONTROLLED="no"'</span> <span class="o">&gt;&gt;</span> /etc/sysconfig/network-scripts/ifcfg-ens33
+
+<span class="c"># 重启网卡</span>
+service network restart
+
+<span class="c"># 阿里 DNS</span>
+<span class="nb">echo</span> <span class="s2">"nameserver 223.5.5.5"</span> <span class="o">&gt;&gt;</span> /etc/resolv.conf
+<span class="nb">echo</span> <span class="s2">"nameserver 223.6.6.6"</span> <span class="o">&gt;&gt;</span> /etc/resolv.conf
+
+<span class="c"># 腾讯DNS</span>
+<span class="nb">echo</span> <span class="s2">"nameserver 119.29.29.29"</span> <span class="o">&gt;&gt;</span> /etc/resolv.conf
+
+<span class="c"># 百度DNS</span>
+<span class="nb">echo</span> <span class="s2">"nameserver 180.76.76.76"</span> <span class="o">&gt;&gt;</span> /etc/resolv.conf
+
+<span class="c"># 一般修改完 reolv.conf 后就能 ping 通了，否则再重启网络</span>
+nmcli c reload
+</code></pre></div></div><h5 id="修改主机名称">修改主机名称</h5><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 修改后重新登录，若 /etc/hosts 有主机名称映射应手动修改</span>
+hostnamectl set-hostname nine-test
+</code></pre></div></div><h5 id="设置静态ip">设置静态IP</h5><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 查看当前网卡名称</span>
+ip a
+
+<span class="c"># 修改配置文件,BOOTPROTO 改为 static，ONBOOT 改为yes，IPADDR 为 NAT 模式中子网 ip 同一网段 ip，GATEWAY、NETMASK、DNS1 分别设置为 NAT 模式中的网关 ip、子网掩码、网关 ip</span>
+vi /etc/sysconfig/network-scripts/ifcfg-ens33
+
+<span class="nv">IPADDR</span><span class="o">=</span><span class="s2">"192.168.216.131"</span>
+<span class="nv">GATEWAY</span><span class="o">=</span><span class="s2">"192.168.216.2"</span>
+<span class="nv">NETMASK</span><span class="o">=</span><span class="s2">"255.255.255.0"</span>
+<span class="nv">DNS1</span><span class="o">=</span><span class="s2">"192.168.216.2"</span>
+
+<span class="c"># 重启网络服务</span>
+service network restart
+</code></pre></div></div><h5 id="临时修改网卡名称">临时修改网卡名称</h5><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 将网卡关闭</span>
+ip <span class="nb">link set </span>ens160 down
+ 
+<span class="c"># 临时更改网卡名称，服务器重启后网卡名称会还原</span>
+ip <span class="nb">link set </span>ens160 name eth0
+ 
+<span class="c"># 将网卡打开</span>
+ip <span class="nb">link set </span>eth0 up
+</code></pre></div></div><h5 id="永久修改网卡名称">永久修改网卡名称</h5><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 编辑 GRUB 配置文件，禁用默认的网卡命名规则</span>
+vim /etc/default/grub
+
+<span class="c"># 在 GRUB_CMDLINE_LINUX 行中添加以下参数，修改 GRUB 配置时，确保语法正确，否则可能导致系统无法启动</span>
+net.ifnames<span class="o">=</span>0 <span class="nv">biosdevname</span><span class="o">=</span>0
+
+<span class="c"># 修改网卡配置文件，将 NAME 和 DEVICE 字段改为新名称</span>
+<span class="nb">cd</span> /etc/sysconfig/network-scripts/
+<span class="nb">mv </span>ifcfg-ens33 ifcfg-eth0
+vim ifcfg-eth0
+
+<span class="c"># 判断操作系统是基于 UEFI 模式引导的系统还是基于 BIOS 引导的系统</span>
+<span class="o">[</span> <span class="nt">-d</span> /sys/firmware/efi <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo </span>UEFI <span class="o">||</span> <span class="nb">echo </span>BIOS
+
+<span class="c"># 基于 UEFI 模式引导的系统，目录 redhat 有的为 centos</span>
+grub2-mkconfig <span class="nt">-o</span> /boot/efi/EFI/redhat/grub.cfg
+ 
+<span class="c"># 基于 BIOS 模式引导的系统 </span>
+grub2-mkconfig <span class="nt">-o</span> /boot/grub2/grub.cfg
+
+<span class="c"># 重启服务器</span>
+reboot
+
+<span class="c"># 查看网卡信息</span>
+ip a
+</code></pre></div></div><p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20250728145315278.png" alt="image-20250728145315278" /></p><h5 id="修改ssh端口号">修改ssh端口号</h5><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 将默认的 22 端口改为 22333 端口</span>
+vim /etc/ssh/sshd_config
+
+<span class="c"># 重启 ssh，此时另起 xshell 窗口使用 22333 端口测试连接，防止修改失败连不上</span>
+systemctl restart sshd
+</code></pre></div></div><h5 id="ssh-登陆慢">ssh 登陆慢</h5><p>将 UseDNS 配置为 yes 会导致登陆慢，原因是在登陆的过程中服务端会发送四次反向域名解析的请求，每次请求相隔 5s，共 20s，反映在登陆过程中就是卡了几十秒。ssh 中该配置主要用于安全加固，服务器会先根据客户端的 IP地址进行 DNS PTR反向查询出客户端的主机名，然后根据查询出的客户端主机名进行DNS正向A记录查询，并验证是否与原始IP地址一致，通过此种措施来防止客户端欺骗。</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 关闭反向 DNS 解析功能</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/#UseDNS yes/UseDNS no/g'</span> /etc/ssh/sshd_config
+
+<span class="c"># 重启 ssh 服务</span>
+systemctl restart sshd
+</code></pre></div></div><h5 id="历史命令数量修改">历史命令数量修改</h5><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 保存 1 万条历史命令</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/^HISTSIZE=.*/HISTSIZE=10000/g'</span> /etc/profile
+</code></pre></div></div><h5 id="配置开机自启">配置开机自启</h5><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 指定用户服务开启自启</span>
+su - guest <span class="nt">-c</span> <span class="s2">"/data/redis/bin/redis-server /data/redis/etc/redis-6379.conf"</span>
+su - guest <span class="nt">-c</span> <span class="s2">"/data/tomcat/apache-tomcat-8.5.88/bin/startup.sh"</span>
+su - guest <span class="nt">-c</span> <span class="s2">"nohup java -jar /data/admin.jar --spring.profiles.active=test &gt;&gt; /data/nohup.out 2&gt;&amp;1 &amp;"</span>
+</code></pre></div></div><h5 id="为普通用户添加-sudo-权限">为普通用户添加 sudo 权限</h5><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># root 用户下执行</span>
+<span class="nb">chmod </span>u+w /etc/sudoers
+
+<span class="c"># 默认新建的用户不在 sudo 组</span>
+vi /etc/sudoers
+
+<span class="c"># 添加一行，默认 5 分钟后刚才输入的 sodo 密码过期，下次 sudo 需要重新输入密码</span>
+centos <span class="nv">ALL</span><span class="o">=(</span>ALL<span class="o">)</span> ALL
+
+<span class="c"># 加上 NOPASSWD 可以不用每次输入密码</span>
+centos <span class="nv">ALL</span><span class="o">=(</span>ALL<span class="o">)</span>NOPASSWD: ALL
+
+<span class="c"># 普通用户有 sudo 权限后切换到 root 下</span>
+<span class="nb">sudo</span> <span class="nt">-i</span>
+</code></pre></div></div><p>注意： 有的时候你的将用户设了 nopasswd，但是不起作用，原因是被后面的 group 的设置覆盖了，需要把group 的设置也改为 nopasswd</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>joe <span class="nv">ALL</span><span class="o">=(</span>ALL<span class="o">)</span>NOPASSWD: ALL
+%admin <span class="nv">ALL</span><span class="o">=(</span>ALL<span class="o">)</span>NOPASSWD: ALL
+</code></pre></div></div><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 查询特权用户特权用户(uid 为0)</span>
+<span class="nb">awk</span> <span class="nt">-F</span>: <span class="s1">'$3==0{print $1}'</span> /etc/passwd
+
+<span class="c"># 查询可以远程登录的帐号信息</span>
+<span class="nb">awk</span> <span class="s1">'/\$1|\$6/{print $1}'</span> /etc/shadow
+
+<span class="c"># 除 root 帐号外，其他帐号是否存在 sudo 权限</span>
+more /etc/sudoers | <span class="nb">grep</span> <span class="nt">-v</span> <span class="s2">"^#</span><span class="se">\|</span><span class="s2">^$"</span> | <span class="nb">grep</span> <span class="s2">"ALL=(ALL)"</span>
+
+<span class="c"># 禁用帐号，帐号无法登录，/etc/shadow 第二栏为 ! 开头</span>
+usermod <span class="nt">-L</span> user
+
+<span class="c"># 删除 user 用户</span>
+userdel user
+
+<span class="c"># 将删除user用户，并且将 /home 目录下的 user 目录一并删除</span>
+userdel <span class="nt">-r</span> user
+</code></pre></div></div><h5 id="修改-umask-值">修改 umask 值</h5><p><code class="language-plaintext highlighter-rouge">umask</code>用于设置用户创建文件或者目录的默认权限，root 的<code class="language-plaintext highlighter-rouge">umask</code>为 0022，普通用户的默认<code class="language-plaintext highlighter-rouge">umask</code>为 0002</p><p>对于文件和目录来说， 最大的权限其实都是 777，但是执行权限对于文件来说，不是必要权限，而对目录来说执行权限是个基本权限。所以默认目录的最大权限是 777，而文件的默认最大权限就是 666。</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 查看</span>
+<span class="nb">umask</span>
+
+<span class="c"># 临时修改</span>
+<span class="nb">umask </span>0022
+
+<span class="c"># 永久修改</span>
+<span class="nb">echo</span> <span class="s1">'umask=022'</span> <span class="o">&gt;&gt;</span> /etc/bashrc
+</code></pre></div></div><blockquote><p>对于目录，直接使用 777-umask 即可，就得到了最终结果</p><p>对于文件，先使用 666-umask</p><p>如果对应位上为偶数：最终权限就是这个偶数值，如果上面的对应为上有奇数，就对应位+1。</p></blockquote><h5 id="修改系统和进程的-max-open-files">修改系统和进程的 Max open files</h5><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 修改/etc/security/limits.conf，此设置对 system services 不生效，只对通过 PAM 登录的用户生效</span>
+<span class="nb">cat</span> <span class="o">&gt;&gt;</span> /etc/security/limits.conf <span class="o">&lt;&lt;</span> <span class="sh">"</span><span class="no">EOF</span><span class="sh">"
+* soft nproc 102400
+* hard nproc 102400
+* soft nofile 655350
+* hard nofile 655350
+</span><span class="no">EOF
+
+</span><span class="c"># 修改系统总限制</span>
+<span class="nb">echo</span> <span class="s2">"fs.file-max = 655350"</span> <span class="o">&gt;&gt;</span> /etc/sysctl.conf
+sysctl <span class="nt">-p</span>
+
+<span class="c"># 对于 systemd service 的资源设置，需修改全局配置</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/#DefaultLimitNOFILE=/DefaultLimitNOFILE=655350/'</span> /etc/systemd/system.conf <span class="o">&amp;&amp;</span> <span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/#DefaultLimitNPROC=/DefaultLimitNPROC=102400/'</span> /etc/systemd/system.conf <span class="o">&amp;&amp;</span> <span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/#DefaultLimitNOFILE=/DefaultLimitNOFILE=655350/'</span> /etc/systemd/user.conf <span class="o">&amp;&amp;</span> <span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/#DefaultLimitNPROC=/DefaultLimitNPROC=102400/'</span> /etc/systemd/user.conf
+</code></pre></div></div><blockquote><p><code class="language-plaintext highlighter-rouge">hard</code>硬限制是可以在任何时候任何进程中设置 但硬限制只能由超级用户修改</p><p><code class="language-plaintext highlighter-rouge">soft</code>软限制是内核实际执行的限制，任何进程都可以将软限制设置为任意小于等于对进程限制的硬限制的值</p><p><code class="language-plaintext highlighter-rouge">noproc</code>进程的最大数目，<code class="language-plaintext highlighter-rouge">nofile</code>打开文件的最大数目</p></blockquote><h5 id="禁用系统-openjdk">禁用系统 openjdk</h5><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 查看 openjdk 的路径</span>
+alternatives <span class="nt">--config</span> java
+
+<span class="c"># ARM 架构位置</span>
+/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.232.b09-0.el7_7.aarch64/jre/bin/java
+
+<span class="c"># X86 架构位置</span>
+/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.171-2.6.13.2.el7.x86_64/jre/bin/java
+
+<span class="c"># 不必真的删除 openjdk，解除 openjdk 的链接配置后自己安装的 jdk 就行</span>
+alternatives <span class="nt">--remove</span> java /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.232.b09-0.el7_7.aarch64/jre/bin/java
+
+<span class="c"># 彻底删除，使用 java -version 查看是否删除成功</span>
+<span class="nb">rm</span> <span class="nt">-rf</span> java-1.8.0-openjdk-1.8.0.232.b09-0.el7_7.aarch64
+</code></pre></div></div><h5 id="添加中文字体">添加中文字体</h5><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 查看当前字体</span>
+fc-list
+
+<span class="c"># fc-list 未找到命令时，先安装字体软件</span>
+yum <span class="nb">install</span> <span class="nt">-y</span> fontconfig mkfontscale
+
+<span class="c"># 上传中文字体，解压后刷新字体缓存，注意权限需要让其它用户可读</span>
+<span class="nb">mkdir</span> /usr/share/fonts/chinese <span class="o">&amp;&amp;</span> <span class="nb">chmod </span>755 /usr/share/fonts/chinese
+unzip chinese.zip <span class="nt">-d</span> /usr/share/fonts
+<span class="nb">chmod </span>644 /usr/share/fonts/chinese/<span class="k">*</span>.tt<span class="k">*</span>
+fc-cache <span class="nt">-fv</span>
+</code></pre></div></div><h5 id="pgrep-无法获取部分进程-pid">Pgrep 无法获取部分进程 pid</h5><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 结果为空，增加参数 -f 才可获取到</span>
+pgrep code-6609ac3d66f4eade5cf376d1cb76f13985724bcb
+pgrep <span class="nt">-f</span> code-6609ac3d66f4eade5cf376d1cb76f13985724bcb
+
+<span class="c"># 查看实际进程名，结果中 Name: code-6609ac3d66</span>
+<span class="nb">cat</span> /proc/27078/status
+</code></pre></div></div><blockquote><p>查看帮助信息：<code class="language-plaintext highlighter-rouge">man pgrep</code>，可以看到 pgrep 默认只能匹配进程的前 15 个字符</p><p>NOTES The process name used for matching is limited to the 15 characters present in the output of /proc/pid/stat. Use the -f option to match against the complete command line, /proc/pid/cmdline.</p></blockquote><h5 id="vivim-显示行号">VI/VIM 显示行号</h5><p>临时显示，<code class="language-plaintext highlighter-rouge">vi</code>命令执行后输入：<code class="language-plaintext highlighter-rouge">：set nu</code></p><p>永久显示：<code class="language-plaintext highlighter-rouge">vi /etc/vim/vimrc</code>，在最后一行加上<code class="language-plaintext highlighter-rouge">set nu</code>，保存，再次使用<code class="language-plaintext highlighter-rouge">vi</code>时就会显示行号</p><h5 id="防火墙操作firewall">防火墙操作firewall</h5><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 查看状态</span>
+systemctl status firewalld
+firewall-cmd <span class="nt">--state</span>
+
+<span class="c"># 开启服务</span>
+systemctl start firewalld
+service firewalld start
+
+<span class="c"># 重启服务</span>
+systemctl restart firewalld
+service firewalld restart
+
+<span class="c"># 关闭服务</span>
+systemctl stop firewalld
+service firewalld stop
+
+<span class="c"># 查看防火墙规则</span>
+firewall-cmd <span class="nt">--list-all</span> 
+
+<span class="c"># 查询端口是否开放</span>
+firewall-cmd <span class="nt">--zone</span><span class="o">=</span>public <span class="nt">--query-port</span><span class="o">=</span>8080/tcp
+
+<span class="c"># 开放80端口</span>
+firewall-cmd <span class="nt">--zone</span><span class="o">=</span>public <span class="nt">--add-port</span><span class="o">=</span>80/tcp <span class="nt">--permanent</span>
+
+<span class="c"># 移除端口</span>
+firewall-cmd <span class="nt">--zone</span><span class="o">=</span>public <span class="nt">--remove-port</span><span class="o">=</span>8080/tcp <span class="nt">--permanent</span>
+
+<span class="c">#重启防火墙(修改配置后要重启防火墙)</span>
+firewall-cmd <span class="nt">--reload</span>
+</code></pre></div></div><blockquote><p><code class="language-plaintext highlighter-rouge">firwall-cmd</code>：是 Linux 提供的操作 firewall 的一个工具 <code class="language-plaintext highlighter-rouge">--zone=public</code>：作用域 <code class="language-plaintext highlighter-rouge">--add-port</code>：标识添加的端口 <code class="language-plaintext highlighter-rouge">--permanent</code>：设置永久</p></blockquote><h5 id="将-r-替换成空">将 \r 替换成空</h5><p>脚本运行时出现问题</p><p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200511013057229.png" alt="image-20200314174432913" /></p><p>原因：在 window 下编写脚本然后在上传到 Linux 上时，由于 window 上换行显示的为 \n\r，然而在 linux上换行显示应该为 \n，所以在 Linux 下无法读取从 window 上传来的脚本，将 \r 替换成空即可</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/\r$//'</span> test.sh
+</code></pre></div></div><h5 id="启用-vi-编辑时数字小键盘">启用 vi 编辑时数字小键盘</h5><p>使用 vi 编辑文件时小键盘数字会变成字母，要恢复输入数字状态需要在 Xshell 中修改 VT 模式设为普通</p><p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20200314174432913.png" alt="image-20200511013057229" /></p><h5 id="centos-永久关闭蜂鸣器">Centos 永久关闭蜂鸣器</h5><p>在 VMware 软件中操作时会有蜂鸣声</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># root 用户下执行</span>
+rmmod pcspkr <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">"rmmod pcspkr"</span> <span class="o">&gt;&gt;</span>/etc/rc.d/rc.local
+</code></pre></div></div><div style="font-size: 16px;border-left: 3px solid #3498db;background-color:#f0f8ff;padding: 16px 0px 1px 1px;border-radius: 3px;"><ul><li>本文作者：<a href="https://blog.nine.gt.tc" target="_blank">Nine</a></li><li>本文链接：<a href="https://blog.nine.gt.tc/2020/03/08/linux-skill/" target="_blank">https://blog.nine.gt.tc/2020/03/08/linux-skill/</a></li><li>版权声明：自由转载-非商用-非衍生-保持署名（<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank">创意共享3.0许可证</a>）</li></ul></div></article><div class="share"></div><div class="comment"> <script src="https://giscus.app/client.js" data-repo="NineHolic/blog-comments" data-repo-id="MDEwOlJlcG9zaXRvcnkzNjU4ODk4MzQ=" data-category="Announcements" data-category-id="DIC_kwDOFc8JKs4CwE7i" data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async> </script></div></div><div class="column one-fourth"><h3>Search</h3><div id="site_search"> <input style="width:96%" type="text" id="search_box" placeholder="Search"></div><ul id="search_results" style="font-size:14px;list-style-type:none;padding-top:10px;padding-left:10px;"></ul><script src="https://blog.nine.gt.tc/assets/js/simple-jekyll-search.min.js"></script> <script type="text/javascript"> SimpleJekyllSearch({ searchInput: document.getElementById('search_box'), resultsContainer: document.getElementById('search_results'), json: 'https://blog.nine.gt.tc/assets/search_data.json?v=1763547720', searchResultTemplate: '<li><a href="{url}" title="{title}">{title}</a></li>', noResultsText: 'No results found', limit: 10, fuzzy: false, exclude: ['Welcome'] }) </script><h3 class="post-directory-title mobile-hidden">Table of Contents</h3><div id="post-directory-module" class="mobile-hidden"><section class="post-directory"><dl></dl></section></div><script src="https://blog.nine.gt.tc/assets/js/jquery.toc.js"></script></div></div></section><footer class="container"><div class="site-footer" role="contentinfo"><div class="copyright left mobile-block"> © <script>document.write(new Date().getFullYear())</script> <span title="Nine">Nine</span> <a href="javascript:window.scrollTo(0,0)" class="right mobile-visible">TOP</a></div><ul class="site-footer-links right mobile-hidden"><li> <a href="javascript:window.scrollTo(0,0)" >TOP</a></li></ul><a href="https://github.com/NineHolic/nineholic.github.io" target="_blank" aria-label="view source code"> <span class="mega-octicon octicon-mark-github" title="GitHub"></span> </a><ul class="site-footer-links mobile-hidden" style="margin-bottom: 7px;"><li> <a href="https://blog.nine.gt.tc/" title="首页" target="">首页</a></li><li> <a href="https://blog.nine.gt.tc/categories/" title="分类" target="">分类</a></li><li> <a href="https://blog.nine.gt.tc/archives/" title="归档" target="">归档</a></li><li> <a href="https://blog.nine.gt.tc/links/" title="链接" target="">链接</a></li><li> <a href="https://blog.nine.gt.tc/about/" title="关于" target="">关于</a></li><li><a href="https://blog.nine.gt.tc/feed.xml"><span class="octicon octicon-rss" style="color:orange;"></span></a></li></ul><span id="runtime_span"> <script type="text/javascript"> function show_runtime() { window.setTimeout("show_runtime()", 1000); X = new Date("05/10/2021 16:20:00"); Y = new Date(); T = (Y.getTime() - X.getTime()); M = 24 * 60 * 60 * 1000; a = T / M; A = Math.floor(a); b = (a - A) * 24; B = Math.floor(b); c = (b - B) * 60; C = Math.floor((b - B) * 60); D = Math.floor((c - C) * 60); runtime_span.innerHTML = "本站已运行 " + A + " 天 " + B + " 小时 " + C + " 分 " + D + " 秒" } show_runtime(); </script> </span></div></footer><div class="tools-wrapper"> <a class="gotop" href="#" title="回到顶部"><span class="octicon octicon-arrow-up"></span></a></div><script src="https://blog.nine.gt.tc/assets/js/geopattern.js"></script> <script> jQuery(document).ready(function($) { $('.geopattern').each(function(){ $(this).geopattern($(this).data('pattern-id')); }); /* hljs.initHighlightingOnLoad(); */ }); </script> <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script> <script> $(document).ready(function() { $("p img").each(function() { var strA = "<a href='" + this.src + "' itemscope=\"\" itemtype=\"http://schema.org/ImageObject\" itemprop=\"url\" data-fancybox=\"default\" rel=\"default\"></a>"; $(this).wrapAll(strA); }); }); </script></body></html>
