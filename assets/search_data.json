@@ -104,7 +104,7 @@
       "title"    : "Git 的安装与使用",
       "category" : "Git",
       
-      "url"      : "https://blog.nine.gt.tc/2020/02/22/linux-git-install/",
+      "url"      : "https://blog.nine.gt.tc/2020/02/22/linux-install-git/",
       "keywords" : "Git, Linux"
     } ,
   
@@ -130,6 +130,14 @@
       
       "url"      : "https://blog.nine.gt.tc/2020/03/09/linux-install-java/",
       "keywords" : "Java, Linux"
+    } ,
+  
+    {
+      "title"    : "SVN 项目迁移到 Git 上",
+      "category" : "SVN",
+      
+      "url"      : "https://blog.nine.gt.tc/2020/03/11/svn-project-transfer-git/",
+      "keywords" : "SVN, Git"
     } ,
   
     {
@@ -322,6 +330,14 @@
       
       "url"      : "https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/",
       "keywords" : "Confluence, Linux"
+    } ,
+  
+    {
+      "title"    : "GitHub Connection refused",
+      "category" : "GitHub",
+      
+      "url"      : "https://blog.nine.gt.tc/2025/10/09/git-connection-refused/",
+      "keywords" : "GitHub, Windows"
     } 
   
 ]

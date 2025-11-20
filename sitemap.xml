@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>https://blog.nine.gt.tc/2020/02/22/linux-git-install/</loc>
+<loc>https://blog.nine.gt.tc/2020/02/22/linux-install-git/</loc>
 <lastmod>2020-02-22T00:00:00+08:00</lastmod>
 </url>
 <url>
@@ -15,6 +15,10 @@
 <url>
 <loc>https://blog.nine.gt.tc/2020/03/09/linux-install-java/</loc>
 <lastmod>2020-03-09T00:00:00+08:00</lastmod>
+</url>
+<url>
+<loc>https://blog.nine.gt.tc/2020/03/11/svn-project-transfer-git/</loc>
+<lastmod>2020-03-11T00:00:00+08:00</lastmod>
 </url>
 <url>
 <loc>https://blog.nine.gt.tc/2020/03/18/linux-install-oracle11/</loc>
@@ -111,6 +115,10 @@
 <url>
 <loc>https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/</loc>
 <lastmod>2024-04-19T00:00:00+08:00</lastmod>
+</url>
+<url>
+<loc>https://blog.nine.gt.tc/2025/10/09/git-connection-refused/</loc>
+<lastmod>2025-10-09T00:00:00+08:00</lastmod>
 </url>
 <url>
 <loc>https://blog.nine.gt.tc/about/</loc>

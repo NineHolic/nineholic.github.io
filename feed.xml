@@ -1,4 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://blog.nine.gt.tc/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.nine.gt.tc/" rel="alternate" type="text/html" /><updated>2025-11-19T18:22:00+08:00</updated><id>https://blog.nine.gt.tc/feed.xml</id><title type="html">Nine</title><subtitle>blog</subtitle><author><name>Nine</name></author><entry><title type="html">Confluence 的安装与使用</title><link href="https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/" rel="alternate" type="text/html" title="Confluence 的安装与使用" /><published>2024-04-19T00:00:00+08:00</published><updated>2024-04-19T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2024/04/19/linux-install-confluence</id><content type="html" xml:base="https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/"><![CDATA[<p>Confluence 是由 Atlassian 公司推出的一款企业级团队协作与知识管理工具。它是一个团队协作空间，将知识与协作无缝融合，让团队能够在一个平台上创建、协作和组织所有工作。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://blog.nine.gt.tc/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.nine.gt.tc/" rel="alternate" type="text/html" /><updated>2025-11-20T14:09:07+08:00</updated><id>https://blog.nine.gt.tc/feed.xml</id><title type="html">Nine</title><subtitle>blog</subtitle><author><name>Nine</name></author><entry><title type="html">GitHub Connection refused</title><link href="https://blog.nine.gt.tc/2025/10/09/git-connection-refused/" rel="alternate" type="text/html" title="GitHub Connection refused" /><published>2025-10-09T00:00:00+08:00</published><updated>2025-10-09T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2025/10/09/git-connection-refused</id><content type="html" xml:base="https://blog.nine.gt.tc/2025/10/09/git-connection-refused/"><![CDATA[<p>解决 GitHub 拉取代码报错：<code class="language-plaintext highlighter-rouge">Could not read from remote repository</code>问题。</p>
+
+<h4 id="1问题">1、问题</h4>
+
+<p>前几日使用 PyCharm 拉取代码时突然报错：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh: connect to host github.com port 22: Connection refused
+Could not <span class="nb">read </span>from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+</code></pre></div></div>
+
+<p>简单记录下排查过程</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 检查 SSH 是否能够连接成功</span>
+ssh <span class="nt">-T</span> git@github.com <span class="nt">-v</span>
+</code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20251009104448436.png" alt="image-20251009104448436" /></p>
+
+<p>可以看到请求到了本地端口，这时想起来本机用了<code class="language-plaintext highlighter-rouge">Steamcommunity 302</code>对<code class="language-plaintext highlighter-rouge">github.com</code>进行了代理，是对应的 host 失效了，使用 443 端口测试是正常的。</p>
+
+<h4 id="2解决">2、解决</h4>
+
+<h5 id="方案一">方案一</h5>
+
+<p>使用 https 的 443 端口代替，本地增加 ssh 配置：<code class="language-plaintext highlighter-rouge">vim ~/.ssh/config</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host github.com
+    HostName ssh.github.com
+	Port 443
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+</code></pre></div></div>
+
+<p>官方说明：<a href="https://docs.github.com/zh/authentication/troubleshooting-ssh/using-ssh-over-the-https-port">https://docs.github.com/zh/authentication/troubleshooting-ssh/using-ssh-over-the-https-port</a></p>
+
+<h5 id="方案二">方案二</h5>
+
+<p>配合使用<a href="https://www.dogfight360.com/blog/18627/">UsbEAm Hosts Editor</a>工具修改 github.com host</p>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20251009110651504.png" alt="image-20251009110651504" /></p>]]></content><author><name>Nine</name></author><category term="GitHub" /><summary type="html"><![CDATA[GitHub 拉取代码报错]]></summary></entry><entry><title type="html">Confluence 的安装与使用</title><link href="https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/" rel="alternate" type="text/html" title="Confluence 的安装与使用" /><published>2024-04-19T00:00:00+08:00</published><updated>2024-04-19T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2024/04/19/linux-install-confluence</id><content type="html" xml:base="https://blog.nine.gt.tc/2024/04/19/linux-install-confluence/"><![CDATA[<p>Confluence 是由 Atlassian 公司推出的一款企业级团队协作与知识管理工具。它是一个团队协作空间，将知识与协作无缝融合，让团队能够在一个平台上创建、协作和组织所有工作。</p>
 
 <h5 id="1安装部署">1、安装部署</h5>
 
@@ -402,6 +444,9 @@ docker inspect <span class="nb">id</span>/name
 
 <span class="c"># 实时显示 Docker 容器的资源使用情况</span>
 docker stats
+
+<span class="c"># 查看空间占用情况</span>
+docker system <span class="nb">df</span>
 </code></pre></div></div>
 
 <p><strong>参考</strong></p>
@@ -988,314 +1033,4 @@ make <span class="o">&amp;&amp;</span> make <span class="nb">install</span>
 
 <h5 id="3内网测试邮件发送">3、内网测试邮件发送</h5>
 
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/nginx/image-20220325140602124.png" alt="image-20220325140602124" /></p>]]></content><author><name>Nine</name></author><category term="Nginx" /><summary type="html"><![CDATA[内网邮件转发]]></summary></entry><entry><title type="html">Gitlab 的安装与使用</title><link href="https://blog.nine.gt.tc/2021/12/30/linux-install-gitlab/" rel="alternate" type="text/html" title="Gitlab 的安装与使用" /><published>2021-12-30T00:00:00+08:00</published><updated>2021-12-30T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2021/12/30/linux-install-gitlab</id><content type="html" xml:base="https://blog.nine.gt.tc/2021/12/30/linux-install-gitlab/"><![CDATA[<p>Centos7 下 Gitlab 的安装配置与备份恢复。</p>
-
-<h5 id="1gitlab-介绍">1、Gitlab 介绍</h5>
-
-<p>GitLab 是利用 Ruby on Rails 一个开源的版本管理系统，实现一个自托管的 Git 项目仓库，可通过 Web 界面进行访问公开的或者私人项目。</p>
-
-<p>GitLab 能够浏览源代码，管理缺陷和注释。可以管理团队对仓库的访问，它非常易于浏览提交过的版本并提供一个文件历史库。团队成员可以利用内置的简单聊天程序 (Wall) 进行交流。</p>
-
-<p>它还提供一个代码片段收集功能可以轻松实现代码复用，便于日后有需要的时候进行查找</p>
-
-<p><strong>Gitlab 服务构成</strong></p>
-
-<ul>
-  <li>Nginx：静态 web 服务器</li>
-  <li>gitlab-shell：用于处理 Git 命令和修改 authorized keys 列表</li>
-  <li>gitlab-workhorse: 轻量级的反向代理服务器</li>
-  <li>logrotate：日志文件管理工具</li>
-  <li>postgresql：数据库</li>
-  <li>redis：缓存数据库</li>
-  <li>sidekiq：用于在后台执行队列任务（异步执行）</li>
-  <li>unicorn：An HTTP server for Rack applications，GitLab Rails 应用是托管在这个服务器上面的</li>
-</ul>
-
-<p><strong>gitlab-ee 和 gitlab-ce 的区别</strong>
-关于 gitlab-ee（企业版）和 gitlab-ce（社区版），二者是基于同样的核心代码进行开发，只是 gitlab-ee 功能更强大，但需要付费使用，有 30 天试用期。但试用期过后如果不付费，它就跟 gitlab-ce 功能是完全一样的，只是需要付费的功能无法再继续使用而已。</p>
-
-<h5 id="2rpm-包安装">2、rpm 包安装</h5>
-
-<p>安装要求：<a href="https://docs.gitlab.com/ee/install/requirements.html">https://docs.gitlab.com/ee/install/requirements.html</a></p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 安装依赖</span>
-yum <span class="nb">install</span> <span class="nt">-y</span> curl policycoreutils-python openssh-server perl
-
-<span class="c"># 启动ssh</span>
-systemctl <span class="nb">enable </span>sshd
-systemctl start sshd
-
-<span class="c"># 将 http 和 https 加入防火墙策略，并重启防火墙。</span>
-systemctl start firewalld
-firewall-cmd <span class="nt">--permanent</span> <span class="nt">--add-service</span><span class="o">=</span>http
-firewall-cmd <span class="nt">--permanent</span> <span class="nt">--add-service</span><span class="o">=</span>https
-systemctl reload firewalld
-systemctl <span class="nb">enable </span>firewalld
-
-<span class="c"># 安装 postfix 发邮件功能，若使用外部 SMTP 服务器发送邮件可以不必安装</span>
-yum <span class="nb">install</span> <span class="nt">-y</span> postfix
-systemctl <span class="nb">enable </span>postfix
-systemctl start postfix
-</code></pre></div></div>
-
-<ul>
-  <li>
-    <p>离线安装</p>
-
-    <p>rpm 镜像：<a href="https://packages.gitlab.com/gitlab/gitlab-ee">https://packages.gitlab.com/gitlab/gitlab-ee</a></p>
-
-    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 下载安装 rpm 包，本机为 centos7</span>
-wget <span class="nt">--content-disposition</span> https://packages.gitlab.com/gitlab/gitlab-ee/packages/el/7/gitlab-ee-14.6.0-ee.0.el7.x86_64.rpm/download.rpm
-  
-rpm <span class="nt">-ivh</span> gitlab-ee-14.6.0-ee.0.el7.x86_64.rpm
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>在线安装</p>
-
-    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 配置 gitlab-ce 的 yum 库</span>
-curl <span class="nt">-sS</span> https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh | <span class="nb">sudo </span>bash
-  
-<span class="c"># 在线安装gitlab-ee</span>
-yum <span class="nb">install</span> <span class="nt">-y</span> gitlab-ee
-  
-<span class="c"># 如果要安装指定的版本，在后面填上版本号即可</span>
-yum <span class="nb">install</span> <span class="nt">-y</span> gitlab-ee-14.6.0
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<h5 id="3docker-安装">3、docker 安装</h5>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 拉取镜像</span>
-docker pull gitlab/gitlab-ee:14.6.0-ee.0
-
-<span class="c"># 运行容器</span>
-docker run <span class="nt">--detach</span> <span class="se">\</span>
-<span class="nt">--publish</span> 22333:80 <span class="nt">--publish</span> 18443:443 <span class="nt">--publish</span> 18022:22 <span class="se">\</span>
-<span class="nt">--name</span> gitlab <span class="se">\</span>
-<span class="nt">--restart</span> always <span class="se">\</span>
-<span class="nt">--volume</span> /data/gitlab/etc:/etc/gitlab <span class="se">\</span>
-<span class="nt">--volume</span> /data/gitlab/log:/var/log/gitlab <span class="se">\</span>
-<span class="nt">--volume</span> /data/gitlab/data:/var/opt/gitlab <span class="se">\</span>
-<span class="nt">--env</span> <span class="nv">GITLAB_OMNIBUS_CONFIG</span><span class="o">=</span><span class="s2">"external_url 'http://192.168.0.250';"</span> <span class="se">\</span>
-gitlab/gitlab-ee:14.6.0-ee.0
-
-<span class="c"># 查看日志</span>
-docker logs <span class="nt">--tail</span> 300 <span class="nt">-f</span> gitlab
-
-<span class="c"># 默认管理员 root，查看密码，登录后修改密码（默认密码有效期只有24小时），访问服务：http://192.168.0.250:22333</span>
-<span class="nb">cat</span> /data/gitlab/etc/initial_root_password
-</code></pre></div></div>
-
-<h5 id="4修改配置">4、修改配置</h5>
-
-<p>修改 Gitlab 主配置文件：<code class="language-plaintext highlighter-rouge">vim /etc/gitlab/gitlab.rb</code></p>
-
-<p>在 vim 下输入<code class="language-plaintext highlighter-rouge">/关键字</code> 快速查找，按 n 键查找下一个</p>
-
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 改为需要配置的域名或 IP，内网则为本机 IP</span>
-<span class="s">external_url 'http://192.168.0.250'</span>
-
-<span class="c1"># 修改监听端口，默认 80</span>
-<span class="s">nginx['listen_port'] = </span><span class="m">22333</span>
-
-<span class="c1"># ssh 地址配置，端口保持与 ssh 登录端口一致</span>
-<span class="s">gitlab_rails['gitlab_ssh_host'] = '192.168.0.250'</span>
-<span class="s">gitlab_rails['gitlab_shell_ssh_port'] = </span><span class="m">30001</span>
-
-<span class="c1"># Email 设置</span>
-<span class="s">gitlab_rails['gitlab_email_enabled'] = </span><span class="no">true</span>
-<span class="s">gitlab_rails['gitlab_email_from'] = 'xxx@qq.com'</span>      <span class="c1"># 自己的邮箱</span>
-<span class="s">gitlab_rails['gitlab_email_display_name'] = 'Name'</span>    <span class="c1"># gitlab 给你发邮件时使用的名字。</span>
-</code></pre></div></div>
-
-<p>以下配置按需修改</p>
-
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 若未安装 postfix，则需要配置 smtp</span>
-<span class="s">gitlab_rails['smtp_enable'] = </span><span class="no">true</span>
-<span class="s">gitlab_rails['smtp_address'] = "smtp.qq.com"</span>
-<span class="s">gitlab_rails['smtp_port'] = </span><span class="m">465</span>
-<span class="s">gitlab_rails['smtp_user_name'] = "xxxx@qq.com"</span>
-<span class="s">gitlab_rails['smtp_password'] = "xxxxxxxxxxx"</span>
-<span class="s">gitlab_rails['smtp_domain'] = "qq.com"</span>
-<span class="s">gitlab_rails['smtp_authentication'] = "login"</span>
-<span class="s">gitlab_rails['smtp_enable_starttls_auto'] = </span><span class="no">true</span>
-<span class="s">gitlab_rails['smtp_tls'] = </span><span class="no">false</span>
-
-<span class="c1"># 关闭 prometheus 监控（内存低时可以关闭节省资源）</span>
-<span class="s">prometheus['enable'] = </span><span class="no">false</span>
-<span class="s">prometheus['monitor_kubernetes'] = </span><span class="no">false</span>
-</code></pre></div></div>
-
-<blockquote>
-  <p><code class="language-plaintext highlighter-rouge">/etc/gitlab/gitlab.rb</code>：主配置文件，包含外部URL、仓库目录、备份目录等</p>
-
-  <p><code class="language-plaintext highlighter-rouge">/etc/gitlab/gitlab-secrets.json</code>：（执行 gitlab-ctl reconfigure 命令行后生成），包含各类密钥的加密信息</p>
-
-  <p>smtp 邮件服务商配置：<a href="https://docs.gitlab.com/omnibus/settings/smtp.html">https://docs.gitlab.com/omnibus/settings/smtp.html</a></p>
-</blockquote>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 重新应用 gitlab 的配置，每次修改 /etc/gitlab/gitlab.rb 文件之后执行</span>
-gitlab-ctl reconfigure
-
-<span class="c"># 查看初始密码</span>
-<span class="nb">cat</span> /etc/gitlab/initial_root_password
-
-<span class="c"># 或者直接重置密码，此命令从 13.9 版本后可用</span>
-gitlab-rake <span class="s2">"gitlab:password:reset"</span>
-
-<span class="c"># 开放端口</span>
-firewall-cmd <span class="nt">--zone</span><span class="o">=</span>public <span class="nt">--permanent</span> <span class="nt">--add-port</span><span class="o">=</span>22333/tcp
-firewall-cmd <span class="nt">--reload</span>
-
-<span class="c"># 查看状态</span>
-gitlab-ctl status
-</code></pre></div></div>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20220404235024738.png" alt="image-20220404235024738" /></p>
-
-<p>安装完成后建议关闭注册功能</p>
-
-<h5 id="5备份恢复">5、备份恢复</h5>
-
-<p>默认备份目录：<code class="language-plaintext highlighter-rouge">/var/opt/gitlab/backups</code></p>
-
-<p>修改 gitlab 配置文件：<code class="language-plaintext highlighter-rouge">vim /etc/gitlab/gitlab.rb</code></p>
-
-<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 指定备份后数据存放的路径、权限、时间配置
-</span><span class="err">gitlab_rails</span><span class="nn">['manage_backup_path']</span> <span class="err">=</span> <span class="err">true</span>                  <span class="c">#292行      开启备份功能
-</span><span class="err">gitlab_rails</span><span class="nn">['backup_path']</span> <span class="err">=</span> <span class="err">"/gitlab_backup"</span>             <span class="c">#293行      指定备份的路径
-</span><span class="err">gitlab_rails</span><span class="nn">['backup_archive_permissions']</span> <span class="err">=</span> <span class="err">0644</span>          <span class="c">#296行      备份文件的权限
-</span><span class="err">gitlab_rails</span><span class="nn">['backup_keep_time']</span> <span class="err">=</span> <span class="err">604800</span>                  <span class="c">#301行      备份保留时间（保留 7 天）
-</span></code></pre></div></div>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 创建备份目录并授权</span>
-<span class="nb">mkdir</span> /gitlab_backup
-<span class="nb">chown</span> <span class="nt">-R</span> git:root /gitlab_backup/
-
-<span class="c"># 重新生效 gitlab 配置</span>
-gitlab-ctl reconfigure
-
-<span class="c"># 手动备份</span>
-gitlab-rake gitlab:backup:create
-
-<span class="c"># 定时备份</span>
-0 3 <span class="k">*</span> <span class="k">*</span> <span class="k">*</span> /opt/gitlab/bin/gitlab-rake gitlab:backup:create <span class="o">&gt;&gt;</span> /gitlab_backup/crontab.log 2&gt;&amp;1
-</code></pre></div></div>
-
-<p>gitlab 数据恢复只能还原到与备份文件相同的 gitlab 版本</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 下载安装与备份相同版本的 gitlab</span>
-wget <span class="nt">--content-disposition</span> https://packages.gitlab.com/gitlab/gitlab-ee/packages/el/7/gitlab-ee-13.10.3-ee.0.el7.x86_64.rpm/download.rpm
-
-rpm <span class="nt">-ivh</span> gitlab-ee-13.10.3-ee.0.el7.x86_64.rpm
-
-<span class="c"># 参考上述安装修改配置</span>
-vim /etc/gitlab/gitlab.rb
-gitlab-ctl reconfigure
-
-<span class="c"># 停止相关数据连接服务</span>
-gitlab-ctl stop unicorn
-gitlab-ctl stop sidekiq
-
-<span class="c"># 将备份文件放在相应的备份路径下</span>
-<span class="nb">mv </span>1618907900_2021_04_20_13.10.3-ee_gitlab_backup.tar /var/opt/gitlab/backups/
-<span class="nb">chmod </span>777 1618907900_2021_04_20_13.10.3-ee_gitlab_backup.tar
-
-<span class="c"># gitlab 的恢复操作会先将当前所有的数据清空</span>
-gitlab-rake gitlab:backup:restore <span class="nv">BACKUP</span><span class="o">=</span>1618907900_2021_04_20_13.10.3-ee
-</code></pre></div></div>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20220317225958638.png" alt="image-20220317225958638" /></p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 重启 gitlab</span>
-gitlab-ctl restart
-
-<span class="c"># 恢复命令完成后，可以 check 检查一下恢复情况</span>
-gitlab-rake gitlab:check <span class="nv">SANITIZE</span><span class="o">=</span><span class="nb">true</span>
-</code></pre></div></div>
-
-<p>其它命令</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 日志目录：/var/log/gitlab</span>
-<span class="c"># 查看 nginx 访问日志</span>
-gitlab-ctl <span class="nb">tail </span>nginx/gitlab_acces.log	
-
-<span class="c"># 查看 postgresql 日志</span>
-gitlab-ctl <span class="nb">tail </span>postgresql
-
-<span class="c"># 查看所有服务</span>
-gitlab-ctl service-list
-
-<span class="c"># 检查配置并启动</span>
-gitlab-ctl check-config
-</code></pre></div></div>
-
-<blockquote>
-  <p>docker 方式安装需进入容器内执行上述相关备份恢复命令：<code class="language-plaintext highlighter-rouge">docker exec -it gitlab bash</code></p>
-</blockquote>
-
-<h5 id="6其他">6、其他</h5>
-
-<p><strong>修改 root 密码</strong></p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 直接重置密码，此命令从 13.9 版本后可用</span>
-gitlab-rake <span class="s2">"gitlab:password:reset"</span>
-
-<span class="c"># 进控制台修改</span>
-gitlab-rails console <span class="nt">-e</span> production
-user.password <span class="o">=</span> <span class="s1">'new_password'</span>
-user.password_confirmation <span class="o">=</span> <span class="s1">'new_password'</span>
-user.save!
-<span class="nb">exit</span>
-</code></pre></div></div>
-
-<ul>
-  <li><a href="https://docs.gitlab.com/ee/security/reset_user_password.html#use-a-rails-console">https://docs.gitlab.com/ee/security/reset_user_password.html#use-a-rails-console</a></li>
-</ul>
-
-<p><strong>添加SSL认证</strong></p>
-
-<p>参考 <a href="https://blog.csdn.net/qq_43626147/article/details/109160229">https://blog.csdn.net/qq_43626147/article/details/109160229</a></p>
-
-<p><strong>Gitlab 管理页面保存后报 500 错误</strong></p>
-
-<p>首先，遍历数据库中所有可能的加密值，验证它们是否可使用 gitlab-secrets.json解密。</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gitlab-rake gitlab:doctor:secrets
-</code></pre></div></div>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/git/image-20211230095708439.png" alt="image-20211230095708439" /></p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gitlab-rails dbconsole
-</code></pre></div></div>
-
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Clear project tokens</span>
-<span class="k">UPDATE</span> <span class="n">projects</span> <span class="k">SET</span> <span class="n">runners_token</span> <span class="o">=</span> <span class="k">null</span><span class="p">,</span> <span class="n">runners_token_encrypted</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
-
-<span class="c1">-- Clear project tokens</span>
-<span class="k">UPDATE</span> <span class="n">projects</span> <span class="k">SET</span> <span class="n">runners_token</span> <span class="o">=</span> <span class="k">null</span><span class="p">,</span> <span class="n">runners_token_encrypted</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
-<span class="c1">-- Clear group tokens</span>
-<span class="k">UPDATE</span> <span class="n">namespaces</span> <span class="k">SET</span> <span class="n">runners_token</span> <span class="o">=</span> <span class="k">null</span><span class="p">,</span> <span class="n">runners_token_encrypted</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
-<span class="c1">-- Clear instance tokens</span>
-<span class="k">UPDATE</span> <span class="n">application_settings</span> <span class="k">SET</span> <span class="n">runners_registration_token_encrypted</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
-<span class="c1">-- Clear key used for JWT authentication</span>
-<span class="c1">-- This may break the $CI_JWT_TOKEN job variable:</span>
-<span class="c1">-- https://gitlab.com/gitlab-org/gitlab/-/issues/325965</span>
-<span class="k">UPDATE</span> <span class="n">application_settings</span> <span class="k">SET</span> <span class="n">encrypted_ci_jwt_signing_key</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
-<span class="c1">-- Clear runner tokens</span>
-<span class="k">UPDATE</span> <span class="n">ci_runners</span> <span class="k">SET</span> <span class="n">token</span> <span class="o">=</span> <span class="k">null</span><span class="p">,</span> <span class="n">token_encrypted</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
-
-<span class="c1">-- truncate web_hooks table</span>
-<span class="k">TRUNCATE</span> <span class="n">web_hooks</span> <span class="k">CASCADE</span><span class="p">;</span>
-</code></pre></div></div>
-
-<p><strong>参考</strong></p>
-
-<ul>
-  <li><a href="https://docs.gitlab.com/ee/administration/raketasks/doctor.html#verify-database-values-can-be-decrypted-using-the-current-secrets">Doctor Rake tasks</a></li>
-  <li><a href="https://docs.gitlab.com/ee/raketasks/backup_restore.html#reset-runner-registration-tokens">Reset runner registration tokens</a></li>
-  <li><a href="https://gitlab.com/gitlab-org/gitlab/-/issues/26171">Issue-26171</a></li>
-  <li><a href="https://www.cnblogs.com/hgzero/p/14088215.html">Gitlab的安装及使用</a></li>
-</ul>]]></content><author><name>Nine</name></author><category term="Gitlab" /><summary type="html"><![CDATA[Gitlab 的安装与简单配置]]></summary></entry></feed>
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/nginx/image-20220325140602124.png" alt="image-20220325140602124" /></p>]]></content><author><name>Nine</name></author><category term="Nginx" /><summary type="html"><![CDATA[内网邮件转发]]></summary></entry></feed>
