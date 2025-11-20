@@ -31,7 +31,7 @@ Oracle 11.2.0.1 官网下载地址：
 yum -y install binutils compat-libcap1 compat-libstdc++-33 compat-libstdc++-33*i686 compat-libstdc++-33*.devel compat-libstdc++-33 compat-libstdc++-33*.devel gcc gcc-c++ glibc glibc*.i686 glibc-devel glibc-devel*.i686 ksh libaio libaio*.i686 libaio-devel libaio-devel*.devel libgcc libgcc*.i686 libstdc++ libstdc++*.i686 libstdc++-devel libstdc++-devel*.devel libXi libXi*.i686 libXtst libXtst*.i686 make sysstat unixODBC unixODBC*.i686 unixODBC-devel unixODBC-devel*.i686 unzip vim
 ```
 
-> 参考官方：http://docs.oracle.com/cd/E11882_01/install.112/e24326/toc.htm#BHCCADGD
+> 参考官方：[http://docs.oracle.com/cd/E11882_01/install.112/e24326/toc.htm#BHCCADGD](http://docs.oracle.com/cd/E11882_01/install.112/e24326/toc.htm#BHCCADGD)
 
 ##### 2、⽤户和组准备
 
@@ -128,9 +128,7 @@ session  required   /lib64/security/pam_limits.so
 session  required   pam_limits.so
 ```
 
-对默认的 shell 启动文件进行以下更改，以便更改所有 Oracle 安装所有者的 ulimit 设置：
-
-`vim /etc/profile`
+对默认的 shell 启动文件进行以下更改，以便更改所有 Oracle 安装所有者的 ulimit 设置：`vim /etc/profile`
 
 ```shell
 # 在最后新增: 
@@ -150,11 +148,11 @@ fi
 
 使用 root 用户执行
 
-修改主机名，本机改为 DB：`vim /etc/hostname`
+修改主机名，本机改为 DB：`hostnamectl set-hostname DB`
 
 添加主机名与 IP 对应记录：`vim /etc/hosts`
 
-```
+```bash
 192.168.33.131	DB
 ```
 
@@ -291,7 +289,7 @@ DECLINE_SECURITY_UPDATES=true
 ![image-20200510211959538](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/oracle/image-20200510211959538.png)
 
 ```shell
-# 注意：重装 Oracle 时执⾏前 /home/oracle/inventory 下不能有内容， 否则会报错 [INS-32035]， 重装的时候要清空此⽬录
+# 注意：重装 Oracle 时执⾏前 /home/oracle/inventory 下不能有内容， 否则会报错 [INS-32035]， 重装的时候要清空此目录
 rm -rf /home/oracle/inventory/*
 
 # 执⾏安装
@@ -495,7 +493,9 @@ su - oracle -lc "/home/oracle/app/oracle/product/11gr2/dbhome_1/bin/dbstart"
 
 当再次执⾏安装命令时，会报错 
 
-> SEVERE: [FATAL] [INS-32025] The chosen installation conflicts with software already installed in the given Oracle home.
+```html
+SEVERE: [FATAL] [INS-32025] The chosen installation conflicts with software already installed in the given Oracle home.
+```
 
  解决⽅法:
 
@@ -503,7 +503,9 @@ su - oracle -lc "/home/oracle/app/oracle/product/11gr2/dbhome_1/bin/dbstart"
 
 ##### 2、plsql 连接报错
 
-> ORA-12514: TNS:listener does not currently know of service requested in connect descriptor
+```html
+ORA-12514: TNS:listener does not currently know of service requested in connect descriptor
+```
 
 - 检查 $ORACLE_HOME/network/admin/listener.ora 配置
 - 配置监听配置了 SID_LIST_LISTENER 
@@ -511,13 +513,17 @@ su - oracle -lc "/home/oracle/app/oracle/product/11gr2/dbhome_1/bin/dbstart"
 
 ##### 3、重启监听时报错
 
-> TNS-01201: Listener cannot find executable homeoracleapporaclebinoracle for SID zzwx
+```html
+TNS-01201: Listener cannot find executable homeoracleapporaclebinoracle for SID zzwx
+```
 
 - 检查 $ORACLE_HOME 是否与 listener.ora 中的配置⼀致， 这个报错是由于没有找到正确的 $ORACLE_HOME 导致， 修改 listener.ora 中的 ORACLE_HOME 解决
 
 ##### 4、检测环境报错
 
-> [FATAL] [INS-13013] Target environment do not meet some mandatory requirements
+```html
+[FATAL] [INS-13013] Target environment do not meet some mandatory requirements
+```
 
 - 这种报错表示环境检测有的不满⾜， 要看具体情况， 对不是必要的条件不满⾜， 可以选择忽略. 在 安装命令中增加` -ignorePrereq`
 
@@ -529,15 +535,17 @@ su - oracle -lc "/home/oracle/app/oracle/product/11gr2/dbhome_1/bin/dbstart"
 
 ##### 5、swap 报错
 
-> ./runInstaller -silent -debug -force -responseFile /home/oracle/database/response/my_db_install.rsp
-> Starting Oracle Universal Installer...
->
-> Checking Temp space: must be greater than 120 MB.   Actual 38285 MB    Passed
-> Checking swap space: 0 MB available, 150 MB required.    Failed <<<<
->
-> Some requirement checks failed. You must fulfill these requirements before
->
-> continuing with the installation, Exiting Oracle Universal Installer,  log for this session can be found at /tmp/OraInstall20190-03-19_12-19-38PM/installActions2019-03-19_12-19-38PM.log
+```bash
+./runInstaller -silent -debug -force -responseFile /home/oracle/database/response/my_db_install.rsp
+Starting Oracle Universal Installer...
+
+Checking Temp space: must be greater than 120 MB.   Actual 38285 MB    Passed
+Checking swap space: 0 MB available, 150 MB required.    Failed <<<<
+
+Some requirement checks failed. You must fulfill these requirements before
+
+continuing with the installation, Exiting Oracle Universal Installer,  log for this session can be found at /tmp/OraInstall20190-03-19_12-19-38PM/installActions2019-03-19_12-19-38PM.log
+```
 
 解决方法：
 

@@ -48,42 +48,13 @@ sed -i 's@//.*archive.ubuntu.com@//mirrors.aliyun.com@g' /etc/apt/sources.list.d
 sed -i 's@//.*archive.ubuntu.com@//mirrors.aliyun.com@g' /etc/apt/sources.list && sed -i 's@//.*security.ubuntu.com@//mirrors.aliyun.com@g' /etc/apt/sources.list && apt update
 ```
 
-##### 查看系统版本
-
-```bash
-# 查看版本
-cat /etc/*-release
-
-# 综合信息查看
-hostnamectl
-
-# 查看内核详细信息
-cat /proc/version
-
-# 查看完整系统信息
-uname -a
-
-# 查看系统位数
-getconf LONG_BIT
-```
-
-##### 常用软件安装
-
-rpm 包下载：[https://rpmfind.net/linux/rpm2html/](https://rpmfind.net/linux/rpm2html/)
-
-```bash
-yum -y install gcc gcc-c++ make lsof tcpdump vim lrzsz wget net-tools telnet unzip screen
-
-apt -y install lrzsz screenfetch
-```
-
 ##### 用户名高亮显示
 
 配置完成后重新登录生效（终端需支持彩色输出）
 
 ```bash
 # 执行配置脚本
-curl -s https://raw.githubusercontent.com/NineHolic/script/master/linux/setcolor.sh | bash
+curl -sSL https://raw.githubusercontent.com/NineHolic/script/master/linux/setcolor.sh | bash
 
 # 或者执行以下命令
 cat >> ~/.bashrc << "EOF"
@@ -107,6 +78,35 @@ EOF
 ```
 
 ![image-20251119171050930](https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20251119171050930.png)
+
+##### 常用软件安装
+
+rpm 包下载：[https://rpmfind.net/linux/rpm2html/](https://rpmfind.net/linux/rpm2html/)
+
+```bash
+yum -y install gcc gcc-c++ make lsof tcpdump vim lrzsz wget net-tools telnet unzip screen
+
+apt -y install lrzsz screenfetch
+```
+
+##### 查看系统版本
+
+```bash
+# 查看版本
+cat /etc/*-release
+
+# 综合信息查看
+hostnamectl
+
+# 查看内核详细信息
+cat /proc/version
+
+# 查看完整系统信息
+uname -a
+
+# 查看系统位数
+getconf LONG_BIT
+```
 
 ##### 网速测试
 

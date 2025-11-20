@@ -17,14 +17,14 @@ mindmap2: false
 ##### 1、脚本安装
 
 ```bash
-# 脚本安装 2.45.0 版本
-curl -sSL https://fastly.jsdelivr.net/gh/NineHolic/nineholic.github.io@master/_posts/files/shell/install_git.sh | bash
+# 脚本安装 2.45.0 版本，会卸载 yum 安装的旧版本
+curl -sSL https://raw.githubusercontent.com/NineHolic/script/master/linux/install_git.sh | bash
 ```
 
 ##### 2、手动安装
 
-```shell
-# Centos/RedHat
+```bash
+# 安装依赖，会自动安装较旧版本的 git
 yum -y install curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc perl-ExtUtils-MakeMaker autoconf automake libtool wget
 
 # 卸载旧版
@@ -50,6 +50,6 @@ make -j2 all && make -j2 install
 # 添加软连接
 ln -s /usr/local/git/bin/git /usr/bin/git
 
-# 查看 git 是否安装完成
+# 查看 git 版本
 git --version
 ```

@@ -118,6 +118,9 @@ docker inspect id/name
 
 # 实时显示 Docker 容器的资源使用情况
 docker stats
+
+# 查看空间占用情况
+docker system df
 ```
 
 **参考**
