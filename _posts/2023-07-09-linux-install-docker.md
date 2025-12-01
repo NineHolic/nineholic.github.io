@@ -32,11 +32,8 @@ curl -o /etc/yum.repos.d/docker-ce.repo http://mirrors.aliyun.com/docker-ce/linu
 # 安装最新版 docker 引擎和容器
 yum -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-# 启动 docker
-systemctl start docker
-
-# 开机自启
-systemctl enable docker
+# 启动 docker 并设置为开机自启
+systemctl enable --now docker
 
 # 查看版本
 docker -v
