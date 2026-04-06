@@ -49,6 +49,10 @@
 <lastmod>2020-11-21T00:00:00+08:00</lastmod>
 </url>
 <url>
+<loc>https://blog.nine.gt.tc/2020/12/03/linux-install-nessus/</loc>
+<lastmod>2020-12-03T00:00:00+08:00</lastmod>
+</url>
+<url>
 <loc>https://blog.nine.gt.tc/2021/01/31/linux-install-mongodb/</loc>
 <lastmod>2021-01-31T00:00:00+08:00</lastmod>
 </url>
@@ -105,6 +109,10 @@
 <lastmod>2023-07-09T00:00:00+08:00</lastmod>
 </url>
 <url>
+<loc>https://blog.nine.gt.tc/2024/01/22/linux-ssh-passwordless-authentication/</loc>
+<lastmod>2024-01-22T00:00:00+08:00</lastmod>
+</url>
+<url>
 <loc>https://blog.nine.gt.tc/2024/03/11/linux-install-pgadmin4/</loc>
 <lastmod>2024-03-11T00:00:00+08:00</lastmod>
 </url>
@@ -155,5 +163,8 @@
 </url>
 <url>
 <loc>https://blog.nine.gt.tc/page3/</loc>
+</url>
+<url>
+<loc>https://blog.nine.gt.tc/page4/</loc>
 </url>
 </urlset>

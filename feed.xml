@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://blog.nine.gt.tc/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.nine.gt.tc/" rel="alternate" type="text/html" /><updated>2025-11-20T14:09:07+08:00</updated><id>https://blog.nine.gt.tc/feed.xml</id><title type="html">Nine</title><subtitle>blog</subtitle><author><name>Nine</name></author><entry><title type="html">GitHub Connection refused</title><link href="https://blog.nine.gt.tc/2025/10/09/git-connection-refused/" rel="alternate" type="text/html" title="GitHub Connection refused" /><published>2025-10-09T00:00:00+08:00</published><updated>2025-10-09T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2025/10/09/git-connection-refused</id><content type="html" xml:base="https://blog.nine.gt.tc/2025/10/09/git-connection-refused/"><![CDATA[<p>解决 GitHub 拉取代码报错：<code class="language-plaintext highlighter-rouge">Could not read from remote repository</code>问题。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://blog.nine.gt.tc/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.nine.gt.tc/" rel="alternate" type="text/html" /><updated>2026-04-06T23:54:39+08:00</updated><id>https://blog.nine.gt.tc/feed.xml</id><title type="html">Nine</title><subtitle>blog</subtitle><author><name>Nine</name></author><entry><title type="html">GitHub Connection refused</title><link href="https://blog.nine.gt.tc/2025/10/09/git-connection-refused/" rel="alternate" type="text/html" title="GitHub Connection refused" /><published>2025-10-09T00:00:00+08:00</published><updated>2025-10-09T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2025/10/09/git-connection-refused</id><content type="html" xml:base="https://blog.nine.gt.tc/2025/10/09/git-connection-refused/"><![CDATA[<p>解决 GitHub 拉取代码报错：<code class="language-plaintext highlighter-rouge">Could not read from remote repository</code>问题。</p>
 
 <h4 id="1问题">1、问题</h4>
 
@@ -278,7 +278,81 @@ http://192.168.216.131:18080/pgadmin4/login
             <span class="kn">proxy_set_header</span> <span class="s">X-Real-IP</span> <span class="nv">$remote_addr</span><span class="p">;</span>
             <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span> <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
         <span class="p">}</span>
-</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="PostgreSQL" /><summary type="html"><![CDATA[pgAdmin4 的安装与使用]]></summary></entry><entry><title type="html">Docker 使用技巧</title><link href="https://blog.nine.gt.tc/2023/07/09/docker-skill/" rel="alternate" type="text/html" title="Docker 使用技巧" /><published>2023-07-09T00:00:00+08:00</published><updated>2023-07-09T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2023/07/09/docker-skill</id><content type="html" xml:base="https://blog.nine.gt.tc/2023/07/09/docker-skill/"><![CDATA[<p>学习和使用 Docker 过程中遇到的问题和解决办法。</p>
+</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="PostgreSQL" /><summary type="html"><![CDATA[pgAdmin4 的安装与使用]]></summary></entry><entry><title type="html">Linux 配置免密登录</title><link href="https://blog.nine.gt.tc/2024/01/22/linux-ssh-passwordless-authentication/" rel="alternate" type="text/html" title="Linux 配置免密登录" /><published>2024-01-22T00:00:00+08:00</published><updated>2024-01-22T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2024/01/22/linux-ssh-passwordless-authentication</id><content type="html" xml:base="https://blog.nine.gt.tc/2024/01/22/linux-ssh-passwordless-authentication/"><![CDATA[<p>使用非对称加密算法制作一对密钥（公钥、私钥），将公钥添加到服务器的某个账户上，然后在客户端利用私钥即可完成认证并登录，公钥存在服务器，私钥存在本地计算机，私钥不在网络传输，降低被黑客截获风险。</p>
+
+<h5 id="1配置密钥">1、配置密钥</h5>
+
+<p>配置服务器  192.168.216.128 免密登录  192.168.216.129</p>
+
+<ul>
+  <li>服务器 192.168.216.128 上使用<code class="language-plaintext highlighter-rouge">ssh-keygen</code>命令生成密钥，<code class="language-plaintext highlighter-rouge">-t</code>未指定参数时默认的密钥加密方法是 RSA</li>
+</ul>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 使用 ED25519 加密方式生成密钥，若有设置 passphrase，则 ssh 登录时还需要输入密钥的密码</span>
+ssh-keygen <span class="nt">-t</span> ed25519
+
+<span class="c"># 将公钥写入到服务器 192.168.216.129 的 ~/.ssh/authorized_keys 文件中（文件不存在会自动创建），执行后需要输入密码</span>
+ssh-copy-id <span class="nt">-p</span> 22333 guest@192.168.216.129
+</code></pre></div></div>
+
+<blockquote>
+  <p>指定密钥名称：<code class="language-plaintext highlighter-rouge">ssh-keygen -t ed25519 -f ~/.ssh/test</code></p>
+
+  <p>指定密钥文件：<code class="language-plaintext highlighter-rouge">ssh-copy-id -i ~/.ssh/test.pub guest@192.168.216.129</code></p>
+
+  <p>使用密钥登录：<code class="language-plaintext highlighter-rouge">ssh -i ~/.ssh/test root@192.168.216.129</code></p>
+</blockquote>
+
+<ul>
+  <li>本地可以使用 Xshell 生成密钥：工具 -&gt; 用户密钥管理者</li>
+</ul>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20240122100348599.png" alt="image-20240122100348599" /></p>
+
+<p>将公钥手动写入远程机器的<code class="language-plaintext highlighter-rouge">~/.ssh/authorized_keys</code>文件中</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 目录和文件不存在就手动创建，注意目录和文件权限</span>
+<span class="nb">mkdir</span> ~/.ssh <span class="o">&amp;&amp;</span> <span class="nb">chmod </span>700 ~/.ssh
+<span class="nb">touch</span> ~/.ssh/authorized_keys <span class="o">&amp;&amp;</span> <span class="nb">chmod </span>600 ~/.ssh/authorized_keys
+vim ~/.ssh/authorized_keys
+</code></pre></div></div>
+
+<h5 id="2测试登录">2、测试登录</h5>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 测试免密登录</span>
+ssh root@192.168.216.129
+
+<span class="c"># 使用指定密钥连接，注意私钥权限应为 600</span>
+ssh <span class="nt">-i</span> ~/.ssh/id_ed25519_256-51 <span class="nt">-p</span> 22333 root@192.168.216.129
+</code></pre></div></div>
+
+<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/linux/image-20240122110254517.png" alt="image-20240122110254517" /></p>
+
+<h5 id="3问题">3、问题</h5>
+
+<p>配置后免密登录仍未生效时，可以查看服务器日志信息排查问题：<code class="language-plaintext highlighter-rouge">tail -f /var/log/secure</code></p>
+
+<p>通过 RSA 密钥远程连接服务器时，提示登录失败，sshd 日志提示</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>userauth_pubkey: signature algorithm ssh-rsa not in PubkeyAcceptedAlgorithms [preauth]
+</code></pre></div></div>
+
+<blockquote>
+  <p>解决方案：使用 ECDSA 或者 ED25519 等其他加密方式</p>
+
+  <p>ssh-rsa 签名算法是 SHA1 的哈希算法和 RSA 公钥算法的结合使用，由于目前 SHA1 的哈希算法容易受到攻击，OpenSSH 从 8.7 以后版本开始默认不支持 ssh-rsa 签名的方式，因此使用 RSA 生成的密钥配置免密登录时有以下错误</p>
+</blockquote>
+
+<h5 id="4其它">4、其它</h5>
+
+<p>配置完成后可以关闭服务器密码登录：<code class="language-plaintext highlighter-rouge">vim /etc/ssh/sshd_config</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 禁止密码登录</span>
+PasswordAuthentication no
+
+<span class="c"># 重启 SSH 服务</span>
+service sshd restart
+</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="Linux" /><summary type="html"><![CDATA[SSH 免密登录配置]]></summary></entry><entry><title type="html">Docker 使用技巧</title><link href="https://blog.nine.gt.tc/2023/07/09/docker-skill/" rel="alternate" type="text/html" title="Docker 使用技巧" /><published>2023-07-09T00:00:00+08:00</published><updated>2023-07-09T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2023/07/09/docker-skill</id><content type="html" xml:base="https://blog.nine.gt.tc/2023/07/09/docker-skill/"><![CDATA[<p>学习和使用 Docker 过程中遇到的问题和解决办法。</p>
 
 <h5 id="配置镜像源">配置镜像源</h5>
 
@@ -360,11 +434,8 @@ curl <span class="nt">-o</span> /etc/yum.repos.d/docker-ce.repo http://mirrors.a
 <span class="c"># 安装最新版 docker 引擎和容器</span>
 yum <span class="nt">-y</span> <span class="nb">install </span>docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-<span class="c"># 启动 docker</span>
-systemctl start docker
-
-<span class="c"># 开机自启</span>
-systemctl <span class="nb">enable </span>docker
+<span class="c"># 启动 docker 并设置为开机自启</span>
+systemctl <span class="nb">enable</span> <span class="nt">--now</span> docker
 
 <span class="c"># 查看版本</span>
 docker <span class="nt">-v</span>
@@ -1002,35 +1073,4 @@ businessNumber_<span class="k">${</span><span class="nv">num</span><span class="
 <span class="o">}</span>
 
 <span class="n">vars</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"mobilePhone"</span><span class="o">,</span> <span class="n">phoneNumber</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
-</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="JMeter" /><summary type="html"><![CDATA[JMeter 常用 BeanShell 脚本]]></summary></entry><entry><title type="html">内网下使用 Nginx 转发邮件</title><link href="https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail/" rel="alternate" type="text/html" title="内网下使用 Nginx 转发邮件" /><published>2022-03-25T00:00:00+08:00</published><updated>2022-03-25T00:00:00+08:00</updated><id>https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail</id><content type="html" xml:base="https://blog.nine.gt.tc/2022/03/25/nginx-forward-mail/"><![CDATA[<p>内网邮件通过 Nginx 代理进行转发。</p>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/nginx/image-20220325133718280.png" alt="image-20220325133718280" /></p>
-
-<h5 id="1安装-stream">1、安装 stream</h5>
-
-<p>使用 stream 方式代理 smtp 协议的邮件服务，需安装 stream 模块</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 查看已安装模块</span>
-./nginx <span class="nt">-V</span>
-
-<span class="c"># 编译时需加上 stream 模块</span>
-./configure <span class="nt">--prefix</span><span class="o">=</span>/usr/local/nginx <span class="nt">--with-stream</span> ...
-make <span class="o">&amp;&amp;</span> make <span class="nb">install</span>
-</code></pre></div></div>
-
-<h5 id="2nginx-配置">2、nginx 配置</h5>
-
-<div class="language-nginx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">stream</span> <span class="p">{</span>
-    <span class="c1"># 邮件转发</span>
-    <span class="kn">server</span> <span class="p">{</span>
-        <span class="kn">listen</span> <span class="mi">8765</span><span class="p">;</span>
-        <span class="kn">proxy_connect_timeout</span> <span class="s">5s</span><span class="p">;</span>
-        <span class="kn">proxy_timeout</span> <span class="s">5s</span><span class="p">;</span>
-        <span class="kn">proxy_pass</span> <span class="nf">smtp.qq.com</span><span class="p">:</span><span class="mi">587</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h5 id="3内网测试邮件发送">3、内网测试邮件发送</h5>
-
-<p><img src="https://fastly.jsdelivr.net/gh/FlyNine/cloudimage/nginx/image-20220325140602124.png" alt="image-20220325140602124" /></p>]]></content><author><name>Nine</name></author><category term="Nginx" /><summary type="html"><![CDATA[内网邮件转发]]></summary></entry></feed>
+</code></pre></div></div>]]></content><author><name>Nine</name></author><category term="JMeter" /><summary type="html"><![CDATA[JMeter 常用 BeanShell 脚本]]></summary></entry></feed>

@@ -98,6 +98,8 @@
   
   
   
+  
+  
 
   
     {
@@ -194,6 +196,14 @@
       
       "url"      : "https://blog.nine.gt.tc/2020/11/21/windows-install-openssh/",
       "keywords" : "OpenSSH, Windows"
+    } ,
+  
+    {
+      "title"    : "Nessus 的安装与使用",
+      "category" : "Linux",
+      
+      "url"      : "https://blog.nine.gt.tc/2020/12/03/linux-install-nessus/",
+      "keywords" : "Nessus, Linux, Centos"
     } ,
   
     {
@@ -306,6 +316,14 @@
       
       "url"      : "https://blog.nine.gt.tc/2023/07/09/linux-install-docker/",
       "keywords" : "Docker, Linux, Centos, Ubuntu"
+    } ,
+  
+    {
+      "title"    : "Linux 配置免密登录",
+      "category" : "Linux",
+      
+      "url"      : "https://blog.nine.gt.tc/2024/01/22/linux-ssh-passwordless-authentication/",
+      "keywords" : "Linux, Centos, Ubuntu"
     } ,
   
     {
